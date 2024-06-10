@@ -1,0 +1,5 @@
+public final class com/apollographql/apollo3/execution/ktor/MainKt {
+	public static final fun apolloModule (Lio/ktor/server/application/Application;Lcom/apollographql/apollo3/execution/ExecutableSchema;)V
+	public static final fun toGraphQLRequest (Lio/ktor/server/request/ApplicationRequest;Lio/ktor/http/HttpMethod;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+

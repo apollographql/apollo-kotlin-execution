@@ -1,0 +1,23 @@
+name: publishIfNeeded
+
+on:
+  push:
+    branches: [ main ]
+    tags:
+      - '*'
+  pull_request:
+    branches:
+      - "*"
+jobs:
+  publishIfNeeded:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          ./gradlew librarianPublishIfNeeded
+        env:
+          LIBRARIAN_SONATYPE_USERNAME: ${{ secrets.SONATYPE_NEXUS_USERNAME }}
+          LIBRARIAN_SONATYPE_PASSWORD: ${{ secrets.SONATYPE_NEXUS_PASSWORD }}
+          LIBRARIAN_SIGNING_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          LIBRARIAN_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.GPG_PRIVATE_KEY_PASSWORD }}
