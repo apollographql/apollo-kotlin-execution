@@ -67,7 +67,7 @@ class ExecutionTest {
         val simpleMainResolver = object : Resolver {
             override fun resolve(resolveInfo: ResolveInfo): Any? {
                 if (resolveInfo.parentType != "Query" || resolveInfo.fieldName != "foo") return null
-                return Resolver { 42 }
+                return "42"
             }
         }
 
