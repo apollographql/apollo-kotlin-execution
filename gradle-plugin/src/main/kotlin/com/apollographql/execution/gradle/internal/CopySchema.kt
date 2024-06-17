@@ -18,6 +18,6 @@ abstract class CopySchema: DefaultTask() {
 
   @TaskAction
   fun taskAction() {
-    from.get().asFile.copyTo(to.asFile.get())
+    from.get().asFile.copyTo(to.asFile.get(), overwrite = true)
   }
 }
