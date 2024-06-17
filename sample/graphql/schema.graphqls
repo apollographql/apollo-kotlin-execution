@@ -1,0 +1,10 @@
+schema {
+  query: Query
+}
+
+type Query {
+  """
+   Greeting for name
+  """
+  hello(name: ID!): ID!
+}

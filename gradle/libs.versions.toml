@@ -6,7 +6,9 @@ ktor = "2.3.11"
 
 [libraries]
 kgp = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin-plugin" }
-librarian = "com.gradleup.librarian:core:0.0.1"
+kgp-min = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version = "1.9.0" }
+librarian = "com.gradleup.librarian:core:0.0.2"
+gradle-api-min = { group = "dev.gradleplugins", name = "gradle-api", version = "8.0" }
 apollo-ast = { group = "com.apollographql.apollo3", name = "apollo-ast", version.ref = "apollo" }
 apollo-compiler = { group = "com.apollographql.apollo3", name = "apollo-compiler", version.ref = "apollo" }
 apollo-api = { group = "com.apollographql.apollo3", name = "apollo-api", version.ref = "apollo" }
@@ -17,6 +19,8 @@ ktor-server-core = { group = "io.ktor", name = "ktor-server-core", version.ref =
 ktor-server-cors = { group = "io.ktor", name = "ktor-server-cors", version.ref ="ktor" }
 slf4j = "org.slf4j:slf4j-simple:2.0.9"
 ksp-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
+ksp-implementation = { module = "com.google.devtools.ksp:symbol-processing", version.ref = "ksp" }
+ksp-gradle = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version.ref = "ksp" }
 kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test" } # the Kotlin plugin resolves the version
 
 
