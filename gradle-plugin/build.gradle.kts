@@ -11,6 +11,7 @@ dependencies {
   compileOnly(libs.ksp.gradle)
   compileOnly(libs.kgp.min)
   compileOnly(libs.gradle.api.min)
+  implementation(libs.java.diff.utils)
   testImplementation(libs.kotlin.test)
 }
 
