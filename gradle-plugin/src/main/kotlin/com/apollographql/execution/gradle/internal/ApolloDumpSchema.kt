@@ -8,7 +8,7 @@ import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
 
-abstract class CopySchema: DefaultTask() {
+abstract class ApolloDumpSchema: DefaultTask() {
   @get:InputFile
   @get:PathSensitive(PathSensitivity.RELATIVE)
   abstract val from: RegularFileProperty

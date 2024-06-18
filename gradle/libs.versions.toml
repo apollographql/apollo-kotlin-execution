@@ -7,6 +7,7 @@ ktor = "2.3.11"
 [libraries]
 kgp = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin-plugin" }
 kgp-min = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version = "1.9.0" }
+java-diff-utils = { module = "io.github.java-diff-utils:java-diff-utils", version = "4.12" }
 librarian = "com.gradleup.librarian:core:0.0.2"
 gradle-api-min = { group = "dev.gradleplugins", name = "gradle-api", version = "8.0" }
 apollo-ast = { group = "com.apollographql.apollo3", name = "apollo-ast", version.ref = "apollo" }

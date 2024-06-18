@@ -1,11 +1,10 @@
 package com.apollographql.execution.gradle
 
-import com.apollographql.execution.gradle.internal.CopySchema
+import com.apollographql.execution.gradle.internal.ApolloCheckSchema
+import com.apollographql.execution.gradle.internal.ApolloDumpSchema
 import com.google.devtools.ksp.gradle.KspExtension
 import org.gradle.api.Action
 import org.gradle.api.Project
-import org.gradle.api.tasks.Copy
-import org.gradle.configurationcache.extensions.capitalized
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import javax.inject.Inject
@@ -34,7 +33,7 @@ abstract class ApolloExecutionExtension @Inject constructor(val project: Project
     }
 
     val configurationName: String
-    val schemaPath: String
+    val kspSchemaPath: String
     val kspTaskName: String
 
     if (kotlin is KotlinMultiplatformExtension) {
@@ -47,11 +46,11 @@ abstract class ApolloExecutionExtension @Inject constructor(val project: Project
       project.tasks.withType(KotlinCompile::class.java).configureEach {
         it.dependsOn("kspCommonMainKotlinMetadata")
       }
-      schemaPath = "build/generated/ksp/metadata/commonMain/resources/${serviceName}Schema.graphqls"
+      kspSchemaPath = "build/generated/ksp/metadata/commonMain/resources/${serviceName}Schema.graphqls"
       kspTaskName = "kspCommonMainKotlinMetadata"
       configurationName = "kspCommonMainMetadata"
     } else {
-      schemaPath = "build/generated/ksp/main/resources/${serviceName}Schema.graphqls"
+      kspSchemaPath = "build/generated/ksp/main/resources/${serviceName}Schema.graphqls"
       kspTaskName = "kspKotlin"
       configurationName = "ksp"
     }
@@ -62,16 +61,27 @@ abstract class ApolloExecutionExtension @Inject constructor(val project: Project
     )
 
     if (service.schemaPath.isPresent) {
-      val task = project.tasks.register("copy${serviceName.capitalized()}Schema", CopySchema::class.java) {
-        it.from.set(project.file(schemaPath))
+      val dumpSchema = project.tasks.register(apolloDumpSchema, ApolloDumpSchema::class.java) {
+        it.from.set(project.file(kspSchemaPath))
         it.to.set(project.file(service.schemaPath.get()))
       }
+      val checkSchema = project.tasks.register(apolloCheckSchema, ApolloCheckSchema::class.java) {
+        it.new.set(project.file(kspSchemaPath))
+        it.existing.set(project.file(service.schemaPath.get()))
+      }
+      project.tasks.named("check") {
+        it.dependsOn(apolloCheckSchema)
+      }
 
-      project.tasks.all {
-        if (it.name == kspTaskName) {
-          it.finalizedBy(task)
+      project.tasks.all { maybeKsp ->
+        if (maybeKsp.name == kspTaskName) {
+          dumpSchema.configure { it.dependsOn(maybeKsp) }
+          checkSchema.configure { it.dependsOn(maybeKsp) }
         }
       }
     }
   }
 }
+
+internal const val apolloDumpSchema = "apolloDumpSchema"
+internal const val apolloCheckSchema = "apolloCheckSchema"
