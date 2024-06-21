@@ -8,10 +8,10 @@
       <header-logo>apollo.svg</header-logo>
       <noindex-content>true</noindex-content>
       <download-title>KDoc</download-title>
-      <download-page>https://martinbonnin.github.io/apollo-kotlin-execution/kdoc/html/</download-page>
+      <download-page>https://apollographql.github.io/apollo-kotlin-execution/kdoc/html/</download-page>
       <showDownloadButton>true</showDownloadButton>
       <enable-browser-edits>true</enable-browser-edits>
-      <browser-edits-url>https://github.com/martinbonnin/apollo-kotlin-execution/edit/main/Writerside/</browser-edits-url>
+      <browser-edits-url>https://github.com/apollographql/apollo-kotlin-execution/edit/main/Writerside/</browser-edits-url>
     </variables>
   </build-profile>
 </buildprofiles>
