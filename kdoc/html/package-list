@@ -11,5 +11,7 @@ com.apollographql.execution
 com.apollographql.execution.annotation
 com.apollographql.execution.internal
 com.apollographql.execution.websocket
+module:runtime-http4k
+com.apollographql.execution.http4k
 module:runtime-ktor
 com.apollographql.execution.ktor
