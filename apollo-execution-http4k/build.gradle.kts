@@ -16,7 +16,7 @@ kotlin {
     }
     getByName("jvmMain") {
       dependencies {
-        api(project(":runtime"))
+        api(project(":apollo-execution-runtime"))
         implementation(libs.coroutines)
         implementation(project.dependencies.platform(libs.http4k.bom.get()))
         implementation(libs.http4k.core)

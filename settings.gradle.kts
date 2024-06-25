@@ -6,4 +6,4 @@ pluginManagement {
 
 includeBuild("build-logic")
 
-include("processor", "gradle-plugin", "runtime", "runtime-ktor", "runtime-http4k")
+include("apollo-execution-processor", "apollo-execution-gradle-plugin", "apollo-execution-runtime", "apollo-execution-ktor", "apollo-execution-http4k")
