@@ -1,17 +1,14 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
 
-module:gradle-plugin
-com.apollographql.execution.gradle
-com.apollographql.execution.gradle.internal
-module:processor
+module:apollo-execution-http4k
+com.apollographql.execution.http4k
+module:apollo-execution-ktor
+com.apollographql.execution.ktor
+module:apollo-execution-processor
 com.apollographql.execution.processor
-module:runtime
+module:apollo-execution-runtime
 com.apollographql.execution
 com.apollographql.execution.annotation
 com.apollographql.execution.internal
 com.apollographql.execution.websocket
-module:runtime-http4k
-com.apollographql.execution.http4k
-module:runtime-ktor
-com.apollographql.execution.ktor
