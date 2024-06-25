@@ -26,12 +26,12 @@ plugins {
   id("org.jetbrains.kotlin.jvm").version("2.0.0")
   id("com.google.devtools.ksp").version("2.0.0-1.0.21")
   // Add the Apollo Execution plugin
-  id("com.apollographql.execution").version("0.0.1")
+  id("com.apollographql.execution").version("%latest_version%")
 }
 
 dependencies {
   // Add the runtime dependency
-  implementation("com.apollographql.execution:runtime-ktor:0.0.1")
+  implementation("com.apollographql.execution:runtime-ktor%latest_version%")
   // This sample uses netty as an engine.
   // See https://ktor.io/ for other choices.
   implementation("io.ktor:ktor-server-netty:2.3.11")

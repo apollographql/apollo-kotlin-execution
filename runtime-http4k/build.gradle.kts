@@ -12,16 +12,20 @@ kotlin {
   sourceSets {
     getByName("commonMain") {
       dependencies {
+      }
+    }
+    getByName("jvmMain") {
+      dependencies {
         api(project(":runtime"))
-        implementation(libs.atomicfu)
-        api(libs.coroutines)
-        api(libs.ktor.server.core)
+        implementation(libs.coroutines)
+        implementation(project.dependencies.platform(libs.http4k.bom.get()))
+        implementation(libs.http4k.core)
+        implementation(libs.http4k.realtime.core)
       }
     }
     getByName("jvmTest") {
       dependencies {
-        implementation(libs.ktor.server.netty)
-        implementation(libs.ktor.server.cors)
+        implementation(libs.http4k.server.jetty)
         implementation(libs.slf4j.nop)
       }
     }

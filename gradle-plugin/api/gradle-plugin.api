@@ -23,7 +23,14 @@ public final class com/apollographql/execution/gradle/VersionKt {
 	public static final field VERSION Ljava/lang/String;
 }
 
-public abstract class com/apollographql/execution/gradle/internal/CopySchema : org/gradle/api/DefaultTask {
+public abstract class com/apollographql/execution/gradle/internal/ApolloCheckSchema : org/gradle/api/DefaultTask {
+	public fun <init> ()V
+	public abstract fun getExisting ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getNew ()Lorg/gradle/api/file/RegularFileProperty;
+	public final fun taskAction ()V
+}
+
+public abstract class com/apollographql/execution/gradle/internal/ApolloDumpSchema : org/gradle/api/DefaultTask {
 	public fun <init> ()V
 	public abstract fun getFrom ()Lorg/gradle/api/file/RegularFileProperty;
 	public abstract fun getTo ()Lorg/gradle/api/file/RegularFileProperty;
