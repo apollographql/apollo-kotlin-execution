@@ -5,7 +5,7 @@
 // - Show manifest properties: true
 // - Show declarations: true
 
-// Library unique name: <com.apollographql.execution:runtime>
+// Library unique name: <com.apollographql.execution:apollo-execution-runtime>
 abstract fun interface com.apollographql.execution/Resolver { // com.apollographql.execution/Resolver|null[0]
     abstract fun resolve(com.apollographql.execution/ResolveInfo): kotlin/Any? // com.apollographql.execution/Resolver.resolve|resolve(com.apollographql.execution.ResolveInfo){}[0]
 }

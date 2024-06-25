@@ -12,7 +12,7 @@ kotlin {
   sourceSets {
     getByName("commonMain") {
       dependencies {
-        api(project(":runtime"))
+        api(project(":apollo-execution-runtime"))
         implementation(libs.atomicfu)
         api(libs.coroutines)
         api(libs.ktor.server.core)
