@@ -18,10 +18,16 @@ coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1"
 ktor-server-netty = { group = "io.ktor", name = "ktor-server-netty", version.ref ="ktor" }
 ktor-server-core = { group = "io.ktor", name = "ktor-server-core", version.ref ="ktor" }
 ktor-server-cors = { group = "io.ktor", name = "ktor-server-cors", version.ref ="ktor" }
-slf4j = "org.slf4j:slf4j-simple:2.0.9"
+slf4j-simple = "org.slf4j:slf4j-simple:2.0.13"
+slf4j-nop = "org.slf4j:slf4j-nop:2.0.13"
 ksp-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
 ksp-implementation = { module = "com.google.devtools.ksp:symbol-processing", version.ref = "ksp" }
 ksp-gradle = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version.ref = "ksp" }
 kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test" } # the Kotlin plugin resolves the version
+http4k-bom = "org.http4k:http4k-bom:5.8.0.0"
+http4k-core = { module = "org.http4k:http4k-core" }
+http4k-realtime-core = { module = "org.http4k:http4k-realtime-core" }
+http4k-server-undertow = { module = "org.http4k:http4k-server-undertow" }
+http4k-server-jetty = { module = "org.http4k:http4k-server-jetty" }
 
 
