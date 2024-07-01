@@ -57,7 +57,7 @@ abstract class ApolloExecutionExtension @Inject constructor(val project: Project
 
     project.dependencies.add(
         configurationName,
-        "com.apollographql.execution:processor:$VERSION"
+        "com.apollographql.execution:apollo-execution-processor:$VERSION"
     )
 
     if (service.schemaPath.isPresent) {
