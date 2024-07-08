@@ -1,6 +1,6 @@
 package com.apollographql.execution.http4k
 
-import com.apollographql.apollo3.api.ExecutionContext
+import com.apollographql.apollo.api.ExecutionContext
 import com.apollographql.execution.ExecutableSchema
 import com.apollographql.execution.parseGetGraphQLRequest
 import com.apollographql.execution.parsePostGraphQLRequest

@@ -1,11 +1,11 @@
 package com.apollographql.execution
 
-import com.apollographql.apollo3.api.ExecutionContext
-import com.apollographql.apollo3.api.Optional
-import com.apollographql.apollo3.ast.GQLField
-import com.apollographql.apollo3.ast.GQLFieldDefinition
-import com.apollographql.apollo3.ast.Schema
-import com.apollographql.apollo3.ast.definitionFromScope
+import com.apollographql.apollo.api.ExecutionContext
+import com.apollographql.apollo.api.Optional
+import com.apollographql.apollo.ast.GQLField
+import com.apollographql.apollo.ast.GQLFieldDefinition
+import com.apollographql.apollo.ast.Schema
+import com.apollographql.apollo.ast.definitionFromScope
 import com.apollographql.execution.internal.InternalValue
 
 fun interface Resolver {

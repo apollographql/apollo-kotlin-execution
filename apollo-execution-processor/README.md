@@ -1,1 +1,1 @@
-# Module processor
+# Module apollo-execution-processor

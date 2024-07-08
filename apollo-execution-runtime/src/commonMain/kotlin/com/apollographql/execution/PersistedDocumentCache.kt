@@ -1,7 +1,7 @@
 package com.apollographql.execution
 
-import com.apollographql.apollo3.ast.GQLDocument
-import com.apollographql.apollo3.ast.Issue
+import com.apollographql.apollo.ast.GQLDocument
+import com.apollographql.apollo.ast.Issue
 
 class PersistedDocument(
     val document: GQLDocument?,

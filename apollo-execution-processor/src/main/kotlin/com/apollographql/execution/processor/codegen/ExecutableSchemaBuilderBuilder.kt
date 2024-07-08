@@ -1,6 +1,5 @@
 package com.apollographql.execution.processor.codegen
 
-import com.apollographql.apollo3.compiler.capitalizeFirstLetter
 import com.apollographql.execution.processor.sir.Instantiation
 import com.apollographql.execution.processor.sir.SirCoercing
 import com.apollographql.execution.processor.sir.SirEnumDefinition

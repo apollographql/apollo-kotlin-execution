@@ -1,9 +1,7 @@
 package com.apollographql.execution.processor.codegen
 
-import com.apollographql.apollo3.compiler.capitalizeFirstLetter
 import com.apollographql.execution.processor.codegen.KotlinSymbols.AstEnumValue
 import com.apollographql.execution.processor.codegen.KotlinSymbols.AstValue
-import com.apollographql.apollo3.compiler.decapitalizeFirstLetter
 import com.apollographql.execution.processor.sir.SirEnumDefinition
 import com.apollographql.execution.processor.sir.SirInputObjectDefinition
 import com.apollographql.execution.processor.sir.SirNonNullType
@@ -20,6 +18,14 @@ import com.squareup.kotlinpoet.ParameterSpec
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeVariableName
+import java.util.Locale
+
+internal fun String.capitalizeFirstLetter(): String {
+  return this.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
+}
+internal fun String.decapitalizeFirstLetter(): String {
+  return this.replaceFirstChar { if (it.isUpperCase()) it.lowercase(Locale.ROOT) else it.toString() }
+}
 
 internal class CoercingsBuilder(
     private val context: KotlinExecutableSchemaContext,

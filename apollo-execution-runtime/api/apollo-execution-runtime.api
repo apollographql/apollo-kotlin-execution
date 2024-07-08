@@ -2,15 +2,15 @@ public final class com/apollographql/execution/BooleanCoercing : com/apollograph
 	public static final field INSTANCE Lcom/apollographql/execution/BooleanCoercing;
 	public fun deserialize (Ljava/lang/Object;)Ljava/lang/Boolean;
 	public synthetic fun deserialize (Ljava/lang/Object;)Ljava/lang/Object;
-	public fun parseLiteral (Lcom/apollographql/apollo3/ast/GQLValue;)Ljava/lang/Boolean;
-	public synthetic fun parseLiteral (Lcom/apollographql/apollo3/ast/GQLValue;)Ljava/lang/Object;
+	public fun parseLiteral (Lcom/apollographql/apollo/ast/GQLValue;)Ljava/lang/Boolean;
+	public synthetic fun parseLiteral (Lcom/apollographql/apollo/ast/GQLValue;)Ljava/lang/Object;
 	public synthetic fun serialize (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun serialize (Z)Ljava/lang/Object;
 }
 
 public abstract interface class com/apollographql/execution/Coercing {
 	public abstract fun deserialize (Ljava/lang/Object;)Ljava/lang/Object;
-	public abstract fun parseLiteral (Lcom/apollographql/apollo3/ast/GQLValue;)Ljava/lang/Object;
+	public abstract fun parseLiteral (Lcom/apollographql/apollo/ast/GQLValue;)Ljava/lang/Object;
 	public abstract fun serialize (Ljava/lang/Object;)Ljava/lang/Object;
 }
 
@@ -39,8 +39,8 @@ public final class com/apollographql/execution/DefaultSubscriptionRoot : com/apo
 }
 
 public final class com/apollographql/execution/ExecutableSchema {
-	public final fun execute (Lcom/apollographql/execution/GraphQLRequest;Lcom/apollographql/apollo3/api/ExecutionContext;)Lcom/apollographql/execution/GraphQLResponse;
-	public final fun executeSubscription (Lcom/apollographql/execution/GraphQLRequest;Lcom/apollographql/apollo3/api/ExecutionContext;)Lkotlinx/coroutines/flow/Flow;
+	public final fun execute (Lcom/apollographql/execution/GraphQLRequest;Lcom/apollographql/apollo/api/ExecutionContext;)Lcom/apollographql/execution/GraphQLResponse;
+	public final fun executeSubscription (Lcom/apollographql/execution/GraphQLRequest;Lcom/apollographql/apollo/api/ExecutionContext;)Lkotlinx/coroutines/flow/Flow;
 }
 
 public final class com/apollographql/execution/ExecutableSchema$Builder {
@@ -56,7 +56,7 @@ public final class com/apollographql/execution/ExecutableSchema$Builder {
 	public final fun persistedDocumentCache (Lcom/apollographql/execution/PersistedDocumentCache;)Lcom/apollographql/execution/ExecutableSchema$Builder;
 	public final fun queryRoot (Lkotlin/jvm/functions/Function0;)Lcom/apollographql/execution/ExecutableSchema$Builder;
 	public final fun resolveType (Lkotlin/jvm/functions/Function2;)Lcom/apollographql/execution/ExecutableSchema$Builder;
-	public final fun schema (Lcom/apollographql/apollo3/ast/GQLDocument;)Lcom/apollographql/execution/ExecutableSchema$Builder;
+	public final fun schema (Lcom/apollographql/apollo/ast/GQLDocument;)Lcom/apollographql/execution/ExecutableSchema$Builder;
 	public final fun schema (Ljava/lang/String;)Lcom/apollographql/execution/ExecutableSchema$Builder;
 	public final fun subscriptionRoot (Lkotlin/jvm/functions/Function0;)Lcom/apollographql/execution/ExecutableSchema$Builder;
 }
@@ -65,8 +65,8 @@ public final class com/apollographql/execution/FloatCoercing : com/apollographql
 	public static final field INSTANCE Lcom/apollographql/execution/FloatCoercing;
 	public fun deserialize (Ljava/lang/Object;)Ljava/lang/Double;
 	public synthetic fun deserialize (Ljava/lang/Object;)Ljava/lang/Object;
-	public fun parseLiteral (Lcom/apollographql/apollo3/ast/GQLValue;)Ljava/lang/Double;
-	public synthetic fun parseLiteral (Lcom/apollographql/apollo3/ast/GQLValue;)Ljava/lang/Object;
+	public fun parseLiteral (Lcom/apollographql/apollo/ast/GQLValue;)Ljava/lang/Double;
+	public synthetic fun parseLiteral (Lcom/apollographql/apollo/ast/GQLValue;)Ljava/lang/Object;
 	public fun serialize (D)Ljava/lang/Object;
 	public synthetic fun serialize (Ljava/lang/Object;)Ljava/lang/Object;
 }
@@ -112,7 +112,7 @@ public final class com/apollographql/execution/GraphQLResponse {
 	public final fun getData ()Ljava/lang/Object;
 	public final fun getErrors ()Ljava/util/List;
 	public final fun getExtensions ()Ljava/util/Map;
-	public final fun serialize (Lcom/apollographql/apollo3/api/json/JsonWriter;)V
+	public final fun serialize (Lcom/apollographql/apollo/api/json/JsonWriter;)V
 	public final fun serialize (Lokio/Sink;)V
 }
 
@@ -144,15 +144,15 @@ public final class com/apollographql/execution/IntCoercing : com/apollographql/e
 	public static final field INSTANCE Lcom/apollographql/execution/IntCoercing;
 	public fun deserialize (Ljava/lang/Object;)Ljava/lang/Integer;
 	public synthetic fun deserialize (Ljava/lang/Object;)Ljava/lang/Object;
-	public fun parseLiteral (Lcom/apollographql/apollo3/ast/GQLValue;)Ljava/lang/Integer;
-	public synthetic fun parseLiteral (Lcom/apollographql/apollo3/ast/GQLValue;)Ljava/lang/Object;
+	public fun parseLiteral (Lcom/apollographql/apollo/ast/GQLValue;)Ljava/lang/Integer;
+	public synthetic fun parseLiteral (Lcom/apollographql/apollo/ast/GQLValue;)Ljava/lang/Object;
 	public fun serialize (I)Ljava/lang/Object;
 	public synthetic fun serialize (Ljava/lang/Object;)Ljava/lang/Object;
 }
 
 public final class com/apollographql/execution/PersistedDocument {
-	public fun <init> (Lcom/apollographql/apollo3/ast/GQLDocument;Ljava/util/List;)V
-	public final fun getDocument ()Lcom/apollographql/apollo3/ast/GQLDocument;
+	public fun <init> (Lcom/apollographql/apollo/ast/GQLDocument;Ljava/util/List;)V
+	public final fun getDocument ()Lcom/apollographql/apollo/ast/GQLDocument;
 	public final fun getIssues ()Ljava/util/List;
 }
 
@@ -163,22 +163,22 @@ public abstract interface class com/apollographql/execution/PersistedDocumentCac
 
 public final class com/apollographql/execution/ResolveInfo {
 	public final fun coordinates ()Ljava/lang/String;
-	public final fun fieldDefinition ()Lcom/apollographql/apollo3/ast/GQLFieldDefinition;
-	public final fun getArgument (Ljava/lang/String;)Lcom/apollographql/apollo3/api/Optional;
-	public final fun getExecutionContext ()Lcom/apollographql/apollo3/api/ExecutionContext;
-	public final fun getField ()Lcom/apollographql/apollo3/ast/GQLField;
+	public final fun fieldDefinition ()Lcom/apollographql/apollo/ast/GQLFieldDefinition;
+	public final fun getArgument (Ljava/lang/String;)Lcom/apollographql/apollo/api/Optional;
+	public final fun getExecutionContext ()Lcom/apollographql/apollo/api/ExecutionContext;
+	public final fun getField ()Lcom/apollographql/apollo/ast/GQLField;
 	public final fun getFieldName ()Ljava/lang/String;
 	public final fun getFields ()Ljava/util/List;
 	public final fun getParentObject ()Ljava/lang/Object;
 	public final fun getParentType ()Ljava/lang/String;
 	public final fun getRequiredArgument (Ljava/lang/String;)Ljava/lang/Object;
-	public final fun getSchema ()Lcom/apollographql/apollo3/ast/Schema;
+	public final fun getSchema ()Lcom/apollographql/apollo/ast/Schema;
 	public final fun getVariables ()Ljava/util/Map;
 }
 
 public final class com/apollographql/execution/ResolveTypeInfo {
-	public fun <init> (Ljava/lang/String;Lcom/apollographql/apollo3/ast/Schema;)V
-	public final fun getSchema ()Lcom/apollographql/apollo3/ast/Schema;
+	public fun <init> (Ljava/lang/String;Lcom/apollographql/apollo/ast/Schema;)V
+	public final fun getSchema ()Lcom/apollographql/apollo/ast/Schema;
 	public final fun getType ()Ljava/lang/String;
 }
 
@@ -194,8 +194,8 @@ public final class com/apollographql/execution/StringCoercing : com/apollographq
 	public static final field INSTANCE Lcom/apollographql/execution/StringCoercing;
 	public synthetic fun deserialize (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun deserialize (Ljava/lang/Object;)Ljava/lang/String;
-	public synthetic fun parseLiteral (Lcom/apollographql/apollo3/ast/GQLValue;)Ljava/lang/Object;
-	public fun parseLiteral (Lcom/apollographql/apollo3/ast/GQLValue;)Ljava/lang/String;
+	public synthetic fun parseLiteral (Lcom/apollographql/apollo/ast/GQLValue;)Ljava/lang/Object;
+	public fun parseLiteral (Lcom/apollographql/apollo/ast/GQLValue;)Ljava/lang/String;
 	public synthetic fun serialize (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun serialize (Ljava/lang/String;)Ljava/lang/Object;
 }
@@ -245,23 +245,23 @@ public final class com/apollographql/execution/websocket/ConnectionInitAck : com
 
 public final class com/apollographql/execution/websocket/ConnectionInitError : com/apollographql/execution/websocket/ConnectionInitResult {
 	public fun <init> ()V
-	public fun <init> (Lcom/apollographql/apollo3/api/Optional;)V
-	public synthetic fun <init> (Lcom/apollographql/apollo3/api/Optional;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getPayload ()Lcom/apollographql/apollo3/api/Optional;
+	public fun <init> (Lcom/apollographql/apollo/api/Optional;)V
+	public synthetic fun <init> (Lcom/apollographql/apollo/api/Optional;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getPayload ()Lcom/apollographql/apollo/api/Optional;
 }
 
 public abstract interface class com/apollographql/execution/websocket/ConnectionInitResult {
 }
 
 public final class com/apollographql/execution/websocket/SubscriptionWebSocketHandler : com/apollographql/execution/websocket/WebSocketHandler {
-	public fun <init> (Lcom/apollographql/execution/ExecutableSchema;Lkotlinx/coroutines/CoroutineScope;Lcom/apollographql/apollo3/api/ExecutionContext;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function2;)V
-	public synthetic fun <init> (Lcom/apollographql/execution/ExecutableSchema;Lkotlinx/coroutines/CoroutineScope;Lcom/apollographql/apollo3/api/ExecutionContext;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function2;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lcom/apollographql/execution/ExecutableSchema;Lkotlinx/coroutines/CoroutineScope;Lcom/apollographql/apollo/api/ExecutionContext;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function2;)V
+	public synthetic fun <init> (Lcom/apollographql/execution/ExecutableSchema;Lkotlinx/coroutines/CoroutineScope;Lcom/apollographql/apollo/api/ExecutionContext;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function2;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun close ()V
 	public fun handleMessage (Lcom/apollographql/execution/websocket/WebSocketMessage;)V
 }
 
 public final class com/apollographql/execution/websocket/SubscriptionWebSocketHandlerKt {
-	public static final fun subscriptionId (Lcom/apollographql/apollo3/api/ExecutionContext;)Ljava/lang/String;
+	public static final fun subscriptionId (Lcom/apollographql/apollo/api/ExecutionContext;)Ljava/lang/String;
 }
 
 public final class com/apollographql/execution/websocket/WebSocketBinaryMessage : com/apollographql/execution/websocket/WebSocketMessage {

@@ -1,13 +1,13 @@
 package test
 
-import com.apollographql.apollo3.api.ExecutionContext
-import com.apollographql.apollo3.ast.GQLListType
-import com.apollographql.apollo3.ast.GQLNamedType
-import com.apollographql.apollo3.ast.GQLNonNullType
-import com.apollographql.apollo3.ast.GQLObjectTypeDefinition
-import com.apollographql.apollo3.ast.GQLScalarTypeDefinition
-import com.apollographql.apollo3.ast.GQLType
-import com.apollographql.apollo3.ast.Schema
+import com.apollographql.apollo.api.ExecutionContext
+import com.apollographql.apollo.ast.GQLListType
+import com.apollographql.apollo.ast.GQLNamedType
+import com.apollographql.apollo.ast.GQLNonNullType
+import com.apollographql.apollo.ast.GQLObjectTypeDefinition
+import com.apollographql.apollo.ast.GQLScalarTypeDefinition
+import com.apollographql.apollo.ast.GQLType
+import com.apollographql.apollo.ast.Schema
 import com.apollographql.execution.ExecutableSchema
 import com.apollographql.execution.GraphQLRequest
 import com.apollographql.execution.ResolveInfo

@@ -1,7 +1,7 @@
 package com.apollographql.execution.processor
 
-import com.apollographql.apollo3.ast.GQLScalarTypeDefinition
-import com.apollographql.apollo3.ast.builtinDefinitions
+import com.apollographql.apollo.ast.GQLScalarTypeDefinition
+import com.apollographql.apollo.ast.builtinDefinitions
 import com.apollographql.execution.processor.sir.Instantiation
 import com.apollographql.execution.processor.sir.SirClassName
 import com.apollographql.execution.processor.sir.SirCoercing

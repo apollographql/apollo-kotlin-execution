@@ -1,14 +1,14 @@
-import com.gradleup.librarian.core.librarianModule
+import com.gradleup.librarian.gradle.librarianModule
 
 plugins {
   id("org.jetbrains.kotlin.jvm")
 }
 
-librarianModule()
+librarianModule(true)
 
 dependencies {
-  implementation(libs.apollo.compiler)
   implementation(libs.ksp.api)
+  implementation(libs.kotlinpoet)
   implementation(libs.apollo.ast)
   testImplementation(libs.kotlin.test)
 }

@@ -1,15 +1,15 @@
 package com.apollographql.execution.websocket
 
-import com.apollographql.apollo3.annotations.ApolloInternal
-import com.apollographql.apollo3.api.Error
-import com.apollographql.apollo3.api.ExecutionContext
-import com.apollographql.apollo3.api.Optional
-import com.apollographql.apollo3.api.json.BufferedSinkJsonWriter
-import com.apollographql.apollo3.api.json.JsonWriter
-import com.apollographql.apollo3.api.json.jsonReader
-import com.apollographql.apollo3.api.json.readAny
-import com.apollographql.apollo3.api.json.writeAny
-import com.apollographql.apollo3.api.json.writeObject
+import com.apollographql.apollo.annotations.ApolloInternal
+import com.apollographql.apollo.api.Error
+import com.apollographql.apollo.api.ExecutionContext
+import com.apollographql.apollo.api.Optional
+import com.apollographql.apollo.api.json.BufferedSinkJsonWriter
+import com.apollographql.apollo.api.json.JsonWriter
+import com.apollographql.apollo.api.json.jsonReader
+import com.apollographql.apollo.api.json.readAny
+import com.apollographql.apollo.api.json.writeAny
+import com.apollographql.apollo.api.json.writeObject
 import com.apollographql.execution.ExecutableSchema
 import com.apollographql.execution.GraphQLRequest
 import com.apollographql.execution.GraphQLResponse

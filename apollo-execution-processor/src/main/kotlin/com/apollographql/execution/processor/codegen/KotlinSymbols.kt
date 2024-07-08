@@ -6,8 +6,8 @@ import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 
 internal object KotlinSymbols {
   val apolloExecutionPackageName = "com.apollographql.execution"
-  val apolloAstPackageName = "com.apollographql.apollo3.ast"
-  val apolloApiPackageName = "com.apollographql.apollo3.api"
+  val apolloAstPackageName = "com.apollographql.apollo.ast"
+  val apolloApiPackageName = "com.apollographql.apollo.api"
 
   val ExecutableSchemaBuilder = ClassName(apolloExecutionPackageName, "ExecutableSchema", "Builder")
   val Resolver = ClassName(apolloExecutionPackageName, "Resolver")

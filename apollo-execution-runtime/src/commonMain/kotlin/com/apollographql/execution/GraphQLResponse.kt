@@ -1,11 +1,11 @@
 package com.apollographql.execution
 
-import com.apollographql.apollo3.api.Error
-import com.apollographql.apollo3.api.json.BufferedSinkJsonWriter
-import com.apollographql.apollo3.api.json.JsonWriter
-import com.apollographql.apollo3.api.json.writeAny
-import com.apollographql.apollo3.api.json.writeArray
-import com.apollographql.apollo3.api.json.writeObject
+import com.apollographql.apollo.api.Error
+import com.apollographql.apollo.api.json.BufferedSinkJsonWriter
+import com.apollographql.apollo.api.json.JsonWriter
+import com.apollographql.apollo.api.json.writeAny
+import com.apollographql.apollo.api.json.writeArray
+import com.apollographql.apollo.api.json.writeObject
 import com.apollographql.execution.internal.ExternalValue
 import okio.BufferedSink
 import okio.Sink
