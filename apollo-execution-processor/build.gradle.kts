@@ -7,8 +7,8 @@ plugins {
 librarianModule()
 
 dependencies {
-  implementation(libs.apollo.compiler)
   implementation(libs.ksp.api)
+  implementation(libs.kotlinpoet)
   implementation(libs.apollo.ast)
   testImplementation(libs.kotlin.test)
 }

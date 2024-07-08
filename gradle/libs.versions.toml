@@ -14,6 +14,8 @@ apollo-ast = { group = "com.apollographql.apollo3", name = "apollo-ast", version
 apollo-compiler = { group = "com.apollographql.apollo3", name = "apollo-compiler", version.ref = "apollo" }
 apollo-api = { group = "com.apollographql.apollo3", name = "apollo-api", version.ref = "apollo" }
 atomicfu = "org.jetbrains.kotlinx:atomicfu:0.24.0"
+kotlinpoet = "com.squareup:kotlinpoet:1.18.0"
+
 coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1"
 ktor-server-netty = { group = "io.ktor", name = "ktor-server-netty", version.ref ="ktor" }
 ktor-server-core = { group = "io.ktor", name = "ktor-server-core", version.ref ="ktor" }

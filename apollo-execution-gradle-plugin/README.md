@@ -1,1 +1,1 @@
-# Module gradle-plugin
+# Module apollo-execution-gradle-plugin

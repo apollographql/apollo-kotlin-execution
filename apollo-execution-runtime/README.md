@@ -1,2 +1,2 @@
-# Module runtime
+# Module apollo-execution-runtime
 
