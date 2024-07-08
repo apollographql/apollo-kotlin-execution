@@ -1,6 +1,6 @@
 package com.apollographql.execution.processor
 
-import com.apollographql.apollo3.ast.parseAsGQLValue
+import com.apollographql.apollo.ast.parseAsGQLValue
 import com.apollographql.execution.processor.sir.Instantiation
 import com.apollographql.execution.processor.sir.SirArgumentDefinition
 import com.apollographql.execution.processor.sir.SirEnumDefinition
@@ -416,7 +416,7 @@ private class TypeDefinitionContext(val logger: KSPLogger, val scalarDefinitions
 }
 
 private fun KSDeclaration.isApolloOptional(): Boolean {
-  return asClassName().asString() == "com.apollographql.apollo3.api.Optional"
+  return asClassName().asString() == "com.apollographql.apollo.api.Optional"
 }
 
 private fun KSDeclaration.isFlow(): Boolean {

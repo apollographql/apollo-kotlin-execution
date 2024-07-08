@@ -1,10 +1,10 @@
-import com.gradleup.librarian.core.librarianModule
+import com.gradleup.librarian.gradle.librarianModule
 
 plugins {
   id("org.jetbrains.kotlin.jvm")
 }
 
-librarianModule()
+librarianModule(true)
 
 dependencies {
   implementation(libs.ksp.api)

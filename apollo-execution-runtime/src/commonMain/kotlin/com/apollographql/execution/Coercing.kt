@@ -1,13 +1,13 @@
 package com.apollographql.execution
 
-import com.apollographql.apollo3.api.json.JsonNumber
-import com.apollographql.apollo3.ast.GQLBooleanValue
-import com.apollographql.apollo3.ast.GQLEnumTypeDefinition
-import com.apollographql.apollo3.ast.GQLFloatValue
-import com.apollographql.apollo3.ast.GQLIntValue
-import com.apollographql.apollo3.ast.GQLStringValue
-import com.apollographql.apollo3.ast.GQLTypeDefinition
-import com.apollographql.apollo3.ast.GQLValue
+import com.apollographql.apollo.api.json.JsonNumber
+import com.apollographql.apollo.ast.GQLBooleanValue
+import com.apollographql.apollo.ast.GQLEnumTypeDefinition
+import com.apollographql.apollo.ast.GQLFloatValue
+import com.apollographql.apollo.ast.GQLIntValue
+import com.apollographql.apollo.ast.GQLStringValue
+import com.apollographql.apollo.ast.GQLTypeDefinition
+import com.apollographql.apollo.ast.GQLValue
 import com.apollographql.execution.internal.ExternalValue
 import com.apollographql.execution.internal.InternalValue
 

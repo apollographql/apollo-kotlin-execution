@@ -1,16 +1,16 @@
 package com.apollographql.execution.internal
 
-import com.apollographql.apollo3.api.json.JsonNumber
-import com.apollographql.apollo3.ast.GQLBooleanValue
-import com.apollographql.apollo3.ast.GQLEnumValue
-import com.apollographql.apollo3.ast.GQLFloatValue
-import com.apollographql.apollo3.ast.GQLIntValue
-import com.apollographql.apollo3.ast.GQLListValue
-import com.apollographql.apollo3.ast.GQLNullValue
-import com.apollographql.apollo3.ast.GQLObjectValue
-import com.apollographql.apollo3.ast.GQLStringValue
-import com.apollographql.apollo3.ast.GQLValue
-import com.apollographql.apollo3.ast.GQLVariableValue
+import com.apollographql.apollo.api.json.JsonNumber
+import com.apollographql.apollo.ast.GQLBooleanValue
+import com.apollographql.apollo.ast.GQLEnumValue
+import com.apollographql.apollo.ast.GQLFloatValue
+import com.apollographql.apollo.ast.GQLIntValue
+import com.apollographql.apollo.ast.GQLListValue
+import com.apollographql.apollo.ast.GQLNullValue
+import com.apollographql.apollo.ast.GQLObjectValue
+import com.apollographql.apollo.ast.GQLStringValue
+import com.apollographql.apollo.ast.GQLValue
+import com.apollographql.apollo.ast.GQLVariableValue
 
 /**
  * An external value, usually JSON

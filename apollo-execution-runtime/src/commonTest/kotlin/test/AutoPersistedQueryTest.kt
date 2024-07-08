@@ -1,6 +1,6 @@
 package test
 
-import com.apollographql.apollo3.api.ExecutionContext
+import com.apollographql.apollo.api.ExecutionContext
 import com.apollographql.execution.ExecutableSchema
 import com.apollographql.execution.GraphQLRequest
 import com.apollographql.execution.InMemoryPersistedDocumentCache

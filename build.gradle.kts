@@ -1,4 +1,4 @@
-import com.gradleup.librarian.core.librarianRoot
+import com.gradleup.librarian.gradle.librarianRoot
 
 buildscript {
     repositories {

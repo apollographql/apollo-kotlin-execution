@@ -202,7 +202,7 @@ internal fun KSDeclaration.asClassName(): SirClassName {
   return SirClassName(packageName.asString(), listOf(simpleName.asString()))
 }
 
-internal val executionContextClassName = SirClassName("com.apollographql.apollo3.api", listOf("ExecutionContext"))
+internal val executionContextClassName = SirClassName("com.apollographql.apollo.api", listOf("ExecutionContext"))
 
 
 

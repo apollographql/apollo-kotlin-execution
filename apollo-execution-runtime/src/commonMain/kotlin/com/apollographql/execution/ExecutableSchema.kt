@@ -1,9 +1,9 @@
 package com.apollographql.execution
 
-import com.apollographql.apollo3.annotations.ApolloExperimental
-import com.apollographql.apollo3.api.Error
-import com.apollographql.apollo3.api.ExecutionContext
-import com.apollographql.apollo3.ast.*
+import com.apollographql.apollo.annotations.ApolloExperimental
+import com.apollographql.apollo.api.Error
+import com.apollographql.apollo.api.ExecutionContext
+import com.apollographql.apollo.ast.*
 import com.apollographql.execution.internal.OperationExecutor
 import com.apollographql.execution.internal.ResolveType
 import com.apollographql.execution.internal.TypeChecker

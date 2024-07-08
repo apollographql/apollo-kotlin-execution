@@ -1,6 +1,6 @@
 package com.apollographql.execution.annotation
 
-import com.apollographql.apollo3.annotations.ApolloExperimental
+import com.apollographql.apollo.annotations.ApolloExperimental
 
 /**
  * Marks the target class as a GraphQL mutation root.

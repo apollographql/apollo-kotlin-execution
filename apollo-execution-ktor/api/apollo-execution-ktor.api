@@ -3,8 +3,8 @@ public final class com/apollographql/execution/ktor/MainKt {
 	public static synthetic fun apolloModule$default (Lio/ktor/server/application/Application;Lcom/apollographql/execution/ExecutableSchema;Ljava/lang/String;ILjava/lang/Object;)V
 	public static final fun apolloSandboxModule (Lio/ktor/server/application/Application;Ljava/lang/String;Ljava/lang/String;)V
 	public static synthetic fun apolloSandboxModule$default (Lio/ktor/server/application/Application;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)V
-	public static final fun respondGraphQL (Lio/ktor/server/application/ApplicationCall;Lcom/apollographql/execution/ExecutableSchema;Lcom/apollographql/apollo3/api/ExecutionContext;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static synthetic fun respondGraphQL$default (Lio/ktor/server/application/ApplicationCall;Lcom/apollographql/execution/ExecutableSchema;Lcom/apollographql/apollo3/api/ExecutionContext;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun respondGraphQL (Lio/ktor/server/application/ApplicationCall;Lcom/apollographql/execution/ExecutableSchema;Lcom/apollographql/apollo/api/ExecutionContext;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun respondGraphQL$default (Lio/ktor/server/application/ApplicationCall;Lcom/apollographql/execution/ExecutableSchema;Lcom/apollographql/apollo/api/ExecutionContext;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public static final fun toGraphQLRequest (Lio/ktor/server/request/ApplicationRequest;Lio/ktor/http/HttpMethod;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 

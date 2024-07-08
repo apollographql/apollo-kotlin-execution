@@ -1,11 +1,11 @@
-import com.gradleup.librarian.core.librarianModule
+import com.gradleup.librarian.gradle.librarianModule
 
 plugins {
   id("org.jetbrains.kotlin.jvm")
   id("java-gradle-plugin")
 }
 
-librarianModule()
+librarianModule(true)
 
 dependencies {
   compileOnly(libs.ksp.gradle)

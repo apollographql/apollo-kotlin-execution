@@ -12,7 +12,6 @@ import com.apollographql.execution.processor.codegen.KotlinSymbols.AstOperationT
 import com.apollographql.execution.processor.codegen.KotlinSymbols.AstSchemaDefinition
 import com.apollographql.execution.processor.codegen.KotlinSymbols.AstStringValue
 import com.apollographql.execution.processor.codegen.KotlinSymbols.AstUnionTypeDefinition
-import com.apollographql.apollo3.compiler.decapitalizeFirstLetter
 import com.apollographql.execution.processor.sir.SirEnumDefinition
 import com.apollographql.execution.processor.sir.SirEnumValueDefinition
 import com.apollographql.execution.processor.sir.SirErrorType
@@ -39,7 +38,7 @@ import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.joinToCode
 
 internal class SchemaDocumentBuilder(
-    val context: com.apollographql.execution.processor.codegen.KotlinExecutableSchemaContext,
+    val context: KotlinExecutableSchemaContext,
     serviceName: String,
     val sirTypeDefinitions: List<SirTypeDefinition>,
 ) : CgFileBuilder {
