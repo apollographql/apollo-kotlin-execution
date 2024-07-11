@@ -5,10 +5,11 @@
     <variables></variables>
   <build-profile instance="doc">
     <variables>
-      <header-logo>apollo.svg</header-logo>
+      <header-logo>apollo_logo.svg</header-logo>
+      <custom-favicons>favicon-96x96.png,favicon-192x192.png</custom-favicons>
       <noindex-content>true</noindex-content>
-      <download-title>KDoc</download-title>
-      <download-page>https://apollographql.github.io/apollo-kotlin-execution/kdoc/html/</download-page>
+      <download-title>GitHub</download-title>
+      <download-page>https://github.com/apollographql/apollo-kotlin-execution/</download-page>
       <showDownloadButton>true</showDownloadButton>
       <enable-browser-edits>true</enable-browser-edits>
       <browser-edits-url>https://github.com/apollographql/apollo-kotlin-execution/edit/main/Writerside/</browser-edits-url>

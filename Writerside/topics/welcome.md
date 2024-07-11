@@ -1,11 +1,11 @@
-# Apollo Execution
+# Welcome
 
-Apollo Execution is a code-first GraphQL execution library. 
+Apollo Execution is a code-first GraphQL execution library.
 
-Apollo Execution:
+Features:
 
-* Generates a GraphQL schema from your Kotlin code: Write Kotlin, get a typesafe API. 
-* Doesn't use any reflection. Use it on the JVM and enjoy ultra fast start times. Or use it on Kotlin native. Apollo Execution is KMP-ready! 
+* Generates a GraphQL schema from your Kotlin code: Write Kotlin, get a typesafe API.
+* Doesn't use any reflection. Use it on the JVM and enjoy ultra fast start times. Or use it on Kotlin native. Apollo Execution is KMP-ready!
 * Supports custom scalars, subscriptions, persisted queries and aims to support the current [GraphQL draft](https://spec.graphql.org/draft/).
 
 Under the hood, Apollo Execution uses [KSP](https://kotlinlang.org/docs/ksp-overview.html) to generate resolvers and schema information from your Kotlin code.
@@ -85,7 +85,7 @@ type Query {
 
 It is recommended to commit this file in source control so you can track changes made to your schema.
 
-### Writing your server 
+### Writing your server
 
 In addition to `schema.graphqls`, Apollo Execution generates an `ExecutableSchemaBuilder` preconfigured with hardwired resolvers that you can use to configure your server:
 
