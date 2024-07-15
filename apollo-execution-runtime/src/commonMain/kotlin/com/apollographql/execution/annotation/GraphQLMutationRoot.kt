@@ -1,11 +1,9 @@
 package com.apollographql.execution.annotation
 
-import com.apollographql.apollo.annotations.ApolloExperimental
-
 /**
  * Marks the target class as a GraphQL mutation root.
  *
- * There can be only one [GraphQLMutationRoot] class in a given compilation.
+ * There can be only one [GraphQLMutation] class in a given compilation.
  */
 @Target(AnnotationTarget.CLASS)
-annotation class GraphQLMutationRoot
+annotation class GraphQLMutation

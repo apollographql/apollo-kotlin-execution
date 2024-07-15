@@ -229,22 +229,22 @@ open annotation class com.apollographql.execution.annotation/GraphQLDefault : ko
     final val value // com.apollographql.execution.annotation/GraphQLDefault.value|{}value[0]
         final fun <get-value>(): kotlin/String // com.apollographql.execution.annotation/GraphQLDefault.value.<get-value>|<get-value>(){}[0]
 }
-open annotation class com.apollographql.execution.annotation/GraphQLMutationRoot : kotlin/Annotation { // com.apollographql.execution.annotation/GraphQLMutationRoot|null[0]
-    constructor <init>() // com.apollographql.execution.annotation/GraphQLMutationRoot.<init>|<init>(){}[0]
+open annotation class com.apollographql.execution.annotation/GraphQLMutation : kotlin/Annotation { // com.apollographql.execution.annotation/GraphQLMutation|null[0]
+    constructor <init>() // com.apollographql.execution.annotation/GraphQLMutation.<init>|<init>(){}[0]
 }
 open annotation class com.apollographql.execution.annotation/GraphQLName : kotlin/Annotation { // com.apollographql.execution.annotation/GraphQLName|null[0]
     constructor <init>(kotlin/String) // com.apollographql.execution.annotation/GraphQLName.<init>|<init>(kotlin.String){}[0]
     final val name // com.apollographql.execution.annotation/GraphQLName.name|{}name[0]
         final fun <get-name>(): kotlin/String // com.apollographql.execution.annotation/GraphQLName.name.<get-name>|<get-name>(){}[0]
 }
-open annotation class com.apollographql.execution.annotation/GraphQLQueryRoot : kotlin/Annotation { // com.apollographql.execution.annotation/GraphQLQueryRoot|null[0]
-    constructor <init>() // com.apollographql.execution.annotation/GraphQLQueryRoot.<init>|<init>(){}[0]
+open annotation class com.apollographql.execution.annotation/GraphQLQuery : kotlin/Annotation { // com.apollographql.execution.annotation/GraphQLQuery|null[0]
+    constructor <init>() // com.apollographql.execution.annotation/GraphQLQuery.<init>|<init>(){}[0]
 }
 open annotation class com.apollographql.execution.annotation/GraphQLScalar : kotlin/Annotation { // com.apollographql.execution.annotation/GraphQLScalar|null[0]
     constructor <init>() // com.apollographql.execution.annotation/GraphQLScalar.<init>|<init>(){}[0]
 }
-open annotation class com.apollographql.execution.annotation/GraphQLSubscriptionRoot : kotlin/Annotation { // com.apollographql.execution.annotation/GraphQLSubscriptionRoot|null[0]
-    constructor <init>() // com.apollographql.execution.annotation/GraphQLSubscriptionRoot.<init>|<init>(){}[0]
+open annotation class com.apollographql.execution.annotation/GraphQLSubscription : kotlin/Annotation { // com.apollographql.execution.annotation/GraphQLSubscription|null[0]
+    constructor <init>() // com.apollographql.execution.annotation/GraphQLSubscription.<init>|<init>(){}[0]
 }
 sealed interface com.apollographql.execution.websocket/ConnectionInitResult // com.apollographql.execution.websocket/ConnectionInitResult|null[0]
 sealed interface com.apollographql.execution.websocket/WebSocketMessage // com.apollographql.execution.websocket/WebSocketMessage|null[0]

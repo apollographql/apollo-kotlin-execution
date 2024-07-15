@@ -51,8 +51,8 @@ Then write your root query in a `Query.kt` file:
 
 ```kotlin
 // Define your root query class 
-// @GraphQLQueryRoot is the entry point for KSP processing
-@GraphQLQueryRoot
+// @GraphQLQuery is the entry point for KSP processing
+@GraphQLQuery
 class Query {
   // Public functions become GraphQL fields 
   // Kdoc comments become GraphQL descriptions

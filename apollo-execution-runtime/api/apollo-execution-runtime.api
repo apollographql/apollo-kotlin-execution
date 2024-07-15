@@ -220,20 +220,20 @@ public abstract interface annotation class com/apollographql/execution/annotatio
 	public abstract fun value ()Ljava/lang/String;
 }
 
-public abstract interface annotation class com/apollographql/execution/annotation/GraphQLMutationRoot : java/lang/annotation/Annotation {
+public abstract interface annotation class com/apollographql/execution/annotation/GraphQLMutation : java/lang/annotation/Annotation {
 }
 
 public abstract interface annotation class com/apollographql/execution/annotation/GraphQLName : java/lang/annotation/Annotation {
 	public abstract fun name ()Ljava/lang/String;
 }
 
-public abstract interface annotation class com/apollographql/execution/annotation/GraphQLQueryRoot : java/lang/annotation/Annotation {
+public abstract interface annotation class com/apollographql/execution/annotation/GraphQLQuery : java/lang/annotation/Annotation {
 }
 
 public abstract interface annotation class com/apollographql/execution/annotation/GraphQLScalar : java/lang/annotation/Annotation {
 }
 
-public abstract interface annotation class com/apollographql/execution/annotation/GraphQLSubscriptionRoot : java/lang/annotation/Annotation {
+public abstract interface annotation class com/apollographql/execution/annotation/GraphQLSubscription : java/lang/annotation/Annotation {
 }
 
 public final class com/apollographql/execution/websocket/ConnectionInitAck : com/apollographql/execution/websocket/ConnectionInitResult {

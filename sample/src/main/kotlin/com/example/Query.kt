@@ -1,9 +1,9 @@
 package com.example
 
-import com.apollographql.execution.annotation.GraphQLQueryRoot
+import com.apollographql.execution.annotation.GraphQLQuery
 
 // Define your root query class
-@GraphQLQueryRoot
+@GraphQLQuery
 class Query {
     // Public functions become GraphQL fields
     // Kdoc comments become GraphQL descriptions

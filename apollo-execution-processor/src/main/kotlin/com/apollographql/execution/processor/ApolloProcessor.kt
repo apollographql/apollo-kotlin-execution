@@ -79,9 +79,9 @@ class ApolloProcessor(
         coercingDefinitions
     )
 
-    val query = getRootSymbol(resolver, "com.apollographql.execution.annotation.GraphQLQueryRoot", ksFiles)
+    val query = getRootSymbol(resolver, "com.apollographql.execution.annotation.GraphQLQuery", ksFiles)
     if (query == null) {
-      logger.error("No '@GraphqlQueryRoot' class found")
+      logger.error("No '@GraphQLQuery' class found")
       return emptyList()
     }
 
@@ -89,8 +89,8 @@ class ApolloProcessor(
         logger,
         scalarDefinitions,
         query,
-        getRootSymbol(resolver, "com.apollographql.execution.annotation.GraphQLMutationRoot", ksFiles),
-        getRootSymbol(resolver, "com.apollographql.execution.annotation.GraphQLSubscriptionRoot", ksFiles)
+        getRootSymbol(resolver, "com.apollographql.execution.annotation.GraphQLMutation", ksFiles),
+        getRootSymbol(resolver, "com.apollographql.execution.annotation.GraphQLSubscription", ksFiles)
     )
 
     val sirTypeDefinitions = scalarDefinitions + typeDefinitions
