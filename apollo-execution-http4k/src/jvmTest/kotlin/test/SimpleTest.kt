@@ -7,7 +7,6 @@ import com.apollographql.execution.Resolver
 import com.apollographql.execution.http4k.*
 import org.http4k.core.Method
 import org.http4k.core.Request
-import kotlin.test.Ignore
 import kotlin.test.Test
 
 class MyDefaultResolver: Resolver {

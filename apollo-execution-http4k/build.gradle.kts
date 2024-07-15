@@ -25,7 +25,7 @@ kotlin {
     }
     getByName("jvmTest") {
       dependencies {
-        implementation(libs.http4k.server.jetty)
+        implementation(libs.http4k.server.netty)
         implementation(libs.slf4j.nop)
       }
     }

@@ -1,32 +1,39 @@
 # Ktor bindings
 
-For a fully functional Ktor server, 
+
+> See [sample-ktor](https://github.com/apollographql/apollo-kotlin-execution/tree/main/sample-ktor) for a project using the Ktor bindings. 
+
+To use the Ktor bindings, add `apollo-execution-ktor` to your dependencies and a Ktor engine:
 
 ```kotlin
 dependencies {
   // Add the runtime dependency
-  implementation("com.apollographql.execution:apollo-execution-runtime:%latest_version%")
+  implementation("com.apollographql.execution:apollo-execution-ktor:%latest_version%")
   // This sample uses netty as an engine.
   // See https://ktor.io/ for other choices.
   implementation("io.ktor:ktor-server-netty:2.3.11")
 }
 ```
 
-
-In addition to `schema.graphqls`, Apollo Execution generates an `ExecutableSchemaBuilder` preconfigured with hardwired resolvers that you can use to configure your server:
+`apollo-execution-ktor` provides an `apolloModule(ExecutableSchema)` function that adds a `/graphql` route to your application:
 
 ```kotlin
-fun main() {
-    embeddedServer(Netty, port = 8080) {
-        // /graphql route
-        apolloModule(ServiceExecutableSchemaBuilder().build())
-        // /sandbox/index.html route
-        apolloSandboxModule()
-    }.start(wait = true)
+embeddedServer(Netty, port = 8080) {
+  // /graphql route
+  apolloModule(ServiceExecutableSchemaBuilder().build())
+}.start(wait = true)
+```
+
+You can also opt in the Apollo Sandbox route by using `apolloSandboxModule()`
+
+```kotlin
+embeddedServer(Netty, port = 8080) {
+  // /sandbox/index.html route
+  apolloSandboxModule()
 }
 ```
 
-Your server is ready!
+`apolloSandboxModule()` adds a `sandbox/index.html` route to your application.
 
 Open [`http://localhost:8080/sandbox/index.html`](http://localhost:8080/sandbox/index.html) and try out your API in the [Apollo sandbox](https://www.apollographql.com/docs/graphos/explorer/sandbox/)
 
