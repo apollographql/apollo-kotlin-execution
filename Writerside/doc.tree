@@ -6,7 +6,8 @@
                  name="Apollo Adapters"
                  start-page="welcome.md">
 
-    <toc-element topic="welcome.md"/>
     <toc-element toc-title="GitHub" href="https://github.com/apollographql/apollo-kotlin-execution"/>
     <toc-element toc-title="Kdoc" href="https://apollographql.github.io/apollo-kotlin-execution/kdoc"/>
+    <toc-element topic="welcome.md"/>
+    <toc-element topic="ktor.md"/>
 </instance-profile>

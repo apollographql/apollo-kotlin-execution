@@ -4,14 +4,12 @@ Apollo Execution is a code-first GraphQL execution library.
 
 Features:
 
-* Generates a GraphQL schema from your Kotlin code: Write Kotlin, get a typesafe API.
-* Doesn't use any reflection. Use it on the JVM and enjoy ultra fast start times. Or use it on Kotlin native. Apollo Execution is KMP-ready!
-* Supports custom scalars, subscriptions, persisted queries and aims to support the current [GraphQL draft](https://spec.graphql.org/draft/).
+* Generates a GraphQL schema from your Kotlin code: write Kotlin, get a typesafe API.
+* Doesn't use reflection. Use it on the JVM and enjoy ultra-fast start times. Or use it on Kotlin native. Apollo Execution is KMP-ready!
+* Supports custom scalars, subscriptions, persisted queries and everything in the current [GraphQL draft](https://spec.graphql.org/draft/).
+* Integration with Ktor and Spring boot
 
-Under the hood, Apollo Execution uses [KSP](https://kotlinlang.org/docs/ksp-overview.html) to generate resolvers and schema information from your Kotlin code.
-
-
-Use `runtime-ktor` for high level integration with Ktor or just `runtime` for just the codegen.
+Under the hood, Apollo Execution uses [KSP](https://kotlinlang.org/docs/ksp-overview.html) to generate GraphQL resolvers and types information from your Kotlin code.
 
 ## Getting started
 
@@ -23,18 +21,15 @@ Add the `com.apollographql.execution` Gradle plugin and dependencies to your bui
 // build.gradle.kts
 plugins {
   // Kotlin and KSP are required
-  id("org.jetbrains.kotlin.jvm").version("2.0.0")
-  id("com.google.devtools.ksp").version("2.0.0-1.0.21")
+  id("org.jetbrains.kotlin.jvm").version(kotlinVersion)
+  id("com.google.devtools.ksp").version(kspVersion)
   // Add the Apollo Execution plugin
   id("com.apollographql.execution").version("%latest_version%")
 }
 
 dependencies {
   // Add the runtime dependency
-  implementation("com.apollographql.execution:runtime-ktor%latest_version%")
-  // This sample uses netty as an engine.
-  // See https://ktor.io/ for other choices.
-  implementation("io.ktor:ktor-server-netty:2.3.11")
+  implementation("com.apollographql.execution:apollo-execution-runtime:%latest_version%")
 }
 
 // Configure codegen
@@ -74,7 +69,7 @@ Run the codegen:
 
 Apollo Execution generates a schema in `graphql/schema.graphqls`:
 
-```graphql
+```
 type Query {
   """
    Greeting for name
@@ -85,25 +80,40 @@ type Query {
 
 It is recommended to commit this file in source control so you can track changes made to your schema.
 
-### Writing your server
+### Executing your query
 
-In addition to `schema.graphqls`, Apollo Execution generates an `ExecutableSchemaBuilder` preconfigured with hardwired resolvers that you can use to configure your server:
+The codegen generates a `com.example.ServiceExecutableSchemaBuilder` class that is the entry point to execute GraphQL requests:
 
 ```kotlin
-fun main() {
-    embeddedServer(Netty, port = 8080) {
-        // /graphql route
-        apolloModule(ServiceExecutableSchemaBuilder().build())
-        // /sandbox/index.html route
-        apolloSandboxModule()
-    }.start(wait = true)
-}
+val executableSchema = ServiceExecutableSchemaBuilder()
+  .build()
 ```
 
-Your server is ready!
+You can then create a GraphQL request:
+```kotlin
+val request = GraphQLRequest.Builder()
+  .document("{ hello(name: \"sample\") }")
+  .build()
+```
 
-Open [`http://localhost:8080/sandbox/index.html`](http://localhost:8080/sandbox/index.html) and try out your API in the [Apollo sandbox](https://www.apollographql.com/docs/graphos/explorer/sandbox/)
+And execute it:
+```kotlin
+val response = executableSchema.execute(
+  request,
+  ExecutionContext.Empty
+)
 
-[![Apollo Sandbox](sandbox.png)](http://localhost:8080/sandbox/index.html)
+println(response.data)
+// {hello=Hello sample}
+```
 
+For more details, see the [Using variables](variables.md), [Execution contexts](execution-context.md) and other documentation pages
 
+## 3rd party bindings
+
+The Apollo Execution execution algorithm are network agnostic but for convenience, they comes with bindings for:
+
+* Ktor ([documentation](ktor.md))
+* Spring ([documentation](spring.md))
+
+See the respective documentation for how to configure a server with an `ExecutableSchema`

@@ -33,3 +33,6 @@ http4k-server-undertow = { module = "org.http4k:http4k-server-undertow" }
 http4k-server-jetty = { module = "org.http4k:http4k-server-jetty" }
 
 
+[plugins]
+kgp-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-plugin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

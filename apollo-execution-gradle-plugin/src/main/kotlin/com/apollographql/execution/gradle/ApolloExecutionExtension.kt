@@ -56,30 +56,15 @@ abstract class ApolloExecutionExtension @Inject constructor(val project: Project
     }
 
     project.dependencies.add(
-        configurationName,
-        "com.apollographql.execution:apollo-execution-processor:$VERSION"
+      configurationName,
+      "com.apollographql.execution:apollo-execution-processor:$VERSION"
     )
 
-    if (service.schemaPath.isPresent) {
-      val dumpSchema = project.tasks.register(apolloDumpSchema, ApolloDumpSchema::class.java) {
-        it.from.set(project.file(kspSchemaPath))
-        it.to.set(project.file(service.schemaPath.get()))
-      }
-      val checkSchema = project.tasks.register(apolloCheckSchema, ApolloCheckSchema::class.java) {
-        it.new.set(project.file(kspSchemaPath))
-        it.existing.set(project.file(service.schemaPath.get()))
-      }
-      project.tasks.named("check") {
-        it.dependsOn(apolloCheckSchema)
-      }
-
-      project.tasks.all { maybeKsp ->
-        if (maybeKsp.name == kspTaskName) {
-          dumpSchema.configure { it.dependsOn(maybeKsp) }
-          checkSchema.configure { it.dependsOn(maybeKsp) }
-        }
-      }
-    }
+    project.enableSchemaDump(
+      kspSchemaPath = kspSchemaPath,
+      kspTaskName = kspTaskName,
+      schemaDump = service.schemaFile
+    )
   }
 }
 
