@@ -6,5 +6,5 @@ type Query {
   """
    Greeting for name
   """
-  hello(name: ID!): ID!
+  hello(name: String!): String!
 }

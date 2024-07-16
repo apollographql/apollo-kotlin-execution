@@ -11,10 +11,12 @@ private fun Project.defaultSchemaDump(): RegularFile {
 }
 fun Project.enableSchemaDump(kspSchemaPath: String, kspTaskName: String, schemaDump: RegularFileProperty) {
   val dumpSchema = tasks.register(apolloDumpSchema, ApolloDumpSchema::class.java) {
+    it.dependsOn(kspTaskName)
     it.from.set(file(kspSchemaPath))
     it.to.set(schemaDump.orElse(defaultSchemaDump()))
   }
   val checkSchema = tasks.register(apolloCheckSchema, ApolloCheckSchema::class.java) {
+    it.dependsOn(kspTaskName)
     it.new.set(file(kspSchemaPath))
     it.existing.set(schemaDump.orElse(defaultSchemaDump()))
   }
