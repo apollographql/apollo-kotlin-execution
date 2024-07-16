@@ -1,15 +1,15 @@
 # Welcome
 
-Apollo Execution is a code-first GraphQL execution library.
+Apollo Kotlin Execution is a code-first GraphQL execution library.
 
 Features:
 
 * Generates a GraphQL schema from your Kotlin code: write Kotlin, get a typesafe API.
-* Doesn't use reflection. Use it on the JVM and enjoy ultra-fast start times. Or use it on Kotlin native. Apollo Execution is KMP-ready!
+* Doesn't use reflection. Use it on the JVM and enjoy ultra-fast start times. Or use it with Kotlin native. Apollo Kotlin Execution is KMP-ready!
 * Supports custom scalars, subscriptions, persisted queries and everything in the current [GraphQL draft](https://spec.graphql.org/draft/).
-* Integration with Ktor and Spring boot
+* Integration with Ktor and http4k.
 
-Under the hood, Apollo Execution uses [KSP](https://kotlinlang.org/docs/ksp-overview.html) to generate GraphQL resolvers and types information from your Kotlin code.
+Under the hood, Apollo Kotlin Execution uses [KSP](https://kotlinlang.org/docs/ksp-overview.html) to generate GraphQL resolvers and types from your Kotlin code.
 
 ## Getting started
 
@@ -23,7 +23,7 @@ plugins {
   // Kotlin and KSP are required
   id("org.jetbrains.kotlin.jvm").version(kotlinVersion)
   id("com.google.devtools.ksp").version(kspVersion)
-  // Add the Apollo Execution plugin
+  // Add the Apollo Kotlin Execution plugin
   id("com.apollographql.execution").version("%latest_version%")
 }
 
@@ -40,7 +40,7 @@ apolloExecution {
 }
 ```
 
-### Defining your root query
+### Define your root query
 
 Then write your root query in a `Query.kt` file:
 
@@ -68,7 +68,7 @@ Run the codegen:
 ```
 
 
-### Executing your query
+### Execute your query
 
 The codegen generates a `com.example.ServiceExecutableSchemaBuilder` class that is the entry point to execute GraphQL requests:
 
@@ -95,13 +95,15 @@ println(response.data)
 // {hello=Hello sample}
 ```
 
-For more details, see the [Using variables](variables.md), [Execution contexts](execution-context.md) and other documentation pages
+Apollo Kotlin Execution supports objects, interfaces, unions, enum, input objects, deprecation, customizing names and descriptions and more. 
+
+For details, see the [Generating a schema](schema.md) page.
 
 ## 3rd party bindings
 
-The Apollo Execution execution algorithm are network agnostic but for convenience, they comes with bindings for:
+The Apollo Kotlin Execution runtime is network agnostic but for convenience, it comes with [bindings](bindings.md) for:
 
 * Ktor ([documentation](ktor.md))
-* Spring ([documentation](spring.md))
+* http4k ([documentation](http4k.md))
 
 See the respective documentation for how to configure a server with an `ExecutableSchema`

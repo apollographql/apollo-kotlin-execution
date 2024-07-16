@@ -1,4 +1,4 @@
-# http4k bindings
+# http4k
 
 > See [sample-http4k](https://github.com/apollographql/apollo-kotlin-execution/tree/main/sample-http4k) for a project using the http4k bindings.
 

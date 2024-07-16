@@ -1,4 +1,4 @@
-# Ktor bindings
+# Ktor
 
 
 > See [sample-ktor](https://github.com/apollographql/apollo-kotlin-execution/tree/main/sample-ktor) for a project using the Ktor bindings. 

@@ -1,6 +1,6 @@
 # Generating a schema
 
-Apollo Kotlin Execution uses KSP to parse your Kotlin code and generate a matching GraphQL graph. 
+Apollo Kotlin Execution uses KSP to parse your Kotlin code and generate a matching GraphQL schema. 
 
 To identify a graph, the Kotlin code must contain exactly one `@GraphQLQuery` class and at most one optional  `@GraphQLMutation` and `@GraphQLSubscription` classes:
 
