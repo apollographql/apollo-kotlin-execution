@@ -64,19 +64,11 @@ class ApolloProcessor(
 
     done = true
     val ksFiles = mutableListOf<KSFile>()
-
-    val coercingDeclarations = getSymbolsWithAnnotation(resolver, "com.apollographql.execution.annotation.GraphQLCoercing", ksFiles)
-    val coercingDefinitions = getCoercingDefinitions(
-        logger,
-        coercingDeclarations
-    )
-
     val scalarDeclarations = getSymbolsWithAnnotation(resolver, "com.apollographql.execution.annotation.GraphQLScalar", ksFiles)
 
     val scalarDefinitions = getScalarDefinitions(
         logger,
         scalarDeclarations,
-        coercingDefinitions
     )
 
     val query = getRootSymbol(resolver, "com.apollographql.execution.annotation.GraphQLQuery", ksFiles)

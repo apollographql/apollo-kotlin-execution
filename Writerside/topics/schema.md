@@ -176,7 +176,7 @@ Classes annotated with `@GraphQLScalar` are mapped to GraphQL scalars:
 <tr>
 <td>
 <code-block lang="kotlin">
-@GraphQLScalar
+@GraphQLScalar(GeoPointCoercing::class)
 class GeoPoint(
     val latitude: Double, 
     val longitude: Double
@@ -200,7 +200,7 @@ You can also map existing classes that you don't own to GraphQL scalars using `t
 <code-block lang="kotlin">
 import kotlinx.datetime.LocalDateTime
 
-@GraphQLScalar
+@GraphQLScalar(DateTimeCoercing::class)
 typealias DateTime = LocalDateTime
 </code-block>
 </td>

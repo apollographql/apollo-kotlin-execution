@@ -1,5 +1,6 @@
 package com.apollographql.execution.annotation
 
+import com.apollographql.execution.Coercing
 import kotlin.reflect.KClass
 
 /**
@@ -21,4 +22,4 @@ import kotlin.reflect.KClass
  * When using type aliases, you may use either the alias or the original type.
  */
 @Target(AnnotationTarget.CLASS, AnnotationTarget.TYPEALIAS)
-annotation class GraphQLScalar
+annotation class GraphQLScalar(val coercing: KClass<out Coercing<*>>)

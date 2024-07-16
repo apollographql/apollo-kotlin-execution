@@ -16,9 +16,8 @@ import com.google.devtools.ksp.symbol.KSTypeAlias
  * Returns a list of scalar. [SirScalarDefinition.name] is unique in the list. Duplicate scalar output an error
  */
 internal fun getScalarDefinitions(
-    logger: KSPLogger,
-    declarations: List<KSAnnotated>,
-    coercingDefinitions: List<SirCoercing>,
+  logger: KSPLogger,
+  declarations: List<KSAnnotated>,
 ): List<SirScalarDefinition> {
   /**
    * key is the scalar name
@@ -26,6 +25,10 @@ internal fun getScalarDefinitions(
   val typeDefinitions = mutableMapOf<String, SirScalarDefinition>()
 
   declarations.forEach { declaration ->
+    val coercing = declaration.getCoercing(logger)
+    if (coercing == null) {
+      return@forEach
+    }
     when (declaration) {
       is KSTypeAlias -> {
         val name = declaration.graphqlNameOrNull() ?: declaration.simpleName.asString()
@@ -34,17 +37,13 @@ internal fun getScalarDefinitions(
           return@forEach
         }
         val qn = declaration.asClassName().asString()
-        val coercing = coercingDefinitions.singleOrNull { it.scalarQualifiedName == qn }
-        if (coercing == null) {
-          logger.error("Cannot find a coercing for scalar '$name'", declaration)
-          return@forEach
-        }
-        typeDefinitions.put(name, SirScalarDefinition(
+        typeDefinitions.put(
+          name, SirScalarDefinition(
             name = name,
             description = declaration.docString,
             qualifiedName = qn,
             coercing = coercing
-        )
+          )
         )
       }
 
@@ -55,18 +54,14 @@ internal fun getScalarDefinitions(
           return@forEach
         }
         val qn = declaration.asClassName().asString()
-        val coercing = coercingDefinitions.singleOrNull { it.scalarQualifiedName == qn }
-        if (coercing == null) {
-          logger.error("Cannot find a coercing for scalar '$name'", declaration)
-          return@forEach
-        }
 
-        typeDefinitions.put(name, SirScalarDefinition(
+        typeDefinitions.put(
+          name, SirScalarDefinition(
             name = name,
             description = declaration.docString,
             qualifiedName = qn,
             coercing = coercing
-        )
+          )
         )
       }
     }
@@ -79,25 +74,47 @@ internal fun getScalarDefinitions(
       val qn = it.toQualifiedName()
       val coercingName = it
       typeDefinitions.put(
+        it,
+        SirScalarDefinition(
           it,
-          SirScalarDefinition(
-              it,
-              qualifiedName = qn,
-              description = null,
-              coercing = SirCoercing(
-                className = SirClassName(
-                  "com.apollographql.execution",
-                  listOf("${coercingName}Coercing")
-                ),
-                instantiation = Instantiation.OBJECT,
-                qn
-              ),
-          )
+          qualifiedName = qn,
+          description = null,
+          coercing = SirCoercing(
+            className = SirClassName(
+              "com.apollographql.execution",
+              listOf("${coercingName}Coercing")
+            ),
+            instantiation = Instantiation.OBJECT,
+          ),
+        )
       )
     }
   }
 
   return typeDefinitions.values.toList()
+}
+
+private fun KSAnnotated.getCoercing(logger: KSPLogger): SirCoercing? {
+  val annotation = annotations.first { it.shortName.asString() == "GraphQLScalar" }
+  val coercing = annotation.arguments.first().value
+  if (coercing !is KSType) {
+    logger.error("coercing must be a type")
+    return null
+  }
+
+  val declaration = coercing.declaration
+  if (declaration !is KSClassDeclaration) {
+    logger.error("Coercing must be a class or object", declaration)
+    return null
+  }
+
+  val instantiation = declaration.instantiation()
+  if (instantiation == Instantiation.UNKNOWN) {
+    logger.error("Coercing implementation must either be objects or have a no-arg constructor", declaration)
+    return null
+  }
+
+  return SirCoercing(declaration.asClassName(), instantiation)
 }
 
 private fun String.toQualifiedName(): String {
@@ -112,61 +129,3 @@ private fun String.toQualifiedName(): String {
   }
 }
 
-private fun KSClassDeclaration.hasSuperType(qualifiedName: String): Boolean {
-  return superTypes.any {
-    it.resolve().declaration.asClassName().asString() == qualifiedName
-  }
-}
-
-internal fun KSType.scalarQualifiedName(): String? {
-  return when (this.declaration) {
-    is KSClassDeclaration -> declaration.asClassName().asString()
-    is KSTypeAlias -> declaration.asClassName().asString()
-    else -> {
-      null
-    }
-  }
-}
-
-internal fun getCoercingDefinitions(logger: KSPLogger, declarations: List<KSAnnotated>): List<SirCoercing> {
-  val definitions = mutableMapOf<String, SirCoercing>()
-
-  declarations.forEach { declaration ->
-    if (declaration !is KSClassDeclaration) {
-      logger.error("Coercing must be a class or object", declaration)
-      return@forEach
-    }
-
-    val instantiation = declaration.instantiation()
-    if (instantiation == Instantiation.UNKNOWN) {
-      logger.error("Coercing implementation must either be objects or have a no-arg constructor", declaration)
-      return@forEach
-    }
-
-    var scalarQualifiedName: String? = null
-    var hasCoercingSuperType = false
-    declaration.superTypes.forEach {
-      val superDeclaration = it.resolve().declaration
-      if (superDeclaration.asClassName().asString() == "com.apollographql.execution.Coercing") {
-        val scalarType = it.element?.typeArguments?.singleOrNull()?.type?.resolve()
-        scalarQualifiedName = scalarType?.scalarQualifiedName()
-        if (scalarQualifiedName == null) {
-          logger.error("Coercing must have a single type parameter", declaration)
-        }
-        hasCoercingSuperType = true
-        return@forEach
-      }
-    }
-    if (!hasCoercingSuperType) {
-      logger.error("Coercing implementations must implement the com.apollographql.execution.Coercing interface", declaration)
-      return@forEach
-    }
-    if (definitions.containsKey(scalarQualifiedName)) {
-      logger.error("There is already a Coercing for type '$scalarQualifiedName'", declaration)
-      return@forEach
-    }
-    definitions.put(scalarQualifiedName!!, SirCoercing(declaration.asClassName(), instantiation, scalarQualifiedName!!))
-  }
-
-  return definitions.values.toList()
-}

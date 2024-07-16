@@ -66,7 +66,6 @@ internal class SirScalarDefinition(
 internal class SirCoercing(
     val className: SirClassName,
     val instantiation: Instantiation,
-    val scalarQualifiedName: String,
 )
 
 internal enum class Instantiation {

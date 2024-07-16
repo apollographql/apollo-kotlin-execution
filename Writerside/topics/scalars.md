@@ -19,7 +19,7 @@ You can define a new custom scalar using `@GraphQLScalar`:
 <tr>
 <td>
 <code-block lang="kotlin">
-@GraphQLScalar
+@GraphQLScalar(GeoPointCoercing::class)
 class GeoPoint(
     val latitude: Double, 
     val longitude: Double
@@ -42,7 +42,7 @@ scalar GeoPoint
 <td>
 <code-block lang="kotlin">
 import kotlinx.datetime.LocalDateTime
-@GraphQLScalar
+@GraphQLScalar(DateTimeCoercing::class)
 typealias DateTime = LocalDateTime
 </code-block>
 </td>
@@ -54,34 +54,9 @@ scalar DateTime
 </tr>
 </table>
 
-### Coercing scalars
-
-Each custom scalar requires a matching `Coercing`:
-
-```kotlin
-@GraphQLCoercing
-internal class GeoPointCoercing : Coercing<GeoPoint> {
-  // ..
-}
-
-```
-
-Apollo Kotlin Execution knows how to bind a scalar to its Coercing by looking at the `Coercing<>` type parameter and looking up the matching `@GraphQLScalar` definition.
-
-
-Similarly to `GraphQLScalar`, you can use `@GraphQLCoercing` on typealiases:
-
-```kotlin
-@GraphQLCoercing
-typealias DateTimeCoercing = LocaleDateTimeCoercing
-```
-
-> Two different custom scalars cannot use the same Kotlin qualified name. If you need this, use a type alias like for `ID` (see [below](#the-id-scalar)).
-{style="warning"}
-
 ### Implementing the Coercing interface
 
-Let's take a look at the `Coercing` definition:
+Each custom scalar requires a matching `Coercing` implementation:
 
 ```kotlin
 interface Coercing<T> {
@@ -136,7 +111,7 @@ query GetUserInParis {
 > For an in-depth explanation of the different methods, see [https://www.graphql.de/blog/scalars-in-depth/](https://www.graphql.de/blog/scalars-in-depth/)
 
 
-With the above, a possible implementation for `GeoPoint` is:
+With the above, a possible implementation for `GeoPointCoercing` is:
 
 ```kotlin
 @GraphQLCoercing
@@ -210,19 +185,13 @@ Typically, `ID` is mapped either to `Int` or `String`.
 Mapping `ID` to `String`:
 
 ```kotlin
-@GraphQLScalar
+@GraphQLScalar(StringCoercing)
 typealias ID = String
-
-@GraphQLCoercing
-typealias IDCoercing = StringCoercing
 ```
 
 Mapping `ID` to `Int`:
 
 ```kotlin
-@GraphQLScalar
+@GraphQLScalar(IntCoercing)
 typealias ID = Int
-
-@GraphQLCoercing
-typealias IDCoercing = IntCoercing
 ```
