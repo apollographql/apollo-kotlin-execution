@@ -1,13 +1,8 @@
 package com.apollographql.execution
 
 import com.apollographql.apollo.api.json.JsonNumber
-import com.apollographql.apollo.ast.GQLBooleanValue
-import com.apollographql.apollo.ast.GQLEnumTypeDefinition
-import com.apollographql.apollo.ast.GQLFloatValue
-import com.apollographql.apollo.ast.GQLIntValue
-import com.apollographql.apollo.ast.GQLStringValue
-import com.apollographql.apollo.ast.GQLTypeDefinition
-import com.apollographql.apollo.ast.GQLValue
+import com.apollographql.apollo.ast.*
+import com.apollographql.execution.annotation.GraphQLCoercing
 import com.apollographql.execution.internal.ExternalValue
 import com.apollographql.execution.internal.InternalValue
 
@@ -16,19 +11,23 @@ import com.apollographql.execution.internal.InternalValue
  */
 interface Coercing<T> {
   /**
-   * Serializes from an internal value to an external value.
+   * Serializes from an internal value (Kotlin) to an external value (typically JSON).
    *
    * For an example Date --> String
    */
   fun serialize(internalValue: T): ExternalValue
 
   /**
-   * Deserializes from an external value to an internal value.
+   * Deserializes from an external value (typically JSON) to an internal value (Kotlin).
    *
    * For an example String --> Date
    */
   fun deserialize(value: ExternalValue): T
-  fun parseLiteral(gqlValue: GQLValue): T
+
+  /**
+   * Parses from a GraphQL value to an internal value (Kotlin)
+   */
+  fun parseLiteral(value: GQLValue): T
 }
 
 
@@ -86,9 +85,9 @@ object IntCoercing: Coercing<Int> {
     return value.toInt()
   }
 
-  override fun parseLiteral(gqlValue: GQLValue): Int {
-    check(gqlValue is GQLIntValue)
-    return gqlValue.value.toInt()
+  override fun parseLiteral(value: GQLValue): Int {
+    check(value is GQLIntValue)
+    return value.value.toInt()
   }
 }
 
@@ -102,10 +101,10 @@ object FloatCoercing: Coercing<Double> {
     return value.toDouble()
   }
 
-  override fun parseLiteral(gqlValue: GQLValue): Double {
-    return when (gqlValue) {
-      is GQLIntValue -> gqlValue.value.toDouble()
-      is GQLFloatValue -> gqlValue.value.toDouble()
+  override fun parseLiteral(value: GQLValue): Double {
+    return when (value) {
+      is GQLIntValue -> value.value.toDouble()
+      is GQLFloatValue -> value.value.toDouble()
       else -> error("")
     }
   }
@@ -121,9 +120,9 @@ object BooleanCoercing: Coercing<Boolean> {
     return value
   }
 
-  override fun parseLiteral(gqlValue: GQLValue): Boolean {
-    check(gqlValue is GQLIntValue)
-    return gqlValue.value.toBooleanStrict()
+  override fun parseLiteral(value: GQLValue): Boolean {
+    check(value is GQLIntValue)
+    return value.value.toBooleanStrict()
   }
 }
 
@@ -137,9 +136,9 @@ object StringCoercing: Coercing<String> {
     return value
   }
 
-  override fun parseLiteral(gqlValue: GQLValue): String {
-    check(gqlValue is GQLStringValue)
-    return gqlValue.value
+  override fun parseLiteral(value: GQLValue): String {
+    check(value is GQLStringValue)
+    return value.value
   }
 }
 

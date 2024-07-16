@@ -198,13 +198,15 @@ You can also map existing classes that you don't own to GraphQL scalars using `t
 <tr>
 <td>
 <code-block lang="kotlin">
+import kotlinx.datetime.LocalDateTime
+
 @GraphQLScalar
-typealias Json = JsonElement
+typealias DateTime = LocalDateTime
 </code-block>
 </td>
 <td>
 <code-block lang="graphql">
-scalar Json
+scalar DateTime
 </code-block>
 </td>
 </tr>

@@ -1,7 +1,5 @@
 package com.apollographql.execution.annotation
 
-import kotlin.reflect.KClass
-
 /**
  * Marks a given class as a GraphQL scalar coercing.
  */

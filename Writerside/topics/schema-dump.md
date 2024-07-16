@@ -4,7 +4,9 @@ When working with Kotlin code, it's easy to introduce unwanted changes to your G
 
 For this reason, Apollo Kotlin Execution comes with built-in monitoring of your GraphQL schema. The Gradle plugin adds an `apolloCheckSchema` task that is run automatically whenever you run `./gradlew check` (and therefore `./gradlew build`).
 
-For an example, if you were to add a `exposedByMistake()` function, running `./gradlew apolloCheckSchema` would fail with the below:
+> If you are familiar with [Kotlin binary compatibility validator](https://github.com/Kotlin/binary-compatibility-validator), the concept is very similar.
+ 
+For an example, if you add a `exposedByMistake()` function, running `./gradlew apolloCheckSchema` fails with the below:
 
 ```
 $ ./gradlew apolloCheckSchema
