@@ -9,7 +9,8 @@
     <toc-element toc-title="GitHub" href="https://github.com/apollographql/apollo-kotlin-execution"/>
     <toc-element toc-title="Kdoc" href="https://apollographql.github.io/apollo-kotlin-execution/kdoc"/>
     <toc-element topic="welcome.md">
-        <toc-element topic="variables.md"/>
+        <toc-element topic="mapping.md"/>
+        <toc-element topic="scalars.md"/>
         <toc-element topic="execution-context.md"/>
         <toc-element topic="schema-dump.md"/>
     </toc-element>

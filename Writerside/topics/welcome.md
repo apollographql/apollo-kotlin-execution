@@ -67,18 +67,6 @@ Run the codegen:
 ./gradlew kspKotlin
 ```
 
-Apollo Execution generates a schema in `graphql/schema.graphqls`:
-
-```
-type Query {
-  """
-   Greeting for name
-  """
-  hello(name: ID!): ID!
-}
-```
-
-It is recommended to commit this file in source control so you can track changes made to your schema.
 
 ### Executing your query
 

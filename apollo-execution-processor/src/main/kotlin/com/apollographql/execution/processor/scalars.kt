@@ -77,10 +77,7 @@ internal fun getScalarDefinitions(
   builtInScalars.forEach {
     if (!typeDefinitions.containsKey(it)) {
       val qn = it.toQualifiedName()
-      val coercingName = when(it) {
-        "ID" -> "String"
-        else -> it
-      }
+      val coercingName = it
       typeDefinitions.put(
           it,
           SirScalarDefinition(
@@ -109,7 +106,8 @@ private fun String.toQualifiedName(): String {
     "String" -> "kotlin.String"
     "Float" -> "kotlin.Double"
     "Boolean" -> "kotlin.Boolean"
-    "ID" -> "kotlin.String"
+    "ID" -> "Apollo Kotlin Execution doesn't come with a built-in ID type, please define your own"
+    // This is only called on built-in scalars so should not happen
     else -> error("")
   }
 }

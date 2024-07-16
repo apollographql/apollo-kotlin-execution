@@ -14,6 +14,4 @@ class Query {
     fun hello(name: String): String {
         return "Hello $name"
     }
-
-    fun bar()  = "bar"
 }
