@@ -1,5 +1,5 @@
 <!DOCTYPE html SYSTEM "about:legacy-compat">
-<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2024-07-16T14:49:23.825126898"><title>Generating a schema | Apollo Adapters</title><script type="application/json" id="virtual-toc-data">[{"id":"objects-and-fields","level":0,"title":"Objects and fields","anchor":"#objects-and-fields"},{"id":"unions-and-interfaces","level":0,"title":"Unions and interfaces","anchor":"#unions-and-interfaces"},{"id":"enums","level":0,"title":"Enums","anchor":"#enums"},{"id":"scalars","level":0,"title":"Scalars","anchor":"#scalars"},{"id":"arguments","level":0,"title":"Arguments","anchor":"#arguments"},{"id":"names","level":0,"title":"Names","anchor":"#names"},{"id":"descriptions","level":0,"title":"Descriptions","anchor":"#descriptions"},{"id":"nullability","level":0,"title":"Nullability","anchor":"#nullability"},{"id":"deprecation","level":0,"title":"Deprecation","anchor":"#deprecation"},{"id":"built-in-types","level":0,"title":"Built-in types","anchor":"#built-in-types"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="https://resources.jetbrains.com/writerside/apidoc/6.10.0-b267/app.css" rel="stylesheet"><link rel="icon" type="image/png" sizes="16x16" href="images/favicon-96x96.png"><link rel="icon" type="image/png" sizes="32x32" href="images/favicon-192x192.png"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="Generating a schema | Apollo Adapters"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="Apollo Adapters Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/schema.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="Generating a schema | Apollo Adapters"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2024-07-16T14:49:59.924610855"><title>Generating a schema | Apollo Adapters</title><script type="application/json" id="virtual-toc-data">[{"id":"objects-and-fields","level":0,"title":"Objects and fields","anchor":"#objects-and-fields"},{"id":"unions-and-interfaces","level":0,"title":"Unions and interfaces","anchor":"#unions-and-interfaces"},{"id":"enums","level":0,"title":"Enums","anchor":"#enums"},{"id":"scalars","level":0,"title":"Scalars","anchor":"#scalars"},{"id":"arguments","level":0,"title":"Arguments","anchor":"#arguments"},{"id":"names","level":0,"title":"Names","anchor":"#names"},{"id":"descriptions","level":0,"title":"Descriptions","anchor":"#descriptions"},{"id":"nullability","level":0,"title":"Nullability","anchor":"#nullability"},{"id":"deprecation","level":0,"title":"Deprecation","anchor":"#deprecation"},{"id":"built-in-types","level":0,"title":"Built-in types","anchor":"#built-in-types"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="https://resources.jetbrains.com/writerside/apidoc/6.10.0-b267/app.css" rel="stylesheet"><link rel="icon" type="image/png" sizes="16x16" href="images/favicon-96x96.png"><link rel="icon" type="image/png" sizes="32x32" href="images/favicon-192x192.png"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="Generating a schema | Apollo Adapters"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="Apollo Adapters Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/schema.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="Generating a schema | Apollo Adapters"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
     "@context": "http://schema.org",
     "@type": "WebPage",
     "@id": "writerside-documentation/schema.html#webpage",
@@ -13,7 +13,7 @@
     "@id": "writerside-documentation/#website",
     "url": "writerside-documentation/",
     "name": "Apollo Adapters Help"
-}</script><!-- End Schema.org --></head><body data-id="schema" data-main-title="Generating a schema" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="welcome.md|Welcome" data-edit-url="https://github.com/apollographql/apollo-kotlin-execution/edit/main/Writerside/topics/schema.md"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>Apollo Adapters  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="schema" id="schema.md">Generating a schema</h1><p id="-9jx2t6_2">Apollo Kotlin Execution uses KSP to parse your Kotlin code and generate a matching GraphQL graph.</p><p id="-9jx2t6_3">To identify a graph, the Kotlin code must contain exactly one <code class="code" id="-9jx2t6_4">@GraphQLQuery</code> class and at most one optional <code class="code" id="-9jx2t6_5">@GraphQLMutation</code> and <code class="code" id="-9jx2t6_6">@GraphQLSubscription</code> classes:</p><div class="code-block" data-lang="kotlin">
+}</script><!-- End Schema.org --></head><body data-id="schema" data-main-title="Generating a schema" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="welcome.md|Welcome" data-edit-url="https://github.com/apollographql/apollo-kotlin-execution/edit/main/Writerside/topics/schema.md"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>Apollo Adapters  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="schema" id="schema.md">Generating a schema</h1><p id="-tmymgj_2">Apollo Kotlin Execution uses KSP to parse your Kotlin code and generate a matching GraphQL graph.</p><p id="-tmymgj_3">To identify a graph, the Kotlin code must contain exactly one <code class="code" id="-tmymgj_4">@GraphQLQuery</code> class and at most one optional <code class="code" id="-tmymgj_5">@GraphQLMutation</code> and <code class="code" id="-tmymgj_6">@GraphQLSubscription</code> classes:</p><div class="code-block" data-lang="kotlin">
 // Mandatory top-level Query
 @GraphQLQuery
 class Query {
@@ -28,39 +28,39 @@ class Mutation { }
 // Optional top-level Subscription
 @GraphQLSubscription
 class Subscription { }
-</div><p id="-9jx2t6_8">From those root classes, the Apollo Kotlin Execution processor traverses the Kotlin class graph and builds the matching GraphQL schema:</p><ul class="list _bullet" id="-9jx2t6_9"><li class="list__item" id="-9jx2t6_10"><p>Classes used in output positions are mapped to objects, unions and interfaces.</p></li><li class="list__item" id="-9jx2t6_11"><p>Classes used in input positions are mapped to input objects.</p></li><li class="list__item" id="-9jx2t6_12"><p>Scalars and Enum can happen in both input and output position.</p></li></ul><aside class="prompt" data-type="tip" data-title="" id="-9jx2t6_13"><p id="-9jx2t6_14">Non-root classes do not need to be annotated and are added to the GraphQL schema automatically.</p></aside><section class="chapter"><h2 id="objects-and-fields" data-toc="objects-and-fields">Objects and fields</h2><p id="-9jx2t6_15">Apollo Kotlin Execution maps public Kotlin classes to GraphQL types and public functions and properties to GraphQL fields with the same name:</p><div class="table-wrapper"><table class="wide" id="-9jx2t6_16"><thead><tr class="ijRowHead" id="-9jx2t6_17"><th id="-9jx2t6_18"><p>Kotlin</p></th><th id="-9jx2t6_19"><p>GraphQL</p></th></tr></thead><tbody><tr id="-9jx2t6_20"><td id="-9jx2t6_21"><div class="code-block" data-lang="kotlin">
+</div><p id="-tmymgj_8">From those root classes, the Apollo Kotlin Execution processor traverses the Kotlin class graph and builds the matching GraphQL schema:</p><ul class="list _bullet" id="-tmymgj_9"><li class="list__item" id="-tmymgj_10"><p>Classes used in output positions are mapped to objects, unions and interfaces.</p></li><li class="list__item" id="-tmymgj_11"><p>Classes used in input positions are mapped to input objects.</p></li><li class="list__item" id="-tmymgj_12"><p>Scalars and Enum can happen in both input and output position.</p></li></ul><aside class="prompt" data-type="tip" data-title="" id="-tmymgj_13"><p id="-tmymgj_14">Non-root classes do not need to be annotated and are added to the GraphQL schema automatically.</p></aside><section class="chapter"><h2 id="objects-and-fields" data-toc="objects-and-fields">Objects and fields</h2><p id="-tmymgj_15">Apollo Kotlin Execution maps public Kotlin classes to GraphQL types and public functions and properties to GraphQL fields with the same name:</p><div class="table-wrapper"><table class="wide" id="-tmymgj_16"><thead><tr class="ijRowHead" id="-tmymgj_17"><th id="-tmymgj_18"><p>Kotlin</p></th><th id="-tmymgj_19"><p>GraphQL</p></th></tr></thead><tbody><tr id="-tmymgj_20"><td id="-tmymgj_21"><div class="code-block" data-lang="kotlin">
 class User(val id: String) {
     fun email(): String
 }
-</div></td><td id="-9jx2t6_23"><div class="code-block" data-lang="none">
+</div></td><td id="-tmymgj_23"><div class="code-block" data-lang="none">
 type User {
     id: String!
     email: String!
 }
-</div></td></tr></tbody></table></div><p id="-9jx2t6_25">Private/internal fields and functions are not exposed in GraphQL:</p><div class="table-wrapper"><table class="wide" id="-9jx2t6_26"><thead><tr class="ijRowHead" id="-9jx2t6_27"><th id="-9jx2t6_28"><p>Kotlin</p></th><th id="-9jx2t6_29"><p>GraphQL</p></th></tr></thead><tbody><tr id="-9jx2t6_30"><td id="-9jx2t6_31"><div class="code-block" data-lang="kotlin">
+</div></td></tr></tbody></table></div><p id="-tmymgj_25">Private/internal fields and functions are not exposed in GraphQL:</p><div class="table-wrapper"><table class="wide" id="-tmymgj_26"><thead><tr class="ijRowHead" id="-tmymgj_27"><th id="-tmymgj_28"><p>Kotlin</p></th><th id="-tmymgj_29"><p>GraphQL</p></th></tr></thead><tbody><tr id="-tmymgj_30"><td id="-tmymgj_31"><div class="code-block" data-lang="kotlin">
 class User {
     fun email(): String
     internal fun sendVerificationEmail()
 }
-</div></td><td id="-9jx2t6_33"><div class="code-block" data-lang="none">
+</div></td><td id="-tmymgj_33"><div class="code-block" data-lang="none">
 type User {
     email: String!
 }
-</div></td></tr></tbody></table></div></section><section class="chapter"><h2 id="unions-and-interfaces" data-toc="unions-and-interfaces">Unions and interfaces</h2><p id="-9jx2t6_35">Non-empty Kotlin interfaces are mapped to GraphQL interfaces:</p><div class="table-wrapper"><table class="wide" id="-9jx2t6_36"><thead><tr class="ijRowHead" id="-9jx2t6_37"><th id="-9jx2t6_38"><p>Kotlin</p></th><th id="-9jx2t6_39"><p>GraphQL</p></th></tr></thead><tbody><tr id="-9jx2t6_40"><td id="-9jx2t6_41"><div class="code-block" data-lang="kotlin">
+</div></td></tr></tbody></table></div></section><section class="chapter"><h2 id="unions-and-interfaces" data-toc="unions-and-interfaces">Unions and interfaces</h2><p id="-tmymgj_35">Non-empty Kotlin interfaces are mapped to GraphQL interfaces:</p><div class="table-wrapper"><table class="wide" id="-tmymgj_36"><thead><tr class="ijRowHead" id="-tmymgj_37"><th id="-tmymgj_38"><p>Kotlin</p></th><th id="-tmymgj_39"><p>GraphQL</p></th></tr></thead><tbody><tr id="-tmymgj_40"><td id="-tmymgj_41"><div class="code-block" data-lang="kotlin">
 sealed interface Node {
     id: String
 }
 class User(
     override val id: String
 ) : Node 
-</div></td><td id="-9jx2t6_43"><div class="code-block" data-lang="none">
+</div></td><td id="-tmymgj_43"><div class="code-block" data-lang="none">
 interface Node {
     id: String!
 }
 type User implements Node {
     id: String!
 }
-</div></td></tr></tbody></table></div><p id="-9jx2t6_45">Empty Kotlin interfaces are mapped to GraphQL unions:</p><div class="table-wrapper"><table class="wide" id="-9jx2t6_46"><thead><tr class="ijRowHead" id="-9jx2t6_47"><th id="-9jx2t6_48"><p>Kotlin</p></th><th id="-9jx2t6_49"><p>GraphQL</p></th></tr></thead><tbody><tr id="-9jx2t6_50"><td id="-9jx2t6_51"><div class="code-block" data-lang="kotlin">
+</div></td></tr></tbody></table></div><p id="-tmymgj_45">Empty Kotlin interfaces are mapped to GraphQL unions:</p><div class="table-wrapper"><table class="wide" id="-tmymgj_46"><thead><tr class="ijRowHead" id="-tmymgj_47"><th id="-tmymgj_48"><p>Kotlin</p></th><th id="-tmymgj_49"><p>GraphQL</p></th></tr></thead><tbody><tr id="-tmymgj_50"><td id="-tmymgj_51"><div class="code-block" data-lang="kotlin">
 sealed interface Actor 
 class User(
     val id: String,
@@ -69,7 +69,7 @@ class User(
 class Organisation(
     val users: List&lt;User&gt;
 ) : Actor
-</div></td><td id="-9jx2t6_53"><div class="code-block" data-lang="none">
+</div></td><td id="-tmymgj_53"><div class="code-block" data-lang="none">
 union Actor = User | Organisation
 type User {
     val id: String!
@@ -78,47 +78,47 @@ type User {
 type Organisation {
     val users: [User]
 }
-</div></td></tr></tbody></table></div></section><section class="chapter"><h2 id="enums" data-toc="enums">Enums</h2><p id="-9jx2t6_55">Kotlin enums are mapped to GraphQL enums:</p><div class="table-wrapper"><table class="wide" id="-9jx2t6_56"><thead><tr class="ijRowHead" id="-9jx2t6_57"><th id="-9jx2t6_58"><p>Kotlin</p></th><th id="-9jx2t6_59"><p>GraphQL</p></th></tr></thead><tbody><tr id="-9jx2t6_60"><td id="-9jx2t6_61"><div class="code-block" data-lang="kotlin">
+</div></td></tr></tbody></table></div></section><section class="chapter"><h2 id="enums" data-toc="enums">Enums</h2><p id="-tmymgj_55">Kotlin enums are mapped to GraphQL enums:</p><div class="table-wrapper"><table class="wide" id="-tmymgj_56"><thead><tr class="ijRowHead" id="-tmymgj_57"><th id="-tmymgj_58"><p>Kotlin</p></th><th id="-tmymgj_59"><p>GraphQL</p></th></tr></thead><tbody><tr id="-tmymgj_60"><td id="-tmymgj_61"><div class="code-block" data-lang="kotlin">
 enum class Role {
     Read,
     Write,
     Admin
 }
-</div></td><td id="-9jx2t6_63"><div class="code-block" data-lang="none">
+</div></td><td id="-tmymgj_63"><div class="code-block" data-lang="none">
 enum Role {
     Read,
     Write,
     Admin
 }
-</div></td></tr></tbody></table></div></section><section class="chapter"><h2 id="scalars" data-toc="scalars">Scalars</h2><p id="-9jx2t6_65">Classes annotated with <code class="code" id="-9jx2t6_66">@GraphQLScalar</code> are mapped to GraphQL scalars:</p><div class="table-wrapper"><table class="wide" id="-9jx2t6_67"><thead><tr class="ijRowHead" id="-9jx2t6_68"><th id="-9jx2t6_69"><p>Kotlin</p></th><th id="-9jx2t6_70"><p>GraphQL</p></th></tr></thead><tbody><tr id="-9jx2t6_71"><td id="-9jx2t6_72"><div class="code-block" data-lang="kotlin">
+</div></td></tr></tbody></table></div></section><section class="chapter"><h2 id="scalars" data-toc="scalars">Scalars</h2><p id="-tmymgj_65">Classes annotated with <code class="code" id="-tmymgj_66">@GraphQLScalar</code> are mapped to GraphQL scalars:</p><div class="table-wrapper"><table class="wide" id="-tmymgj_67"><thead><tr class="ijRowHead" id="-tmymgj_68"><th id="-tmymgj_69"><p>Kotlin</p></th><th id="-tmymgj_70"><p>GraphQL</p></th></tr></thead><tbody><tr id="-tmymgj_71"><td id="-tmymgj_72"><div class="code-block" data-lang="kotlin">
 @GraphQLScalar
 class GeoPoint(
     val latitude: Double, 
     val longitude: Double
 )
-</div></td><td id="-9jx2t6_74"><div class="code-block" data-lang="none">
+</div></td><td id="-tmymgj_74"><div class="code-block" data-lang="none">
 scalar GeoPoint
-</div></td></tr></tbody></table></div><p id="-9jx2t6_76">You can also map existing classes that you don't own to GraphQL scalars using <code class="code" id="-9jx2t6_77">typealias</code></p><div class="table-wrapper"><table class="wide" id="-9jx2t6_78"><thead><tr class="ijRowHead" id="-9jx2t6_79"><th id="-9jx2t6_80"><p>Kotlin</p></th><th id="-9jx2t6_81"><p>GraphQL</p></th></tr></thead><tbody><tr id="-9jx2t6_82"><td id="-9jx2t6_83"><div class="code-block" data-lang="kotlin">
+</div></td></tr></tbody></table></div><p id="-tmymgj_76">You can also map existing classes that you don't own to GraphQL scalars using <code class="code" id="-tmymgj_77">typealias</code></p><div class="table-wrapper"><table class="wide" id="-tmymgj_78"><thead><tr class="ijRowHead" id="-tmymgj_79"><th id="-tmymgj_80"><p>Kotlin</p></th><th id="-tmymgj_81"><p>GraphQL</p></th></tr></thead><tbody><tr id="-tmymgj_82"><td id="-tmymgj_83"><div class="code-block" data-lang="kotlin">
 import kotlinx.datetime.LocalDateTime
 @GraphQLScalar
 typealias DateTime = LocalDateTime
-</div></td><td id="-9jx2t6_86"><div class="code-block" data-lang="none">
+</div></td><td id="-tmymgj_86"><div class="code-block" data-lang="none">
 scalar DateTime
-</div></td></tr></tbody></table></div><aside class="prompt" data-type="note" data-title="" id="-9jx2t6_88"><p id="-9jx2t6_89">Scalars require defining an associated Coercing. You can read more in the dedicated <a href="scalars.html" id="-9jx2t6_90" data-tooltip="By default, Apollo Kotlin Execution the following Kotlin types to their matching GraphQL type:">scalars page</a>.</p></aside></section><section class="chapter"><h2 id="arguments" data-toc="arguments">Arguments</h2><p id="-9jx2t6_91">Kotlin parameters are mapped to GraphQL arguments:</p><div class="table-wrapper"><table class="wide" id="-9jx2t6_92"><thead><tr class="ijRowHead" id="-9jx2t6_93"><th id="-9jx2t6_94"><p>Kotlin</p></th><th id="-9jx2t6_95"><p>GraphQL</p></th></tr></thead><tbody><tr id="-9jx2t6_96"><td id="-9jx2t6_97"><div class="code-block" data-lang="kotlin">
+</div></td></tr></tbody></table></div><aside class="prompt" data-type="note" data-title="" id="-tmymgj_88"><p id="-tmymgj_89">Scalars require defining an associated Coercing. You can read more in the dedicated <a href="scalars.html" id="-tmymgj_90" data-tooltip="By default, Apollo Kotlin Execution the following Kotlin types to their matching GraphQL type:">scalars page</a>.</p></aside></section><section class="chapter"><h2 id="arguments" data-toc="arguments">Arguments</h2><p id="-tmymgj_91">Kotlin parameters are mapped to GraphQL arguments:</p><div class="table-wrapper"><table class="wide" id="-tmymgj_92"><thead><tr class="ijRowHead" id="-tmymgj_93"><th id="-tmymgj_94"><p>Kotlin</p></th><th id="-tmymgj_95"><p>GraphQL</p></th></tr></thead><tbody><tr id="-tmymgj_96"><td id="-tmymgj_97"><div class="code-block" data-lang="kotlin">
 class Organisation {
     fun users(
         first: Int, 
         after: String
     ): UserConnection
 }
-</div></td><td id="-9jx2t6_99"><div class="code-block" data-lang="none">
+</div></td><td id="-tmymgj_99"><div class="code-block" data-lang="none">
 type Organisation {
     users(
         first: Int!,
         after: String!
     ): UserConnection!
 }
-</div></td></tr></tbody></table></div><p id="-9jx2t6_101">Kotlin parameters may be of class type in which case the class is generated as a GraphQL input object:</p><div class="table-wrapper"><table class="wide" id="-9jx2t6_102"><thead><tr class="ijRowHead" id="-9jx2t6_103"><th id="-9jx2t6_104"><p>Kotlin</p></th><th id="-9jx2t6_105"><p>GraphQL</p></th></tr></thead><tbody><tr id="-9jx2t6_106"><td id="-9jx2t6_107"><div class="code-block" data-lang="kotlin">
+</div></td></tr></tbody></table></div><p id="-tmymgj_101">Kotlin parameters may be of class type in which case the class is generated as a GraphQL input object:</p><div class="table-wrapper"><table class="wide" id="-tmymgj_102"><thead><tr class="ijRowHead" id="-tmymgj_103"><th id="-tmymgj_104"><p>Kotlin</p></th><th id="-tmymgj_105"><p>GraphQL</p></th></tr></thead><tbody><tr id="-tmymgj_106"><td id="-tmymgj_107"><div class="code-block" data-lang="kotlin">
 class UserFilter(
     val role: Role?, 
     val organisationId: String?
@@ -128,7 +128,7 @@ class Query {
         where: UserFilter, 
     ): List&lt;User&gt;
 }
-</div></td><td id="-9jx2t6_109"><div class="code-block" data-lang="none">
+</div></td><td id="-tmymgj_109"><div class="code-block" data-lang="none">
 input UserFilter {
     role: Role,
     organisationId: String
@@ -138,17 +138,17 @@ type Query {
         where: UserFilter!,
     ): [User!]
 }
-</div></td></tr></tbody></table></div></section><section class="chapter"><h2 id="names" data-toc="names">Names</h2><p id="-9jx2t6_111">The GraphQL name can be customized using <code class="code" id="-9jx2t6_112">@GraphQLName</code>:</p><div class="table-wrapper"><table class="wide" id="-9jx2t6_113"><thead><tr class="ijRowHead" id="-9jx2t6_114"><th id="-9jx2t6_115"><p>Kotlin</p></th><th id="-9jx2t6_116"><p>GraphQL</p></th></tr></thead><tbody><tr id="-9jx2t6_117"><td id="-9jx2t6_118"><div class="code-block" data-lang="kotlin">
+</div></td></tr></tbody></table></div></section><section class="chapter"><h2 id="names" data-toc="names">Names</h2><p id="-tmymgj_111">The GraphQL name can be customized using <code class="code" id="-tmymgj_112">@GraphQLName</code>:</p><div class="table-wrapper"><table class="wide" id="-tmymgj_113"><thead><tr class="ijRowHead" id="-tmymgj_114"><th id="-tmymgj_115"><p>Kotlin</p></th><th id="-tmymgj_116"><p>GraphQL</p></th></tr></thead><tbody><tr id="-tmymgj_117"><td id="-tmymgj_118"><div class="code-block" data-lang="kotlin">
 @GraphQLName(&quot;User&quot;)
 class DomainUser {
     @GraphQLName(&quot;email&quot;)
     fun emailAddress(): String
 }
-</div></td><td id="-9jx2t6_120"><div class="code-block" data-lang="none">
+</div></td><td id="-tmymgj_120"><div class="code-block" data-lang="none">
 type User {
     email: String
 }
-</div></td></tr></tbody></table></div></section><section class="chapter"><h2 id="descriptions" data-toc="descriptions">Descriptions</h2><p id="-9jx2t6_122">The GraphQL description is generated from the KDoc:</p><div class="table-wrapper"><table class="wide" id="-9jx2t6_123"><thead><tr class="ijRowHead" id="-9jx2t6_124"><th id="-9jx2t6_125"><p>Kotlin</p></th><th id="-9jx2t6_126"><p>GraphQL</p></th></tr></thead><tbody><tr id="-9jx2t6_127"><td id="-9jx2t6_128"><div class="code-block" data-lang="kotlin">
+</div></td></tr></tbody></table></div></section><section class="chapter"><h2 id="descriptions" data-toc="descriptions">Descriptions</h2><p id="-tmymgj_122">The GraphQL description is generated from the KDoc:</p><div class="table-wrapper"><table class="wide" id="-tmymgj_123"><thead><tr class="ijRowHead" id="-tmymgj_124"><th id="-tmymgj_125"><p>Kotlin</p></th><th id="-tmymgj_126"><p>GraphQL</p></th></tr></thead><tbody><tr id="-tmymgj_127"><td id="-tmymgj_128"><div class="code-block" data-lang="kotlin">
 /**
  * A logged-in user of the service.
  */
@@ -158,7 +158,7 @@ class User {
      */
     fun email(): String
 }
-</div></td><td id="-9jx2t6_130"><div class="code-block" data-lang="none">
+</div></td><td id="-tmymgj_130"><div class="code-block" data-lang="none">
 &quot;&quot;&quot;
 A logged-in user of the service.
 &quot;&quot;&quot;
@@ -168,22 +168,22 @@ type User {
     &quot;&quot;&quot;
     email: String
 }
-</div></td></tr></tbody></table></div></section><section class="chapter"><h2 id="nullability" data-toc="nullability">Nullability</h2><p id="-9jx2t6_132">Nullable fields and input fields are also nullable in GraphQL:</p><div class="table-wrapper"><table class="wide" id="-9jx2t6_133"><thead><tr class="ijRowHead" id="-9jx2t6_134"><th id="-9jx2t6_135"><p>Kotlin</p></th><th id="-9jx2t6_136"><p>GraphQL</p></th></tr></thead><tbody><tr id="-9jx2t6_137"><td id="-9jx2t6_138"><div class="code-block" data-lang="kotlin">
+</div></td></tr></tbody></table></div></section><section class="chapter"><h2 id="nullability" data-toc="nullability">Nullability</h2><p id="-tmymgj_132">Nullable fields and input fields are also nullable in GraphQL:</p><div class="table-wrapper"><table class="wide" id="-tmymgj_133"><thead><tr class="ijRowHead" id="-tmymgj_134"><th id="-tmymgj_135"><p>Kotlin</p></th><th id="-tmymgj_136"><p>GraphQL</p></th></tr></thead><tbody><tr id="-tmymgj_137"><td id="-tmymgj_138"><div class="code-block" data-lang="kotlin">
 class User {
     fun email(): String?
 }
-</div></td><td id="-9jx2t6_140"><div class="code-block" data-lang="none">
+</div></td><td id="-tmymgj_140"><div class="code-block" data-lang="none">
 type User {
     email: String
 }
-</div></td></tr></tbody></table></div><aside class="prompt" data-type="tip" data-title="" id="-9jx2t6_142"><p id="-9jx2t6_143">Note how the logic is inverted. In GraphQL, fields are nullable by default.</p></aside></section><section class="chapter"><h2 id="deprecation" data-toc="deprecation">Deprecation</h2><p id="-9jx2t6_144">Kotlin symbols annotated as <code class="code" id="-9jx2t6_145">@Deprecated</code> are marked deprecated in GraphQL when applicable:</p><div class="table-wrapper"><table class="wide" id="-9jx2t6_146"><thead><tr class="ijRowHead" id="-9jx2t6_147"><th id="-9jx2t6_148"><p>Kotlin</p></th><th id="-9jx2t6_149"><p>GraphQL</p></th></tr></thead><tbody><tr id="-9jx2t6_150"><td id="-9jx2t6_151"><div class="code-block" data-lang="kotlin">
+</div></td></tr></tbody></table></div><aside class="prompt" data-type="tip" data-title="" id="-tmymgj_142"><p id="-tmymgj_143">Note how the logic is inverted. In GraphQL, fields are nullable by default.</p></aside></section><section class="chapter"><h2 id="deprecation" data-toc="deprecation">Deprecation</h2><p id="-tmymgj_144">Kotlin symbols annotated as <code class="code" id="-tmymgj_145">@Deprecated</code> are marked deprecated in GraphQL when applicable:</p><div class="table-wrapper"><table class="wide" id="-tmymgj_146"><thead><tr class="ijRowHead" id="-tmymgj_147"><th id="-tmymgj_148"><p>Kotlin</p></th><th id="-tmymgj_149"><p>GraphQL</p></th></tr></thead><tbody><tr id="-tmymgj_150"><td id="-tmymgj_151"><div class="code-block" data-lang="kotlin">
 class User {
     fun role(): Role
     @Deprecated(&quot;Check for `role == Admin` instead&quot;)
     fun isAdmin(): Boolean
 }
-</div></td><td id="-9jx2t6_153"><div class="code-block" data-lang="none">
+</div></td><td id="-tmymgj_153"><div class="code-block" data-lang="none">
 type User {
     isAdmin: String @deprecated(&quot;Check for `role == Admin` instead&quot;)
 }
-</div></td></tr></tbody></table></div><aside class="prompt" data-type="note" data-title="" id="-9jx2t6_155"><p id="-9jx2t6_156">As of 2024, field, input fields, arguments and enum values support deprecation in GraphQL. Other locations, and especially objects and input objects cannot be deprecated. See <a href="https://github.com/graphql/graphql-spec/issues/550" id="-9jx2t6_157" data-external="true" rel="noopener noreferrer">graphql-spec#550</a> for more details.</p></aside></section><section class="chapter"><h2 id="built-in-types" data-toc="built-in-types">Built-in types</h2><p id="-9jx2t6_158">Kotlin built-in types map to their GraphQL equivalent:</p><div class="table-wrapper"><table class="wide" id="-9jx2t6_159"><thead><tr class="ijRowHead" id="-9jx2t6_160"><th id="-9jx2t6_161"><p>Kotlin</p></th><th id="-9jx2t6_162"><p>GraphQL</p></th></tr></thead><tbody><tr id="-9jx2t6_163"><td id="-9jx2t6_164"><p>Int</p></td><td id="-9jx2t6_165"><p>Int</p></td></tr><tr id="-9jx2t6_166"><td id="-9jx2t6_167"><p>String</p></td><td id="-9jx2t6_168"><p>String</p></td></tr><tr id="-9jx2t6_169"><td id="-9jx2t6_170"><p>Double</p></td><td id="-9jx2t6_171"><p>Float</p></td></tr><tr id="-9jx2t6_172"><td id="-9jx2t6_173"><p>Boolean</p></td><td id="-9jx2t6_174"><p>Boolean</p></td></tr><tr id="-9jx2t6_175"><td id="-9jx2t6_176"><p>List</p></td><td id="-9jx2t6_177"><p>List</p></td></tr></tbody></table></div></section><div class="last-modified">Last modified: 16 July 2024</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="welcome.html" class="navigation-links__prev">Welcome</a><a href="scalars.html" class="navigation-links__next">Using custom scalars</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="https://resources.jetbrains.com/writerside/apidoc/6.10.0-b267/app.js"></script></body></html>
+</div></td></tr></tbody></table></div><aside class="prompt" data-type="note" data-title="" id="-tmymgj_155"><p id="-tmymgj_156">As of 2024, field, input fields, arguments and enum values support deprecation in GraphQL. Other locations, and especially objects and input objects cannot be deprecated. See <a href="https://github.com/graphql/graphql-spec/issues/550" id="-tmymgj_157" data-external="true" rel="noopener noreferrer">graphql-spec#550</a> for more details.</p></aside></section><section class="chapter"><h2 id="built-in-types" data-toc="built-in-types">Built-in types</h2><p id="-tmymgj_158">Kotlin built-in types map to their GraphQL equivalent:</p><div class="table-wrapper"><table class="wide" id="-tmymgj_159"><thead><tr class="ijRowHead" id="-tmymgj_160"><th id="-tmymgj_161"><p>Kotlin</p></th><th id="-tmymgj_162"><p>GraphQL</p></th></tr></thead><tbody><tr id="-tmymgj_163"><td id="-tmymgj_164"><p>Int</p></td><td id="-tmymgj_165"><p>Int</p></td></tr><tr id="-tmymgj_166"><td id="-tmymgj_167"><p>String</p></td><td id="-tmymgj_168"><p>String</p></td></tr><tr id="-tmymgj_169"><td id="-tmymgj_170"><p>Double</p></td><td id="-tmymgj_171"><p>Float</p></td></tr><tr id="-tmymgj_172"><td id="-tmymgj_173"><p>Boolean</p></td><td id="-tmymgj_174"><p>Boolean</p></td></tr><tr id="-tmymgj_175"><td id="-tmymgj_176"><p>List</p></td><td id="-tmymgj_177"><p>List</p></td></tr></tbody></table></div></section><div class="last-modified">Last modified: 16 July 2024</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="welcome.html" class="navigation-links__prev">Welcome</a><a href="scalars.html" class="navigation-links__next">Using custom scalars</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="https://resources.jetbrains.com/writerside/apidoc/6.10.0-b267/app.js"></script></body></html>
