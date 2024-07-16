@@ -1,5 +1,5 @@
 <!DOCTYPE html SYSTEM "about:legacy-compat">
-<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2024-07-15T22:52:30.804795135"><title>Monitoring the generated schema | Apollo Adapters</title><script type="application/json" id="virtual-toc-data">[]</script><script type="application/json" id="topic-shortcuts"></script><link href="https://resources.jetbrains.com/writerside/apidoc/6.10.0-b267/app.css" rel="stylesheet"><link rel="icon" type="image/png" sizes="16x16" href="images/favicon-96x96.png"><link rel="icon" type="image/png" sizes="32x32" href="images/favicon-192x192.png"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="Monitoring the generated schema | Apollo Adapters"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="Apollo Adapters Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/schema-dump.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="Monitoring the generated schema | Apollo Adapters"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2024-07-16T14:32:46.238136861"><title>Monitoring the generated schema | Apollo Adapters</title><script type="application/json" id="virtual-toc-data">[]</script><script type="application/json" id="topic-shortcuts"></script><link href="https://resources.jetbrains.com/writerside/apidoc/6.10.0-b267/app.css" rel="stylesheet"><link rel="icon" type="image/png" sizes="16x16" href="images/favicon-96x96.png"><link rel="icon" type="image/png" sizes="32x32" href="images/favicon-192x192.png"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="Monitoring the generated schema | Apollo Adapters"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="Apollo Adapters Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/schema-dump.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="Monitoring the generated schema | Apollo Adapters"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
     "@context": "http://schema.org",
     "@type": "WebPage",
     "@id": "writerside-documentation/schema-dump.html#webpage",
@@ -13,4 +13,43 @@
     "@id": "writerside-documentation/#website",
     "url": "writerside-documentation/",
     "name": "Apollo Adapters Help"
-}</script><!-- End Schema.org --></head><body data-id="schema-dump" data-main-title="Monitoring the generated schema" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="welcome.md|Welcome" data-edit-url="https://github.com/apollographql/apollo-kotlin-execution/edit/main/Writerside/topics/schema-dump.md"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>Apollo Adapters  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="schema-dump" id="schema-dump.md">Monitoring the generated schema</h1><p id="-xp8mr6_2">You can dump the generated schema with <code class="code" id="-xp8mr6_3">./gradlew apolloDumpSchema</code>.</p><p id="-xp8mr6_4">It is recommended to check this file in source control so that changes to the Kotlin source can be reviewed and no unintentional change is published.</p><p id="-xp8mr6_5">By default, GraphQL schema is dumped in <code class="code" id="-xp8mr6_6">graphql/schema.graphqls</code>.</p><p id="-xp8mr6_7">The Apollo Kotlin Execution Gradle plugin also adds a <code class="code" id="-xp8mr6_8">apolloCheckSchema</code> task to the <code class="code" id="-xp8mr6_9">check</code> lifecycle task. Any time there is a change in the schema, <code class="code" id="-xp8mr6_10">apolloCheckSchema</code> fails and you can pull the latest changes with an explicit <code class="code" id="-xp8mr6_11">./gradlew apolloDumpSchema</code>.</p><div class="last-modified">Last modified: 15 July 2024</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="execution-context.html" class="navigation-links__prev">Execution context</a><a href="ktor.html" class="navigation-links__next">Ktor bindings</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="https://resources.jetbrains.com/writerside/apidoc/6.10.0-b267/app.js"></script></body></html>
+}</script><!-- End Schema.org --></head><body data-id="schema-dump" data-main-title="Monitoring the generated schema" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="welcome.md|Welcome" data-edit-url="https://github.com/apollographql/apollo-kotlin-execution/edit/main/Writerside/topics/schema-dump.md"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>Apollo Adapters  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="schema-dump" id="schema-dump.md">Monitoring the generated schema</h1><p id="-7kapab_2">When working with Kotlin code, it's easy to introduce unwanted changes to your GraphQL schema. Not every Kotlin construct needs to be part of your exported GraphQL API.</p><p id="-7kapab_3">For this reason, Apollo Kotlin Execution comes with built-in monitoring of your GraphQL schema. The Gradle plugin adds an <code class="code" id="-7kapab_4">apolloCheckSchema</code> task that is run automatically whenever you run <code class="code" id="-7kapab_5">./gradlew check</code> (and therefore <code class="code" id="-7kapab_6">./gradlew build</code>).</p><aside class="prompt" data-type="tip" data-title="" id="-7kapab_7"><p id="-7kapab_8">If you are familiar with <a href="https://github.com/Kotlin/binary-compatibility-validator" id="-7kapab_9" data-external="true" rel="noopener noreferrer">Kotlin binary compatibility validator</a>, the concept is very similar.</p></aside><p id="-7kapab_10">For an example, if you add a <code class="code" id="-7kapab_11">exposedByMistake()</code> function, running <code class="code" id="-7kapab_12">./gradlew apolloCheckSchema</code> fails with the below:</p><div class="code-block" data-lang="none">
+$ ./gradlew apolloCheckSchema
+&gt; Task :apolloCheckSchema FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':apolloCheckSchema'.
+&gt; Apollo schema check failed.
+  --- /Users/mbonnin/git/apollo-kotlin-execution/sample-ktor/graphql/schema.graphqls
+  +++ /Users/mbonnin/git/apollo-kotlin-execution/sample-ktor/build/generated/ksp/main/resources/serviceSchema.graphqls
+  @@ -7,5 +7,7 @@
+      Greeting for name
+     &quot;&quot;&quot;
+     hello(name: String!): String!
+  +
+  +  exposedByMistake: String!
+   }
+   
+  
+  Run 'apolloDumpSchema' to overwrite the schema.
+</div><p id="-7kapab_14">If the change is unwanted, then you can fix your code to hide it.</p><p id="-7kapab_15">If the change is in fact desired, you can run <code class="code" id="-7kapab_16">./gradlew apolloDumpSchema</code> and commit the resulted file to make the check pass:</p><div class="code-block" data-lang="none">
+$ ./gradlew apolloDumpSchema        
+BUILD SUCCESSFUL in 522ms
+$ git diff graphql/
+diff --git a/sample-ktor/graphql/schema.graphqls b/sample-ktor/graphql/schema.graphqls
+index 6f4c510..b7f7311 100644
+--- a/sample-ktor/graphql/schema.graphqls
++++ b/sample-ktor/graphql/schema.graphqls
+@@ -7,4 +7,6 @@ type Query {
+    Greeting for name
+   &quot;&quot;&quot;
+   hello(name: String!): String!
++
++  newField: String!
+ }
+$ git commit -a -m 'Update GraphQL schema'
+$ ./gradlew apolloCheckSchema        
+BUILD SUCCESSFUL in 324ms
+</div><div class="last-modified">Last modified: 16 July 2024</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="execution-context.html" class="navigation-links__prev">Execution context</a><a href="ktor.html" class="navigation-links__next">Ktor bindings</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="https://resources.jetbrains.com/writerside/apidoc/6.10.0-b267/app.js"></script></body></html>
