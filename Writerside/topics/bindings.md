@@ -1,7 +1,7 @@
 # Bindings
 
-The Apollo Kotlin Execution runtime is network agnostic but for convenience, it comes with [bindings](bindings.md) for:
+Apollo Kotlin Execution comes with [bindings](bindings.md) for popular server libraries:
 
-* Ktor ([documentation](ktor.md))
-* http4k ([documentation](http4k.md))
+* [Ktor bindings](ktor.md)
+* [http4k bindings](http4k.md)
 

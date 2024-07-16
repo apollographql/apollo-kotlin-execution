@@ -1,16 +1,4 @@
-# Using custom scalars
-
-By default, Apollo Kotlin Execution the following Kotlin types to their matching GraphQL type:
-
-| Kotlin  | GraphQL |
-|---------|---------|
-| Int     | Int     |
-| String  | String  |
-| Double  | Float   |
-| Boolean | Boolean |
-
-
-### Defining custom scalars
+# Custom scalars
 
 You can define a new custom scalar using `@GraphQLScalar`:
 

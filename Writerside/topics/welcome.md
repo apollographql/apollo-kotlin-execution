@@ -2,12 +2,12 @@
 
 Apollo Kotlin Execution is a code-first GraphQL execution library.
 
-Features:
+Apollo Kotlin Execution:
 
 * Generates a GraphQL schema from your Kotlin code: write Kotlin, get a typesafe API.
 * Doesn't use reflection. Use it on the JVM and enjoy ultra-fast start times. Or use it with Kotlin native. Apollo Kotlin Execution is KMP-ready!
 * Supports custom scalars, subscriptions, persisted queries and everything in the current [GraphQL draft](https://spec.graphql.org/draft/).
-* Integration with Ktor and http4k.
+* Integrates seamlessly with [Ktor](ktor.md) and [http4k](http4k.md).
 
 Under the hood, Apollo Kotlin Execution uses [KSP](https://kotlinlang.org/docs/ksp-overview.html) to generate GraphQL resolvers and types from your Kotlin code.
 
@@ -42,10 +42,9 @@ apolloExecution {
 
 ### Define your root query
 
-Then write your root query in a `Query.kt` file:
+Write your root query class in a `Query.kt` file:
 
 ```kotlin
-// Define your root query class 
 // @GraphQLQuery is the entry point for KSP processing
 @GraphQLQuery
 class Query {
@@ -67,7 +66,6 @@ Run the codegen:
 ./gradlew kspKotlin
 ```
 
-
 ### Execute your query
 
 The codegen generates a `com.example.ServiceExecutableSchemaBuilder` class that is the entry point to execute GraphQL requests:
@@ -77,14 +75,14 @@ val executableSchema = ServiceExecutableSchemaBuilder()
   .build()
 ```
 
-You can then create a GraphQL request:
+Create a GraphQL request:
 ```kotlin
 val request = GraphQLRequest.Builder()
   .document("{ hello(name: \"sample\") }")
   .build()
 ```
 
-And execute it:
+Execute the GraphQL request:
 ```kotlin
 val response = executableSchema.execute(
   request,
@@ -97,13 +95,13 @@ println(response.data)
 
 Apollo Kotlin Execution supports objects, interfaces, unions, enum, input objects, deprecation, customizing names and descriptions and more. 
 
-For details, see the [Generating a schema](schema.md) page.
+See the [Generating a schema](schema.md) page for more details.
 
-## 3rd party bindings
+## bindings
 
-The Apollo Kotlin Execution runtime is network agnostic but for convenience, it comes with [bindings](bindings.md) for:
+Apollo Kotlin Execution comes with [bindings](bindings.md) for popular server libraries:
 
-* Ktor ([documentation](ktor.md))
-* http4k ([documentation](http4k.md))
+* [Ktor bindings](ktor.md)
+* [http4k bindings](http4k.md)
 
 See the respective documentation for how to configure a server with an `ExecutableSchema`
