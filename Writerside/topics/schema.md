@@ -29,7 +29,7 @@ From those root classes, the Apollo Kotlin Execution processor traverses the Kot
 
 > Non-root classes do not need to be annotated and are added to the GraphQL schema automatically.
 
-### Objects and fields
+## Objects and fields
 
 Apollo Kotlin Execution maps public Kotlin classes to GraphQL types and public functions and properties to GraphQL fields with the same name:
 
@@ -77,7 +77,7 @@ type User {
 </tr>
 </table>
 
-### Unions and interfaces
+## Unions and interfaces
 
 Non-empty Kotlin interfaces are mapped to GraphQL interfaces:
 
@@ -139,7 +139,7 @@ type Organisation {
 </tr>
 </table>
 
-### Enums
+## Enums
 
 Kotlin enums are mapped to GraphQL enums:
 
@@ -167,7 +167,7 @@ enum Role {
 </tr>
 </table>
 
-### Scalars
+## Scalars
 
 Classes annotated with `@GraphQLScalar` are mapped to GraphQL scalars:
 
@@ -215,7 +215,7 @@ scalar DateTime
 > Scalars require defining an associated Coercing. You can read more in the dedicated [scalars page](scalars.md).
 {style="note"}
 
-### Arguments
+## Arguments
 
 Kotlin parameters are mapped to GraphQL arguments:
 
@@ -279,7 +279,7 @@ type Query {
 </tr>
 </table>
 
-### Names
+## Names
 The GraphQL name can be customized using `@GraphQLName`:
 
 <table>
@@ -304,7 +304,7 @@ type User {
 </tr>
 </table>
 
-### Descriptions
+## Descriptions
 The GraphQL description is generated from the KDoc:
 
 <table>
@@ -339,7 +339,7 @@ type User {
 </tr>
 </table>
 
-### Nullability
+## Nullability
 
 Nullable fields and input fields are also nullable in GraphQL:
 
@@ -365,7 +365,7 @@ type User {
 
 > Note how the logic is inverted. In GraphQL, fields are nullable by default.
 
-### Deprecation
+## Deprecation
 
 Kotlin symbols annotated as `@Deprecated` are marked deprecated in GraphQL when applicable:
 
@@ -394,7 +394,7 @@ type User {
 > As of 2024, field, input fields, arguments and enum values support deprecation in GraphQL. Other locations, and especially objects and input objects cannot be deprecated. See [graphql-spec#550](https://github.com/graphql/graphql-spec/issues/550) for more details.
 {style="note"}
 
-### Built-in types
+## Built-in types
 
 Kotlin built-in types map to their GraphQL equivalent:
 

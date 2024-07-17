@@ -4,17 +4,18 @@
 
 <instance-profile id="doc"
                  name="Apollo Adapters"
-                 start-page="welcome.md">
+                 start-page="getting-started.md">
 
     <toc-element toc-title="GitHub" href="https://github.com/apollographql/apollo-kotlin-execution"/>
     <toc-element toc-title="Kdoc" href="https://apollographql.github.io/apollo-kotlin-execution/kdoc"/>
     <toc-element topic="welcome.md">
+        <toc-element topic="getting-started.md"/>
         <toc-element topic="schema.md"/>
         <toc-element topic="scalars.md"/>
         <toc-element topic="execution-context.md"/>
         <toc-element topic="schema-dump.md"/>
     </toc-element>
-    <toc-element topic="bindings.md">
+    <toc-element topic="integrations.md">
         <toc-element topic="ktor.md"/>
         <toc-element topic="http4k.md"/>
     </toc-element>

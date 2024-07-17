@@ -1,9 +1,9 @@
 # Ktor
 
 
-> See [sample-ktor](https://github.com/apollographql/apollo-kotlin-execution/tree/main/sample-ktor) for a project using the Ktor bindings. 
+> See [sample-ktor](https://github.com/apollographql/apollo-kotlin-execution/tree/main/sample-ktor) for a project using the Ktor integration. 
 
-To use the Ktor bindings, add `apollo-execution-ktor` to your dependencies and a Ktor engine:
+To use the Ktor integration, add `apollo-execution-ktor` to your dependencies and a Ktor engine:
 
 ```kotlin
 dependencies {

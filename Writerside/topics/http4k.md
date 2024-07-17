@@ -1,8 +1,8 @@
 # http4k
 
-> See [sample-http4k](https://github.com/apollographql/apollo-kotlin-execution/tree/main/sample-http4k) for a project using the http4k bindings.
+> See [sample-http4k](https://github.com/apollographql/apollo-kotlin-execution/tree/main/sample-http4k) for a project using the http4k integration.
 
-To use the http4k bindings, add `apollo-execution-http4k` to your dependencies and the http4k bom:
+To use the http4k integration, add `apollo-execution-http4k` to your dependencies and the http4k bom:
 
 ```kotlin
 dependencies {
