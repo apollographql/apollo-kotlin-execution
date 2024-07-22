@@ -3,7 +3,7 @@
         SYSTEM "https://resources.jetbrains.com/writerside/1.0/product-profile.dtd">
 
 <instance-profile id="doc"
-                 name="Apollo Adapters"
+                 name="Apollo Kotlin Execution"
                  start-page="getting-started.md">
 
     <toc-element toc-title="GitHub" href="https://github.com/apollographql/apollo-kotlin-execution"/>
