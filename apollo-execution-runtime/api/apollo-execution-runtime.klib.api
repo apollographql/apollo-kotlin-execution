@@ -221,9 +221,6 @@ final object com.apollographql.execution/StringCoercing : com.apollographql.exec
     final fun parseLiteral(com.apollographql.apollo.ast/GQLValue): kotlin/String // com.apollographql.execution/StringCoercing.parseLiteral|parseLiteral(com.apollographql.apollo.ast.GQLValue){}[0]
     final fun serialize(kotlin/String): kotlin/Any? // com.apollographql.execution/StringCoercing.serialize|serialize(kotlin.String){}[0]
 }
-open annotation class com.apollographql.execution.annotation/GraphQLCoercing : kotlin/Annotation { // com.apollographql.execution.annotation/GraphQLCoercing|null[0]
-    constructor <init>() // com.apollographql.execution.annotation/GraphQLCoercing.<init>|<init>(){}[0]
-}
 open annotation class com.apollographql.execution.annotation/GraphQLDefault : kotlin/Annotation { // com.apollographql.execution.annotation/GraphQLDefault|null[0]
     constructor <init>(kotlin/String) // com.apollographql.execution.annotation/GraphQLDefault.<init>|<init>(kotlin.String){}[0]
     final val value // com.apollographql.execution.annotation/GraphQLDefault.value|{}value[0]
@@ -241,7 +238,9 @@ open annotation class com.apollographql.execution.annotation/GraphQLQuery : kotl
     constructor <init>() // com.apollographql.execution.annotation/GraphQLQuery.<init>|<init>(){}[0]
 }
 open annotation class com.apollographql.execution.annotation/GraphQLScalar : kotlin/Annotation { // com.apollographql.execution.annotation/GraphQLScalar|null[0]
-    constructor <init>() // com.apollographql.execution.annotation/GraphQLScalar.<init>|<init>(){}[0]
+    constructor <init>(kotlin.reflect/KClass<out com.apollographql.execution/Coercing<*>>) // com.apollographql.execution.annotation/GraphQLScalar.<init>|<init>(kotlin.reflect.KClass<out|com.apollographql.execution.Coercing<*>>){}[0]
+    final val coercing // com.apollographql.execution.annotation/GraphQLScalar.coercing|{}coercing[0]
+        final fun <get-coercing>(): kotlin.reflect/KClass<out com.apollographql.execution/Coercing<*>> // com.apollographql.execution.annotation/GraphQLScalar.coercing.<get-coercing>|<get-coercing>(){}[0]
 }
 open annotation class com.apollographql.execution.annotation/GraphQLSubscription : kotlin/Annotation { // com.apollographql.execution.annotation/GraphQLSubscription|null[0]
     constructor <init>() // com.apollographql.execution.annotation/GraphQLSubscription.<init>|<init>(){}[0]
