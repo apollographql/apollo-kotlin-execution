@@ -15,8 +15,12 @@ public abstract class com/apollographql/execution/gradle/ApolloExecutionPlugin :
 public abstract class com/apollographql/execution/gradle/ApolloExecutionService {
 	public fun <init> ()V
 	public abstract fun getPackageName ()Ljava/lang/String;
-	public abstract fun getSchemaPath ()Lorg/gradle/api/provider/Property;
+	public abstract fun getSchemaFile ()Lorg/gradle/api/file/RegularFileProperty;
 	public abstract fun setPackageName (Ljava/lang/String;)V
+}
+
+public final class com/apollographql/execution/gradle/Schema_dumpKt {
+	public static final fun enableSchemaDump (Lorg/gradle/api/Project;Ljava/lang/String;Ljava/lang/String;Lorg/gradle/api/file/RegularFileProperty;)V
 }
 
 public final class com/apollographql/execution/gradle/VersionKt {
