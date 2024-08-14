@@ -4,8 +4,7 @@ import com.apollographql.apollo.api.ExecutionContext
 import com.apollographql.execution.ExecutableSchema
 import com.apollographql.execution.GraphQLRequest
 import com.apollographql.execution.GraphQLResponse
-import com.apollographql.execution.parseGetGraphQLRequest
-import com.apollographql.execution.parsePostGraphQLRequest
+import com.apollographql.execution.parseGraphQLRequest
 import com.apollographql.execution.sandboxHtml
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
@@ -29,7 +28,7 @@ import io.ktor.utils.io.ByteReadChannel
 import okio.Buffer
 
 suspend fun ApplicationCall.respondGraphQL(executableSchema: ExecutableSchema, executionContext: ExecutionContext = ExecutionContext.Empty, configure: OutgoingContent.(GraphQLResponse?) -> Unit = {}) {
-  val request = request.toGraphQLRequest(request.httpMethod)
+  val request = request.toGraphQLRequest()
   val contentType = ContentType.parse("application/graphql-response+json")
   if (request.isFailure) {
     respondText(
@@ -75,11 +74,11 @@ private fun GraphQLResponse.toByteArray(): ByteArray {
   return buffer.readByteArray()
 }
 
-suspend fun ApplicationRequest.toGraphQLRequest(method: HttpMethod): Result<GraphQLRequest> {
-  return when (method) {
-    HttpMethod.Post -> receiveChannel().buffer().parsePostGraphQLRequest()
-    HttpMethod.Get -> queryString().parseGetGraphQLRequest()
-    else -> Result.failure(Exception("Unhandled method: $method"))
+suspend fun ApplicationRequest.toGraphQLRequest(): Result<GraphQLRequest> {
+  return when (httpMethod) {
+    HttpMethod.Post -> receiveChannel().buffer().parseGraphQLRequest()
+    HttpMethod.Get -> queryString().parseGraphQLRequest()
+    else -> Result.failure(Exception("Unhandled method: $httpMethod"))
   }
 }
 
@@ -98,14 +97,15 @@ fun Application.apolloModule(
 }
 
 fun Application.apolloSandboxModule(
-    title: String = "API sandbox", initialEndpoint: String = "http://localhost:8080/graphql"
+    title: String = "API sandbox",
+    initialEndpoint: String = "http://localhost:8080/graphql"
 ) {
   routing {
     get(Regex("/sandbox/?")) {
       call.respondRedirect(call.url { path("/sandbox/index.html") })
     }
     get("/sandbox/index.html") {
-      call.respondText(sandboxHtml(title,initialEndpoint ), ContentType.parse("text/html"))
+      call.respondText(sandboxHtml(title, initialEndpoint ), ContentType.parse("text/html"))
     }
   }
 }

@@ -4,4 +4,11 @@ pluginManagement {
   }
 }
 
-include("apollo-execution-processor", "apollo-execution-gradle-plugin", "apollo-execution-runtime", "apollo-execution-ktor", "apollo-execution-http4k")
+include(
+  "apollo-execution-processor",
+  "apollo-execution-gradle-plugin",
+  "apollo-execution-runtime",
+  "apollo-execution-ktor",
+  "apollo-execution-http4k",
+  "apollo-execution-spring",
+)

@@ -18,5 +18,6 @@
     <toc-element topic="integrations.md">
         <toc-element topic="ktor.md"/>
         <toc-element topic="http4k.md"/>
+        <toc-element topic="spring.md"/>
     </toc-element>
 </instance-profile>

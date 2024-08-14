@@ -3,28 +3,20 @@
 package com.apollographql.execution
 
 import com.apollographql.apollo.annotations.ApolloInternal
-import com.apollographql.apollo.api.Error
-import com.apollographql.apollo.api.Optional
 import com.apollographql.apollo.api.http.internal.urlDecode
-import com.apollographql.apollo.api.json.BufferedSinkJsonWriter
-import com.apollographql.apollo.api.json.JsonWriter
 import com.apollographql.apollo.api.json.jsonReader
 import com.apollographql.apollo.api.json.readAny
-import com.apollographql.apollo.api.json.writeAny
-import com.apollographql.apollo.api.json.writeObject
 import okio.Buffer
-import okio.BufferedSink
 import okio.BufferedSource
-import okio.Sink
-import okio.buffer
 import okio.use
+import kotlin.jvm.JvmName
 
 class GraphQLRequest internal constructor(
     val document: String?,
     val operationName: String?,
     val variables: Map<String, Any?>,
     val extensions: Map<String, Any?>,
-) : GraphQLRequestResult {
+) {
   class Builder {
     var document: String? = null
     var operationName: String? = null
@@ -58,14 +50,7 @@ class GraphQLRequest internal constructor(
   }
 }
 
-
-sealed interface GraphQLRequestResult
-
-class GraphQLRequestError internal constructor(
-    val message: String,
-) : GraphQLRequestResult
-
-fun Map<String, Any?>.toGraphQLRequest(): Result<GraphQLRequest> {
+fun Map<String, Any?>.parseGraphQLRequest(): Result<GraphQLRequest> {
   val map = this
 
   val document = map.get("query")
@@ -98,7 +83,7 @@ fun Map<String, Any?>.toGraphQLRequest(): Result<GraphQLRequest> {
 }
 
 @OptIn(ApolloInternal::class)
-fun BufferedSource.parsePostGraphQLRequest(): Result<GraphQLRequest> {
+fun BufferedSource.parseGraphQLRequest(): Result<GraphQLRequest> {
   val map = try {
     jsonReader().use {
       it.readAny()
@@ -113,14 +98,13 @@ fun BufferedSource.parsePostGraphQLRequest(): Result<GraphQLRequest> {
 
   map as Map<String, Any?>
 
-  return map.toGraphQLRequest()
+  return map.parseGraphQLRequest()
 }
 
 /**
- * Parses a query string to a GraphQL request
+ * Parses an url to a GraphQL request
  */
-@OptIn(ApolloInternal::class)
-fun String.parseGetGraphQLRequest(): Result<GraphQLRequest> {
+fun String.parseGraphQLRequest(): Result<GraphQLRequest> {
   var fragmentStart = indexOfLast { it == '#' }
   if (fragmentStart < 0) {
     fragmentStart = length
@@ -138,54 +122,61 @@ fun String.parseGetGraphQLRequest(): Result<GraphQLRequest> {
   val query = substring(queryStart, fragmentStart)
   val pairs = query.split("&")
 
-  val builder = GraphQLRequest.Builder()
-
-  pairs.forEach {
-    it.split("=").apply {
-      if (size != 2) {
-        return@forEach
-      }
-
-      when (get(0).urlDecode()) {
-        "query" -> builder.document(get(1).urlDecode())
-        "variables" -> {
-          val variablesJson = try {
-            get(1).urlDecode()
-          } catch (e: Exception) {
-            return Result.failure(Exception("Cannot decode 'variables' ('${get(1)}')", e))
-          }
-          val map = try {
-            Buffer().writeUtf8(variablesJson).jsonReader().readAny()
-          } catch (e: Exception) {
-            return Result.failure(Exception("'variables' is not a valid JSON ('${variablesJson}')", e))
-          }
-          if (map !is Map<*, *>?) {
-            return Result.failure(Exception("Expected 'variables' to be an object"))
-          }
-          builder.variables(map as Map<String, Any>?)
-        }
-
-        "extensions" -> {
-          val extensions = try {
-            get(1).urlDecode()
-          } catch (e: Exception) {
-            return Result.failure(Exception("Cannot decode 'extensions' ('${get(1)}')", e))
-          }
-          val map = try {
-            Buffer().writeUtf8(extensions).jsonReader().readAny()
-          } catch (e: Exception) {
-            return Result.failure(Exception("'extensions' is not a valid JSON ('${extensions}')", e))
-          }
-          if (map !is Map<*, *>?) {
-            return Result.failure(Exception("Expected 'extensions' to be an object"))
-          }
-          builder.extensions(map as Map<String, Any>?)
-        }
-
-        "operationName" -> builder.operationName(get(1).urlDecode())
-      }
+  return pairs.map {
+    it.split("=").let {
+      it.get(0).urlDecode() to it.get(1).urlDecode()
     }
-  }
-
-  return Result.success(builder.build())
+  }.groupBy { it.first }
+    .mapValues {
+      it.value.map { it.second }
+    }
+    .parseGraphQLRequest()
 }
+
+@JvmName("parseGraphQLRequestFromMultiMap")
+fun Map<String, List<String>>.parseGraphQLRequest(): Result<GraphQLRequest> {
+  return mapValues {
+    when (it.key) {
+      "query" -> {
+        if (it.value.size != 1) {
+          return Result.failure(Exception("multiple 'query' parameter found"))
+        }
+
+        it.value.first()
+      }
+      "variables" -> {
+        if (it.value.size != 1) {
+          return Result.failure(Exception("multiple 'variables' parameter found"))
+        }
+
+        try {
+          it.value.first().readAny()
+        } catch (e: Exception) {
+          return Result.failure(e)
+        }
+      }
+      "extensions" -> {
+        if (it.value.size != 1) {
+          return Result.failure(Exception("multiple 'extensions' parameter found"))
+        }
+
+        try {
+          it.value.first().readAny()
+        } catch (e: Exception) {
+          return Result.failure(e)
+        }
+      }
+      "operationName" -> {
+        if (it.value.size != 1) {
+          return Result.failure(Exception("multiple 'operationName' parameter found"))
+        }
+
+        it.value.first()
+      }
+      else -> it.value
+    }
+  }.parseGraphQLRequest()
+}
+
+@OptIn(ApolloInternal::class)
+private fun String.readAny(): Any? = Buffer().writeUtf8(this).jsonReader().readAny()

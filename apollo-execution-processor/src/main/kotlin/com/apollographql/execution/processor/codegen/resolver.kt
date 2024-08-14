@@ -3,7 +3,7 @@ package com.apollographql.execution.processor.codegen
 import com.apollographql.execution.processor.sir.SirArgumentDefinition
 import com.apollographql.execution.processor.sir.SirExecutionContextArgumentDefinition
 import com.apollographql.execution.processor.sir.SirFieldDefinition
-import com.apollographql.execution.processor.sir.SirGraphQLArgumentDefinition
+import com.apollographql.execution.processor.sir.SirInputValueDefinition
 import com.apollographql.execution.processor.sir.SirNonNullType
 import com.apollographql.execution.processor.sir.SirObjectDefinition
 import com.apollographql.execution.processor.sir.asKotlinPoet
@@ -42,7 +42,7 @@ internal fun CodeBlock.Builder.indent(condition: Boolean = true, block: CodeBloc
 private fun argumentCodeBlock(sirArgument: SirArgumentDefinition): CodeBlock {
   return buildCode {
     when (sirArgument) {
-      is SirGraphQLArgumentDefinition -> {
+      is SirInputValueDefinition -> {
         val getArgument = if (sirArgument.defaultValue == null && sirArgument.type !is SirNonNullType) {
           // No default value and nullable => Optional
           "getArgument"
@@ -51,7 +51,7 @@ private fun argumentCodeBlock(sirArgument: SirArgumentDefinition): CodeBlock {
         }
         add(
             "%L·=·it.$getArgument(%S).cast()",
-            sirArgument.targetName,
+            sirArgument.kotlinName,
             sirArgument.name,
         )
       }

@@ -1,26 +1,15 @@
 package com.apollographql.execution.processor.codegen
 
-import com.apollographql.execution.processor.sir.Instantiation
-import com.apollographql.execution.processor.sir.SirCoercing
-import com.apollographql.execution.processor.sir.SirEnumDefinition
-import com.apollographql.execution.processor.sir.SirInputObjectDefinition
-import com.apollographql.execution.processor.sir.SirObjectDefinition
-import com.apollographql.execution.processor.sir.SirScalarDefinition
-import com.apollographql.execution.processor.sir.asKotlinPoet
-import com.apollographql.execution.processor.sir.SirTypeDefinition
-import com.squareup.kotlinpoet.CodeBlock
-import com.squareup.kotlinpoet.FileSpec
-import com.squareup.kotlinpoet.FunSpec
-import com.squareup.kotlinpoet.KModifier
-import com.squareup.kotlinpoet.MemberName
+import com.apollographql.execution.processor.sir.*
+import com.squareup.kotlinpoet.*
 
 internal class ExecutableSchemaBuilderBuilder(
-    private val context: KotlinExecutableSchemaContext,
-    private val serviceName: String,
-    private val schemaDocument: MemberName,
-    private val sirTypeDefinitions: List<SirTypeDefinition>,
+  private val context: KotlinExecutableSchemaContext,
+  serviceName: String,
+  private val schemaDocument: MemberName,
+  private val sirDefinitions: List<SirDefinition>,
 ) : CgFileBuilder {
-  val simpleName = "${serviceName}ExecutableSchemaBuilder".capitalizeFirstLetter()
+  private val simpleName = "${serviceName}ExecutableSchemaBuilder".capitalizeFirstLetter()
   override fun prepare() {}
 
   override fun build(): FileSpec {
@@ -41,24 +30,24 @@ internal class ExecutableSchemaBuilderBuilder(
               add("val schemaBuilder = %L()\n", KotlinSymbols.ExecutableSchemaBuilder)
               indent {
                 add(".schema(%M)\n", schemaDocument)
-                sirTypeDefinitions.filterIsInstance<SirObjectDefinition>().forEach { sirObjectDefinition ->
+                sirDefinitions.filterIsInstance<SirObjectDefinition>().forEach { sirObjectDefinition ->
                   add(".addTypeChecker(%S)·{·it·is·%T·}\n", sirObjectDefinition.name, sirObjectDefinition.targetClassName.asKotlinPoet())
                   sirObjectDefinition.fields.forEach { irTargetField ->
                     val coordinates = "${sirObjectDefinition.name}.${irTargetField.name}"
                     add(".addResolver(%S)·{\n%L\n}\n", coordinates, resolverBody(sirObjectDefinition, irTargetField))
                   }
                 }
-                sirTypeDefinitions.filterIsInstance<SirScalarDefinition>().forEach { sirScalarDefinition ->
+                sirDefinitions.filterIsInstance<SirScalarDefinition>().forEach { sirScalarDefinition ->
                   add(".addCoercing(%S, %L)\n", sirScalarDefinition.name, sirScalarDefinition.coercing.codeBlock())
                 }
-                sirTypeDefinitions.filterIsInstance<SirInputObjectDefinition>().forEach { sirInputObjectDefinition ->
+                sirDefinitions.filterIsInstance<SirInputObjectDefinition>().forEach { sirInputObjectDefinition ->
                   add(".addCoercing(%S, %M)\n", sirInputObjectDefinition.name, context.coercings.get(sirInputObjectDefinition.name))
                 }
-                sirTypeDefinitions.filterIsInstance<SirEnumDefinition>().forEach { sirEnumDefinition ->
+                sirDefinitions.filterIsInstance<SirEnumDefinition>().forEach { sirEnumDefinition ->
                   add(".addCoercing(%S, %M)\n", sirEnumDefinition.name, context.coercings.get(sirEnumDefinition.name))
                 }
                 listOf("query", "mutation", "subscription").forEach { operationType ->
-                  val sirObjectDefinition = sirTypeDefinitions.rootType(operationType)
+                  val sirObjectDefinition = sirDefinitions.rootType(operationType)
                   if (sirObjectDefinition != null && sirObjectDefinition.instantiation != Instantiation.UNKNOWN) {
                     add(".${operationType}Root { %L }\n", sirObjectDefinition.codeBlock())
                   }
@@ -80,7 +69,7 @@ private fun SirCoercing.codeBlock(): CodeBlock {
   }
 }
 
-internal fun List<SirTypeDefinition>.rootType(operationType: String): SirObjectDefinition? {
+internal fun List<SirDefinition>.rootType(operationType: String): SirObjectDefinition? {
   return firstOrNull { it is SirObjectDefinition && it.operationType == operationType } as SirObjectDefinition?
 }
 

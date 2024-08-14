@@ -25,7 +25,7 @@ abstract class ApolloExecutionExtension @Inject constructor(val project: Project
       error("The 'com.apollographql.execution' plugin requires the 'com.google.devtools.ksp' plugin.")
     }
     ksp.arg("apolloService", serviceName)
-    ksp.arg("apolloPackageName", service.packageName)
+    ksp.arg("apolloPackageName", service.packageName.getOrElse("com.example"))
 
     val kotlin = project.extensions.findByName("kotlin")
     if (kotlin == null) {

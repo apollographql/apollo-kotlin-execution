@@ -4,7 +4,6 @@ import com.apollographql.apollo.annotations.ApolloInternal
 import com.apollographql.apollo.api.Error
 import com.apollographql.apollo.api.ExecutionContext
 import com.apollographql.apollo.api.Optional
-import com.apollographql.apollo.api.json.BufferedSinkJsonWriter
 import com.apollographql.apollo.api.json.JsonWriter
 import com.apollographql.apollo.api.json.jsonReader
 import com.apollographql.apollo.api.json.readAny
@@ -16,7 +15,7 @@ import com.apollographql.execution.GraphQLResponse
 import com.apollographql.execution.SubscriptionError
 import com.apollographql.execution.SubscriptionResponse
 import com.apollographql.execution.jsonWriter
-import com.apollographql.execution.toGraphQLRequest
+import com.apollographql.execution.parseGraphQLRequest
 import com.apollographql.execution.writeError
 import kotlinx.atomicfu.locks.reentrantLock
 import kotlinx.atomicfu.locks.withLock
@@ -24,9 +23,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import okio.Buffer
-import okio.BufferedSink
 import okio.Sink
-import okio.buffer
 
 
 /**
@@ -271,7 +268,7 @@ internal fun String.parseApolloWebsocketClientMessage(): SubscriptionWebsocketCl
         }
 
         @Suppress("UNCHECKED_CAST")
-        val request = (payload as Map<String, Any?>).toGraphQLRequest()
+        val request = (payload as Map<String, Any?>).parseGraphQLRequest()
         return request.fold(
             onFailure = { SubscriptionWebsocketClientMessageParseError("Cannot parse start payload: '${it.message}'") },
             onSuccess = { SubscriptionWebsocketStart(id, request = it) }
