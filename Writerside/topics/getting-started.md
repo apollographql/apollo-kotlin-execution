@@ -97,7 +97,7 @@ See the [Generating a schema](schema.md) page for more details.
 
 ## Integrate with your favorite server library
 
-Apollo Kotlin Execution comes with [integrations](integrations.md) for popular server libraries:
+Apollo Kotlin Execution comes with integrations for popular server libraries:
 
 * [Ktor integration](ktor.md)
 * [http4k integration](http4k.md)
