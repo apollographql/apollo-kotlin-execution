@@ -65,7 +65,7 @@ final class com.apollographql.execution/ExecutableSchema { // com.apollographql.
     final fun execute(com.apollographql.execution/GraphQLRequest, com.apollographql.apollo.api/ExecutionContext): com.apollographql.execution/GraphQLResponse // com.apollographql.execution/ExecutableSchema.execute|execute(com.apollographql.execution.GraphQLRequest;com.apollographql.apollo.api.ExecutionContext){}[0]
     final fun executeSubscription(com.apollographql.execution/GraphQLRequest, com.apollographql.apollo.api/ExecutionContext): kotlinx.coroutines.flow/Flow<com.apollographql.execution/SubscriptionEvent> // com.apollographql.execution/ExecutableSchema.executeSubscription|executeSubscription(com.apollographql.execution.GraphQLRequest;com.apollographql.apollo.api.ExecutionContext){}[0]
 }
-final class com.apollographql.execution/GraphQLRequest : com.apollographql.execution/GraphQLRequestResult { // com.apollographql.execution/GraphQLRequest|null[0]
+final class com.apollographql.execution/GraphQLRequest { // com.apollographql.execution/GraphQLRequest|null[0]
     final class Builder { // com.apollographql.execution/GraphQLRequest.Builder|null[0]
         constructor <init>() // com.apollographql.execution/GraphQLRequest.Builder.<init>|<init>(){}[0]
         final fun build(): com.apollographql.execution/GraphQLRequest // com.apollographql.execution/GraphQLRequest.Builder.build|build(){}[0]
@@ -94,10 +94,6 @@ final class com.apollographql.execution/GraphQLRequest : com.apollographql.execu
         final fun <get-operationName>(): kotlin/String? // com.apollographql.execution/GraphQLRequest.operationName.<get-operationName>|<get-operationName>(){}[0]
     final val variables // com.apollographql.execution/GraphQLRequest.variables|{}variables[0]
         final fun <get-variables>(): kotlin.collections/Map<kotlin/String, kotlin/Any?> // com.apollographql.execution/GraphQLRequest.variables.<get-variables>|<get-variables>(){}[0]
-}
-final class com.apollographql.execution/GraphQLRequestError : com.apollographql.execution/GraphQLRequestResult { // com.apollographql.execution/GraphQLRequestError|null[0]
-    final val message // com.apollographql.execution/GraphQLRequestError.message|{}message[0]
-        final fun <get-message>(): kotlin/String // com.apollographql.execution/GraphQLRequestError.message.<get-message>|<get-message>(){}[0]
 }
 final class com.apollographql.execution/GraphQLResponse { // com.apollographql.execution/GraphQLResponse|null[0]
     final class Builder { // com.apollographql.execution/GraphQLResponse.Builder|null[0]
@@ -177,9 +173,10 @@ final class com.apollographql.execution/SubscriptionResponse : com.apollographql
         final fun <get-response>(): com.apollographql.execution/GraphQLResponse // com.apollographql.execution/SubscriptionResponse.response.<get-response>|<get-response>(){}[0]
 }
 final fun (com.apollographql.apollo.api/ExecutionContext).com.apollographql.execution.websocket/subscriptionId(): kotlin/String // com.apollographql.execution.websocket/subscriptionId|subscriptionId@com.apollographql.apollo.api.ExecutionContext(){}[0]
-final fun (kotlin.collections/Map<kotlin/String, kotlin/Any?>).com.apollographql.execution/toGraphQLRequest(): kotlin/Result<com.apollographql.execution/GraphQLRequest> // com.apollographql.execution/toGraphQLRequest|toGraphQLRequest@kotlin.collections.Map<kotlin.String,kotlin.Any?>(){}[0]
-final fun (kotlin/String).com.apollographql.execution/parseGetGraphQLRequest(): kotlin/Result<com.apollographql.execution/GraphQLRequest> // com.apollographql.execution/parseGetGraphQLRequest|parseGetGraphQLRequest@kotlin.String(){}[0]
-final fun (okio/BufferedSource).com.apollographql.execution/parsePostGraphQLRequest(): kotlin/Result<com.apollographql.execution/GraphQLRequest> // com.apollographql.execution/parsePostGraphQLRequest|parsePostGraphQLRequest@okio.BufferedSource(){}[0]
+final fun (kotlin.collections/Map<kotlin/String, kotlin.collections/List<kotlin/String>>).com.apollographql.execution/parseGraphQLRequest(): kotlin/Result<com.apollographql.execution/GraphQLRequest> // com.apollographql.execution/parseGraphQLRequest|parseGraphQLRequest@kotlin.collections.Map<kotlin.String,kotlin.collections.List<kotlin.String>>(){}[0]
+final fun (kotlin.collections/Map<kotlin/String, kotlin/Any?>).com.apollographql.execution/parseGraphQLRequest(): kotlin/Result<com.apollographql.execution/GraphQLRequest> // com.apollographql.execution/parseGraphQLRequest|parseGraphQLRequest@kotlin.collections.Map<kotlin.String,kotlin.Any?>(){}[0]
+final fun (kotlin/String).com.apollographql.execution/parseGraphQLRequest(): kotlin/Result<com.apollographql.execution/GraphQLRequest> // com.apollographql.execution/parseGraphQLRequest|parseGraphQLRequest@kotlin.String(){}[0]
+final fun (okio/BufferedSource).com.apollographql.execution/parseGraphQLRequest(): kotlin/Result<com.apollographql.execution/GraphQLRequest> // com.apollographql.execution/parseGraphQLRequest|parseGraphQLRequest@okio.BufferedSource(){}[0]
 final fun com.apollographql.execution/sandboxHtml(kotlin/String, kotlin/String): kotlin/String // com.apollographql.execution/sandboxHtml|sandboxHtml(kotlin.String;kotlin.String){}[0]
 final object com.apollographql.execution.websocket/ConnectionInitAck : com.apollographql.execution.websocket/ConnectionInitResult { // com.apollographql.execution.websocket/ConnectionInitAck|null[0]
     final fun equals(kotlin/Any?): kotlin/Boolean // com.apollographql.execution.websocket/ConnectionInitAck.equals|equals(kotlin.Any?){}[0]
@@ -226,6 +223,9 @@ open annotation class com.apollographql.execution.annotation/GraphQLDefault : ko
     final val value // com.apollographql.execution.annotation/GraphQLDefault.value|{}value[0]
         final fun <get-value>(): kotlin/String // com.apollographql.execution.annotation/GraphQLDefault.value.<get-value>|<get-value>(){}[0]
 }
+open annotation class com.apollographql.execution.annotation/GraphQLDirective : kotlin/Annotation { // com.apollographql.execution.annotation/GraphQLDirective|null[0]
+    constructor <init>() // com.apollographql.execution.annotation/GraphQLDirective.<init>|<init>(){}[0]
+}
 open annotation class com.apollographql.execution.annotation/GraphQLMutation : kotlin/Annotation { // com.apollographql.execution.annotation/GraphQLMutation|null[0]
     constructor <init>() // com.apollographql.execution.annotation/GraphQLMutation.<init>|<init>(){}[0]
 }
@@ -248,5 +248,4 @@ open annotation class com.apollographql.execution.annotation/GraphQLSubscription
 sealed interface com.apollographql.execution.websocket/ConnectionInitResult // com.apollographql.execution.websocket/ConnectionInitResult|null[0]
 sealed interface com.apollographql.execution.websocket/WebSocketMessage // com.apollographql.execution.websocket/WebSocketMessage|null[0]
 sealed interface com.apollographql.execution/DefaultRoot // com.apollographql.execution/DefaultRoot|null[0]
-sealed interface com.apollographql.execution/GraphQLRequestResult // com.apollographql.execution/GraphQLRequestResult|null[0]
 sealed interface com.apollographql.execution/SubscriptionEvent // com.apollographql.execution/SubscriptionEvent|null[0]

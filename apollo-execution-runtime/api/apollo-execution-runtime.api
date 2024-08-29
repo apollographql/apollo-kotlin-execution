@@ -71,7 +71,7 @@ public final class com/apollographql/execution/FloatCoercing : com/apollographql
 	public synthetic fun serialize (Ljava/lang/Object;)Ljava/lang/Object;
 }
 
-public final class com/apollographql/execution/GraphQLRequest : com/apollographql/execution/GraphQLRequestResult {
+public final class com/apollographql/execution/GraphQLRequest {
 	public final fun getDocument ()Ljava/lang/String;
 	public final fun getExtensions ()Ljava/util/Map;
 	public final fun getOperationName ()Ljava/lang/String;
@@ -95,17 +95,11 @@ public final class com/apollographql/execution/GraphQLRequest$Builder {
 	public final fun variables (Ljava/util/Map;)Lcom/apollographql/execution/GraphQLRequest$Builder;
 }
 
-public final class com/apollographql/execution/GraphQLRequestError : com/apollographql/execution/GraphQLRequestResult {
-	public final fun getMessage ()Ljava/lang/String;
-}
-
 public final class com/apollographql/execution/GraphQLRequestKt {
-	public static final fun parseGetGraphQLRequest (Ljava/lang/String;)Ljava/lang/Object;
-	public static final fun parsePostGraphQLRequest (Lokio/BufferedSource;)Ljava/lang/Object;
-	public static final fun toGraphQLRequest (Ljava/util/Map;)Ljava/lang/Object;
-}
-
-public abstract interface class com/apollographql/execution/GraphQLRequestResult {
+	public static final fun parseGraphQLRequest (Ljava/lang/String;)Ljava/lang/Object;
+	public static final fun parseGraphQLRequest (Ljava/util/Map;)Ljava/lang/Object;
+	public static final fun parseGraphQLRequest (Lokio/BufferedSource;)Ljava/lang/Object;
+	public static final fun parseGraphQLRequestFromMultiMap (Ljava/util/Map;)Ljava/lang/Object;
 }
 
 public final class com/apollographql/execution/GraphQLResponse {
@@ -215,6 +209,9 @@ public final class com/apollographql/execution/SubscriptionResponse : com/apollo
 
 public abstract interface annotation class com/apollographql/execution/annotation/GraphQLDefault : java/lang/annotation/Annotation {
 	public abstract fun value ()Ljava/lang/String;
+}
+
+public abstract interface annotation class com/apollographql/execution/annotation/GraphQLDirective : java/lang/annotation/Annotation {
 }
 
 public abstract interface annotation class com/apollographql/execution/annotation/GraphQLMutation : java/lang/annotation/Annotation {
