@@ -365,6 +365,106 @@ type User {
 
 > Note how the logic is inverted. In GraphQL, fields are nullable by default.
 
+## Directives
+
+Define custom directives using `@GraphQLDirective`:
+
+<table>
+<tr><th>Kotlin</th><th>GraphQL</th></tr>
+<tr>
+<td>
+<code-block lang="kotlin">
+/**
+ * A field requires a specific opt-in
+ */
+@GraphQLDirective
+annotation class requiresOptIn(val feature: String)
+</code-block>
+</td>
+<td>
+<code-block lang="graphql">
+"""
+A field requires a specific opt-in
+"""
+directive @requiresOptIn(feature: String!) on FIELD_DEFINITION
+</code-block>
+</td>
+</tr>
+</table>
+
+> The directive locations and repeatable values are inferred automatically from the usages.
+{style="note"}
+
+Use your directive by annotating your Kotlin code:
+
+<table>
+<tr><th>Kotlin</th><th>GraphQL</th></tr>
+<tr>
+<td>
+<code-block lang="kotlin">
+class Query {
+    @requiresOptIn(feature = "experimental")
+    fun experimentalField(): String { 
+        TODO() 
+    }
+}
+</code-block>
+</td>
+<td>
+<code-block lang="graphql">
+type Query {
+    experimentalField: String! @requiresOptIn(feature: "experimental")
+}
+</code-block>
+</td>
+</tr> 
+</table>
+
+The order of the directives in the GraphQL schema is the same as the order of the annotations in the Kotlin code.
+
+Kotlin annotation classes are mapped to input objects when used as parameter types:
+
+<table>
+<tr><th>Kotlin</th><th>GraphQL</th></tr>
+<tr>
+<td>
+<code-block lang="kotlin">
+enum class OptInLevel {
+    Ignore,
+    Warning,
+    Error
+}
+
+annotation class OptInFeature(
+    val name: String,
+    val level: OptInLevel
+)
+
+@GraphQLDirective
+annotation class requiresOptIn(val feature: OptInFeature)
+</code-block>
+</td>
+<td>
+<code-block lang="graphql">
+enum OptInLevel {
+    Ignore,
+    Warning,
+    Error
+}
+input OptInFeature {
+    name: String!,
+    level: OptInLevel!
+}
+directive @requiresOptIn(feature: OptInFeature!) on FIELD_DEFINITION
+</code-block>
+</td>
+</tr>
+</table>
+
+Limitations:
+1. It is impossible to reuse other input objects in directive arguments. The directive input objects can only be used in directives. This is because [Kotlin annotations do not support regular class paramaters, only annotation classes](https://kotlinlang.org/docs/annotations.html#constructors) unlike regular function parameters.
+2. Directive arguments cannot have default values. This is because KSP does not support reading Kotlin default values and using `@GraphQLDefault` only without a default value would not compile.
+
 ## Deprecation
 
 Kotlin symbols annotated as `@Deprecated` are marked deprecated in GraphQL when applicable:
@@ -393,6 +493,42 @@ type User {
 
 > As of 2024, field, input fields, arguments and enum values support deprecation in GraphQL. Other locations, and especially objects and input objects cannot be deprecated. See [graphql-spec#550](https://github.com/graphql/graphql-spec/issues/550) for more details.
 {style="note"}
+
+## Default values
+
+[KSP cannot read default parameter values](https://github.com/google/ksp/issues/642).
+
+In order to define a default value for your arguments, use `@GraphQLDefault` and pass the value [encoded as GraphQL](https://spec.graphql.org/draft/#Value):
+
+<table>
+<tr><th>Kotlin</th><th>GraphQL</th></tr>
+<tr>
+<td>
+<code-block lang="kotlin">
+class Organisation {
+    fun users(
+        @GraphQLDefault("100") first: Int, 
+        @GraphQLDefault("null") after: String?
+    ): UserConnection
+}
+</code-block>
+</td>
+<td>
+<code-block lang="graphql">
+type Organisation {
+    users(
+        first: Int! = 100,
+        after: String = null
+    ): UserConnection!
+}
+</code-block>
+</td>
+</tr>
+</table>
+
+> Default values are not supported in directives
+{style=note}
+
 
 ## Built-in types
 

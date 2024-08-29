@@ -1,36 +1,23 @@
 package com.apollographql.execution.processor
 
-import com.apollographql.execution.processor.codegen.CgFileBuilder
-import com.apollographql.execution.processor.codegen.CoercingsBuilder
-import com.apollographql.execution.processor.codegen.ExecutableSchemaBuilderBuilder
-import com.apollographql.execution.processor.codegen.KotlinExecutableSchemaContext
-import com.apollographql.execution.processor.codegen.SchemaDocumentBuilder
+import com.apollographql.execution.processor.codegen.*
 import com.apollographql.execution.processor.sir.SirClassName
 import com.google.devtools.ksp.containingFile
 import com.google.devtools.ksp.getConstructors
 import com.google.devtools.ksp.isAbstract
-import com.google.devtools.ksp.processing.CodeGenerator
-import com.google.devtools.ksp.processing.Dependencies
-import com.google.devtools.ksp.processing.KSPLogger
-import com.google.devtools.ksp.processing.Resolver
-import com.google.devtools.ksp.processing.SymbolProcessor
-import com.google.devtools.ksp.symbol.KSAnnotated
-import com.google.devtools.ksp.symbol.KSAnnotation
-import com.google.devtools.ksp.symbol.KSClassDeclaration
-import com.google.devtools.ksp.symbol.KSDeclaration
-import com.google.devtools.ksp.symbol.KSFile
-import com.google.devtools.ksp.symbol.KSPropertyDeclaration
+import com.google.devtools.ksp.processing.*
+import com.google.devtools.ksp.symbol.*
 
 class ApolloProcessor(
-    private val codeGenerator: CodeGenerator,
-    private val logger: KSPLogger,
-    private val packageName: String,
-    private val serviceName: String,
+  private val codeGenerator: CodeGenerator,
+  private val logger: KSPLogger,
+  private val packageName: String,
+  private val serviceName: String,
 ) : SymbolProcessor {
   private var done = false
 
-  private fun getRootSymbol(resolver: Resolver, annotationName: String, dependencies: MutableList<KSFile>): KSClassDeclaration? {
-    val ret = getSymbolsWithAnnotation(resolver, annotationName, dependencies).toList()
+  private fun getRootSymbol(resolver: Resolver, annotationName: String): KSClassDeclaration? {
+    val ret = getSymbolsWithAnnotation(resolver, annotationName).toList()
 
     if (ret.size > 1) {
       val locations = ret.map { it.location }.joinToString("\n")
@@ -48,13 +35,10 @@ class ApolloProcessor(
     return ret.singleOrNull() as KSClassDeclaration?
   }
 
-  private fun getSymbolsWithAnnotation(resolver: Resolver, annotationName: String, dependencies: MutableList<KSFile>): List<KSAnnotated> {
+  private fun getSymbolsWithAnnotation(resolver: Resolver, annotationName: String): List<KSAnnotated> {
     return resolver.getSymbolsWithAnnotation(annotationName)
-        .filter { it.containingFile != null }
-        .toList()
-        .also {
-          dependencies.addAll(it.map { it.containingFile!! })
-        }
+      .filter { it.containingFile != null }
+      .toList()
   }
 
   override fun process(resolver: Resolver): List<KSAnnotated> {
@@ -63,34 +47,26 @@ class ApolloProcessor(
     }
 
     done = true
-    val ksFiles = mutableListOf<KSFile>()
-    val scalarDeclarations = getSymbolsWithAnnotation(resolver, "com.apollographql.execution.annotation.GraphQLScalar", ksFiles)
 
-    val scalarDefinitions = getScalarDefinitions(
-        logger,
-        scalarDeclarations,
-    )
-
-    val query = getRootSymbol(resolver, "com.apollographql.execution.annotation.GraphQLQuery", ksFiles)
+    val query = getRootSymbol(resolver, "com.apollographql.execution.annotation.GraphQLQuery")
     if (query == null) {
       logger.error("No '@GraphQLQuery' class found")
       return emptyList()
     }
 
-    val typeDefinitions = getTypeDefinitions(
-        logger,
-        scalarDefinitions,
-        query,
-        getRootSymbol(resolver, "com.apollographql.execution.annotation.GraphQLMutation", ksFiles),
-        getRootSymbol(resolver, "com.apollographql.execution.annotation.GraphQLSubscription", ksFiles)
+    val result = doTraversal(
+      logger,
+      query,
+      getRootSymbol(resolver, "com.apollographql.execution.annotation.GraphQLMutation"),
+      getRootSymbol(resolver, "com.apollographql.execution.annotation.GraphQLSubscription"),
     )
+    val definitions = result.definitions
 
-    val sirTypeDefinitions = scalarDefinitions + typeDefinitions
     val context = KotlinExecutableSchemaContext(packageName)
     val schemaDocumentBuilder = SchemaDocumentBuilder(
-        context = context,
-        serviceName = serviceName,
-        sirTypeDefinitions = sirTypeDefinitions
+      context = context,
+      serviceName = serviceName,
+      sirDefinitions = definitions
     )
 
     val builders = mutableListOf<CgFileBuilder>()
@@ -98,57 +74,57 @@ class ApolloProcessor(
     builders.add(schemaDocumentBuilder)
 
     builders.add(
-        CoercingsBuilder(
-            context = context,
-            serviceName = serviceName,
-            sirTypeDefinitions = sirTypeDefinitions,
-            logger = logger
-        )
+      CoercingsBuilder(
+        context = context,
+        serviceName = serviceName,
+        sirDefinitions = definitions,
+        logger = logger
+      )
     )
     builders.add(
-        ExecutableSchemaBuilderBuilder(
-            context = context,
-            serviceName = serviceName,
-            schemaDocument = schemaDocumentBuilder.schemaDocument,
-            sirTypeDefinitions = sirTypeDefinitions
-        )
+      ExecutableSchemaBuilderBuilder(
+        context = context,
+        serviceName = serviceName,
+        schemaDocument = schemaDocumentBuilder.schemaDocument,
+        sirDefinitions = definitions
+      )
     )
 
     builders.forEach {
       it.prepare()
     }
 
-    val dependencies = Dependencies(true, *ksFiles.toTypedArray())
+    val dependencies = Dependencies(true, *result.analyzedFiles.toTypedArray())
     builders.map {
       it.build()
-          .toBuilder()
-          .addFileComment(
-              """
+        .toBuilder()
+        .addFileComment(
+          """
                 
                 AUTO-GENERATED FILE. DO NOT MODIFY.
                 
                 This class was automatically generated by Apollo GraphQL version '$VERSION'.
                 
               """.trimIndent()
-          ).build()
+        ).build()
     }
-        .forEach { sourceFile ->
-          codeGenerator.createNewFile(
-              dependencies,
-              packageName = sourceFile.packageName,
-              // SourceFile contains .kt
-              fileName = sourceFile.name.substringBeforeLast('.'),
-          ).bufferedWriter().use {
-            sourceFile.writeTo(it)
-          }
+      .forEach { sourceFile ->
+        codeGenerator.createNewFile(
+          dependencies,
+          packageName = sourceFile.packageName,
+          // SourceFile contains .kt
+          fileName = sourceFile.name.substringBeforeLast('.'),
+        ).bufferedWriter().use {
+          sourceFile.writeTo(it)
         }
+      }
 
     codeGenerator.createNewFileByPath(
-        dependencies,
-        "${serviceName}Schema.graphqls",
-        "",
+      dependencies,
+      "${serviceName}Schema.graphqls",
+      "",
     ).bufferedWriter().use {
-      it.write(schemaString(sirTypeDefinitions))
+      it.write(schemaString(definitions))
     }
     return emptyList()
   }
@@ -160,11 +136,11 @@ internal fun KSClassDeclaration.hasNoArgsConstructor(): Boolean {
   }
 }
 
-internal fun KSAnnotated.deprecationReason(): String? {
-  return findAnnotation("Deprecated")?.getArgumentValueAsString("reason")
-}
+//internal fun KSAnnotated.deprecationReason(): String? {
+//  return findAnnotation("Deprecated")?.getArgumentValueAsString("reason")
+//}
 
-internal fun KSClassDeclaration.graphqlName(): String {
+internal fun KSDeclaration.graphqlName(): String {
   return graphqlNameOrNull() ?: simpleName.asString()
 }
 

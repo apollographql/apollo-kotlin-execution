@@ -53,8 +53,6 @@ class GraphQLResponse internal constructor(
 
   fun serialize(jsonWriter: JsonWriter) {
       jsonWriter.writeObject {
-          name("data")
-          writeAny(data)
           if (!errors.isNullOrEmpty()) {
               name("errors")
               writeArray {
@@ -63,6 +61,8 @@ class GraphQLResponse internal constructor(
                   }
               }
           }
+          name("data")
+          writeAny(data)
           if (extensions != null) {
               name("extensions")
               writeAny(extensions)

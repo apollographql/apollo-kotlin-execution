@@ -7,7 +7,7 @@ Apollo Kotlin Execution:
 * Generates a GraphQL schema from your Kotlin code: write Kotlin, get a typesafe API.
 * Doesn't use reflection. Use it on the JVM and enjoy ultra-fast start times. Or use it with Kotlin native. Apollo Kotlin Execution is KMP-ready!
 * Supports custom scalars, subscriptions, persisted queries and everything in the current [GraphQL draft](https://spec.graphql.org/draft/).
-* Integrates seamlessly with [Ktor](ktor.md) and [http4k](http4k.md).
+* Integrates with [Ktor](ktor.md), [http4k](http4k.md) and [Spring](spring.md).
 
 Under the hood, Apollo Kotlin Execution uses [KSP](https://kotlinlang.org/docs/ksp-overview.html) to generate GraphQL resolvers and types from your Kotlin code.
 
