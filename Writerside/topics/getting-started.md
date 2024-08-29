@@ -101,5 +101,6 @@ Apollo Kotlin Execution comes with [integrations](integrations.md) for popular s
 
 * [Ktor integration](ktor.md)
 * [http4k integration](http4k.md)
+* [Spring integration](spring.md)
 
 See the respective documentation for how to configure a server with an `ExecutableSchema`.
