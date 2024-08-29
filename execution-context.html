@@ -1,5 +1,5 @@
 <!DOCTYPE html SYSTEM "about:legacy-compat">
-<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2024-08-29T16:40:29.846562336"><title>Execution context | Apollo Kotlin Execution</title><script type="application/json" id="virtual-toc-data">[]</script><script type="application/json" id="topic-shortcuts"></script><link href="https://resources.jetbrains.com/writerside/apidoc/6.10.0-b267/app.css" rel="stylesheet"><link rel="icon" type="image/png" sizes="16x16" href="images/favicon-96x96.png"><link rel="icon" type="image/png" sizes="32x32" href="images/favicon-192x192.png"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="Execution context | Apollo Kotlin Execution"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="Apollo Kotlin Execution Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/execution-context.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="Execution context | Apollo Kotlin Execution"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2024-08-29T16:41:52.46769281"><title>Execution context | Apollo Kotlin Execution</title><script type="application/json" id="virtual-toc-data">[]</script><script type="application/json" id="topic-shortcuts"></script><link href="https://resources.jetbrains.com/writerside/apidoc/6.10.0-b267/app.css" rel="stylesheet"><link rel="icon" type="image/png" sizes="16x16" href="images/favicon-96x96.png"><link rel="icon" type="image/png" sizes="32x32" href="images/favicon-192x192.png"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="Execution context | Apollo Kotlin Execution"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="Apollo Kotlin Execution Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/execution-context.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="Execution context | Apollo Kotlin Execution"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
     "@context": "http://schema.org",
     "@type": "WebPage",
     "@id": "writerside-documentation/execution-context.html#webpage",
@@ -13,7 +13,7 @@
     "@id": "writerside-documentation/#website",
     "url": "writerside-documentation/",
     "name": "Apollo Kotlin Execution Help"
-}</script><!-- End Schema.org --></head><body data-id="execution-context" data-main-title="Execution context" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="welcome.md|Welcome" data-edit-url="https://github.com/apollographql/apollo-kotlin-execution/edit/main/Writerside/topics/execution-context.md"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>Apollo Kotlin Execution  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="execution-context" id="execution-context.md">Execution context</h1><p id="sdtliq_2">Kotlin functions may define an additional <code class="code" id="sdtliq_3">ExecutionContext</code> parameter. This parameter is special and never exposed in GraphQL.</p><div class="table-wrapper"><table class="wide" id="sdtliq_4"><thead><tr class="ijRowHead" id="sdtliq_5"><th id="sdtliq_6"><p>Kotlin</p></th><th id="sdtliq_7"><p>GraphQL</p></th></tr></thead><tbody><tr id="sdtliq_8"><td id="sdtliq_9"><div class="code-block" data-lang="kotlin">
+}</script><!-- End Schema.org --></head><body data-id="execution-context" data-main-title="Execution context" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="welcome.md|Welcome" data-edit-url="https://github.com/apollographql/apollo-kotlin-execution/edit/main/Writerside/topics/execution-context.md"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>Apollo Kotlin Execution  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="execution-context" id="execution-context.md">Execution context</h1><p id="-sl4tq2_2">Kotlin functions may define an additional <code class="code" id="-sl4tq2_3">ExecutionContext</code> parameter. This parameter is special and never exposed in GraphQL.</p><div class="table-wrapper"><table class="wide" id="-sl4tq2_4"><thead><tr class="ijRowHead" id="-sl4tq2_5"><th id="-sl4tq2_6"><p>Kotlin</p></th><th id="-sl4tq2_7"><p>GraphQL</p></th></tr></thead><tbody><tr id="-sl4tq2_8"><td id="-sl4tq2_9"><div class="code-block" data-lang="kotlin">
 @GraphQLQuery
 class Query {
   fun viewer(context: ExecutionContext): User {
@@ -21,19 +21,19 @@ class Query {
     return user
   }
 }
-</div></td><td id="sdtliq_11"><div class="code-block" data-lang="none">
+</div></td><td id="-sl4tq2_11"><div class="code-block" data-lang="none">
 type Query {
     # this field has no arguments
     viewer: user
 }
-</div></td></tr></tbody></table></div><p id="sdtliq_13"><code class="code" id="sdtliq_14">ExecutionContext</code> is a typesafe map inspired by <code class="code" id="sdtliq_15">CoroutinesContext</code>. Define your own context by extending <code class="code" id="sdtliq_16">ExecutionContext.Element</code>:</p><div class="code-block" data-lang="kotlin">
+</div></td></tr></tbody></table></div><p id="-sl4tq2_13"><code class="code" id="-sl4tq2_14">ExecutionContext</code> is a typesafe map inspired by <code class="code" id="-sl4tq2_15">CoroutinesContext</code>. Define your own context by extending <code class="code" id="-sl4tq2_16">ExecutionContext.Element</code>:</p><div class="code-block" data-lang="kotlin">
 class CurrentUser(val id: String) : ExecutionContext.Element {
   override val key: ExecutionContext.Key&lt;*&gt;
     get() = Key
 
   companion object Key : ExecutionContext.Key&lt;CurrentUser&gt;
 }
-</div><p id="sdtliq_18">And pass it to <code class="code" id="sdtliq_19">ExecutableSchema.execute()</code>:</p><div class="code-block" data-lang="kotlin">
+</div><p id="-sl4tq2_18">And pass it to <code class="code" id="-sl4tq2_19">ExecutableSchema.execute()</code>:</p><div class="code-block" data-lang="kotlin">
 // Get the current logged-in user
 val context = CurrentUser(getUserIdFromHttpHeaders())
 
@@ -43,7 +43,7 @@ val response = executableSchema.execute(
     .build(),
   context
 )
-</div><p id="sdtliq_21"><code class="code" id="sdtliq_22">CurrentUser</code> is now available in <code class="code" id="sdtliq_23">Query.viewer</code>:</p><div class="code-block" data-lang="kotlin">
+</div><p id="-sl4tq2_21"><code class="code" id="-sl4tq2_22">CurrentUser</code> is now available in <code class="code" id="-sl4tq2_23">Query.viewer</code>:</p><div class="code-block" data-lang="kotlin">
 class Query {
   fun viewer(context: ExecutionContext): User {
     val id = context[CurrentUser]!!.id
