@@ -28,6 +28,7 @@ jobs:
 
       - name: Prepare static content
         run: |
+          export JAVA_HOME=$JAVA_HOME_17_X64
           ./gradlew dokkatooGeneratePublicationHtml
           mkdir -p build/static
           cp -rf build/dokka/html build/static/kdoc
@@ -38,11 +39,3 @@ jobs:
         with:
           branch: gh-pages # The branch the action should deploy to.
           folder: build/static # The folder the action should deploy.
-
-      - name: Save artifact with build results
-        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 #v4.3.3
-        with:
-          name: docs
-          path: |
-            artifacts/${{ env.ARTIFACT }}
-          retention-days: 7
