@@ -38,5 +38,5 @@ spring-webflux = "org.springframework:spring-webflux:6.1.10"
 [plugins]
 kgp-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-plugin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-librarian = { id = "com.gradleup.librarian", version = "0.0.4" }
+librarian = { id = "com.gradleup.librarian", version = "0.0.6" }
 apollo-execution = { id = "com.apollographql.execution" }
