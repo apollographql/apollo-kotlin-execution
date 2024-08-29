@@ -15,3 +15,5 @@ com.apollographql.execution
 com.apollographql.execution.annotation
 com.apollographql.execution.internal
 com.apollographql.execution.websocket
+module:apollo-execution-spring
+com.apollographql.execution.spring
