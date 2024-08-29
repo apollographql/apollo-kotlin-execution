@@ -1,5 +1,5 @@
 <!DOCTYPE html SYSTEM "about:legacy-compat">
-<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2024-08-29T16:56:04.1584936"><title>Generating a schema | Apollo Kotlin Execution</title><script type="application/json" id="virtual-toc-data">[{"id":"objects-and-fields","level":0,"title":"Objects and fields","anchor":"#objects-and-fields"},{"id":"unions-and-interfaces","level":0,"title":"Unions and interfaces","anchor":"#unions-and-interfaces"},{"id":"enums","level":0,"title":"Enums","anchor":"#enums"},{"id":"scalars","level":0,"title":"Scalars","anchor":"#scalars"},{"id":"arguments","level":0,"title":"Arguments","anchor":"#arguments"},{"id":"names","level":0,"title":"Names","anchor":"#names"},{"id":"descriptions","level":0,"title":"Descriptions","anchor":"#descriptions"},{"id":"nullability","level":0,"title":"Nullability","anchor":"#nullability"},{"id":"directives","level":0,"title":"Directives","anchor":"#directives"},{"id":"deprecation","level":0,"title":"Deprecation","anchor":"#deprecation"},{"id":"default-values","level":0,"title":"Default values","anchor":"#default-values"},{"id":"built-in-types","level":0,"title":"Built-in types","anchor":"#built-in-types"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="https://resources.jetbrains.com/writerside/apidoc/6.10.0-b408/app.css" rel="stylesheet"><link rel="icon" type="image/png" sizes="16x16" href="images/favicon-96x96.png"><link rel="icon" type="image/png" sizes="32x32" href="images/favicon-192x192.png"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="Generating a schema | Apollo Kotlin Execution"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="Apollo Kotlin Execution Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/schema.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="Generating a schema | Apollo Kotlin Execution"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+<html lang="en-US" data-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2024-08-29T16:59:17.144198849"><title>Generating a schema | Apollo Kotlin Execution</title><script type="application/json" id="virtual-toc-data">[{"id":"objects-and-fields","level":0,"title":"Objects and fields","anchor":"#objects-and-fields"},{"id":"unions-and-interfaces","level":0,"title":"Unions and interfaces","anchor":"#unions-and-interfaces"},{"id":"enums","level":0,"title":"Enums","anchor":"#enums"},{"id":"scalars","level":0,"title":"Scalars","anchor":"#scalars"},{"id":"arguments","level":0,"title":"Arguments","anchor":"#arguments"},{"id":"names","level":0,"title":"Names","anchor":"#names"},{"id":"descriptions","level":0,"title":"Descriptions","anchor":"#descriptions"},{"id":"nullability","level":0,"title":"Nullability","anchor":"#nullability"},{"id":"directives","level":0,"title":"Directives","anchor":"#directives"},{"id":"deprecation","level":0,"title":"Deprecation","anchor":"#deprecation"},{"id":"default-values","level":0,"title":"Default values","anchor":"#default-values"},{"id":"built-in-types","level":0,"title":"Built-in types","anchor":"#built-in-types"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="https://resources.jetbrains.com/writerside/apidoc/6.10.0-b408/app.css" rel="stylesheet"><link rel="icon" type="image/png" sizes="16x16" href="images/favicon-96x96.png"><link rel="icon" type="image/png" sizes="32x32" href="images/favicon-192x192.png"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="Generating a schema | Apollo Kotlin Execution"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="Apollo Kotlin Execution Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="writerside-documentation/schema.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="Generating a schema | Apollo Kotlin Execution"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
     "@context": "http://schema.org",
     "@type": "WebPage",
     "@id": "writerside-documentation/schema.html#webpage",
@@ -13,7 +13,7 @@
     "@id": "writerside-documentation/#website",
     "url": "writerside-documentation/",
     "name": "Apollo Kotlin Execution Help"
-}</script><!-- End Schema.org --></head><body data-id="schema" data-main-title="Generating a schema" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="" data-edit-url="https://github.com/apollographql/apollo-kotlin-execution/edit/main/Writerside/topics/schema.md"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>Apollo Kotlin Execution  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="schema" id="schema.md">Generating a schema</h1><p id="-lijfm2_3">Apollo Kotlin Execution uses KSP to parse your Kotlin code and generate a matching GraphQL schema.</p><p id="-lijfm2_4">To identify a graph, the Kotlin code must contain exactly one <code class="code" id="-lijfm2_21">@GraphQLQuery</code> class and at most one optional <code class="code" id="-lijfm2_22">@GraphQLMutation</code> and <code class="code" id="-lijfm2_23">@GraphQLSubscription</code> classes:</p><div class="code-block" data-lang="kotlin">
+}</script><!-- End Schema.org --></head><body data-id="schema" data-main-title="Generating a schema" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="Welcome" data-edit-url="https://github.com/apollographql/apollo-kotlin-execution/edit/main/Writerside/topics/schema.md"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>Apollo Kotlin Execution  Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="schema" id="schema.md">Generating a schema</h1><p id="rjtjw8_3">Apollo Kotlin Execution uses KSP to parse your Kotlin code and generate a matching GraphQL schema.</p><p id="rjtjw8_4">To identify a graph, the Kotlin code must contain exactly one <code class="code" id="rjtjw8_21">@GraphQLQuery</code> class and at most one optional <code class="code" id="rjtjw8_22">@GraphQLMutation</code> and <code class="code" id="rjtjw8_23">@GraphQLSubscription</code> classes:</p><div class="code-block" data-lang="kotlin">
 // Mandatory top-level Query
 @GraphQLQuery
 class Query {
@@ -28,39 +28,39 @@ class Mutation { }
 // Optional top-level Subscription
 @GraphQLSubscription
 class Subscription { }
-</div><p id="-lijfm2_6">From those root classes, the Apollo Kotlin Execution processor traverses the Kotlin class graph and builds the matching GraphQL schema:</p><ul class="list _bullet" id="-lijfm2_7"><li class="list__item" id="-lijfm2_24"><p>Classes used in output positions are mapped to objects, unions and interfaces.</p></li><li class="list__item" id="-lijfm2_25"><p>Classes used in input positions are mapped to input objects.</p></li><li class="list__item" id="-lijfm2_26"><p>Scalars and Enum can happen in both input and output position.</p></li></ul><aside class="prompt" data-type="tip" data-title="" id="-lijfm2_8"><p id="-lijfm2_27">Non-root classes do not need to be annotated and are added to the GraphQL schema automatically.</p></aside><section class="chapter"><h2 id="objects-and-fields" data-toc="objects-and-fields">Objects and fields</h2><p id="-lijfm2_28">Apollo Kotlin Execution maps public Kotlin classes to GraphQL types and public functions and properties to GraphQL fields with the same name:</p><div class="table-wrapper"><table class="wide" id="-lijfm2_29"><thead><tr class="ijRowHead" id="-lijfm2_32"><th id="-lijfm2_34"><p>Kotlin</p></th><th id="-lijfm2_35"><p>GraphQL</p></th></tr></thead><tbody><tr id="-lijfm2_33"><td id="-lijfm2_36"><div class="code-block" data-lang="kotlin">
+</div><p id="rjtjw8_6">From those root classes, the Apollo Kotlin Execution processor traverses the Kotlin class graph and builds the matching GraphQL schema:</p><ul class="list _bullet" id="rjtjw8_7"><li class="list__item" id="rjtjw8_24"><p>Classes used in output positions are mapped to objects, unions and interfaces.</p></li><li class="list__item" id="rjtjw8_25"><p>Classes used in input positions are mapped to input objects.</p></li><li class="list__item" id="rjtjw8_26"><p>Scalars and Enum can happen in both input and output position.</p></li></ul><aside class="prompt" data-type="tip" data-title="" id="rjtjw8_8"><p id="rjtjw8_27">Non-root classes do not need to be annotated and are added to the GraphQL schema automatically.</p></aside><section class="chapter"><h2 id="objects-and-fields" data-toc="objects-and-fields">Objects and fields</h2><p id="rjtjw8_28">Apollo Kotlin Execution maps public Kotlin classes to GraphQL types and public functions and properties to GraphQL fields with the same name:</p><div class="table-wrapper"><table class="wide" id="rjtjw8_29"><thead><tr class="ijRowHead" id="rjtjw8_32"><th id="rjtjw8_34"><p>Kotlin</p></th><th id="rjtjw8_35"><p>GraphQL</p></th></tr></thead><tbody><tr id="rjtjw8_33"><td id="rjtjw8_36"><div class="code-block" data-lang="kotlin">
 class User(val id: String) {
     fun email(): String
 }
-</div></td><td id="-lijfm2_37"><div class="code-block" data-lang="none">
+</div></td><td id="rjtjw8_37"><div class="code-block" data-lang="none">
 type User {
     id: String!
     email: String!
 }
-</div></td></tr></tbody></table></div><p id="-lijfm2_30">Private/internal fields and functions are not exposed in GraphQL:</p><div class="table-wrapper"><table class="wide" id="-lijfm2_31"><thead><tr class="ijRowHead" id="-lijfm2_40"><th id="-lijfm2_42"><p>Kotlin</p></th><th id="-lijfm2_43"><p>GraphQL</p></th></tr></thead><tbody><tr id="-lijfm2_41"><td id="-lijfm2_44"><div class="code-block" data-lang="kotlin">
+</div></td></tr></tbody></table></div><p id="rjtjw8_30">Private/internal fields and functions are not exposed in GraphQL:</p><div class="table-wrapper"><table class="wide" id="rjtjw8_31"><thead><tr class="ijRowHead" id="rjtjw8_40"><th id="rjtjw8_42"><p>Kotlin</p></th><th id="rjtjw8_43"><p>GraphQL</p></th></tr></thead><tbody><tr id="rjtjw8_41"><td id="rjtjw8_44"><div class="code-block" data-lang="kotlin">
 class User {
     fun email(): String
     internal fun sendVerificationEmail()
 }
-</div></td><td id="-lijfm2_45"><div class="code-block" data-lang="none">
+</div></td><td id="rjtjw8_45"><div class="code-block" data-lang="none">
 type User {
     email: String!
 }
-</div></td></tr></tbody></table></div></section><section class="chapter"><h2 id="unions-and-interfaces" data-toc="unions-and-interfaces">Unions and interfaces</h2><p id="-lijfm2_48">Non-empty Kotlin interfaces are mapped to GraphQL interfaces:</p><div class="table-wrapper"><table class="wide" id="-lijfm2_49"><thead><tr class="ijRowHead" id="-lijfm2_52"><th id="-lijfm2_54"><p>Kotlin</p></th><th id="-lijfm2_55"><p>GraphQL</p></th></tr></thead><tbody><tr id="-lijfm2_53"><td id="-lijfm2_56"><div class="code-block" data-lang="kotlin">
+</div></td></tr></tbody></table></div></section><section class="chapter"><h2 id="unions-and-interfaces" data-toc="unions-and-interfaces">Unions and interfaces</h2><p id="rjtjw8_48">Non-empty Kotlin interfaces are mapped to GraphQL interfaces:</p><div class="table-wrapper"><table class="wide" id="rjtjw8_49"><thead><tr class="ijRowHead" id="rjtjw8_52"><th id="rjtjw8_54"><p>Kotlin</p></th><th id="rjtjw8_55"><p>GraphQL</p></th></tr></thead><tbody><tr id="rjtjw8_53"><td id="rjtjw8_56"><div class="code-block" data-lang="kotlin">
 sealed interface Node {
     id: String
 }
 class User(
     override val id: String
 ) : Node 
-</div></td><td id="-lijfm2_57"><div class="code-block" data-lang="none">
+</div></td><td id="rjtjw8_57"><div class="code-block" data-lang="none">
 interface Node {
     id: String!
 }
 type User implements Node {
     id: String!
 }
-</div></td></tr></tbody></table></div><p id="-lijfm2_50">Empty Kotlin interfaces are mapped to GraphQL unions:</p><div class="table-wrapper"><table class="wide" id="-lijfm2_51"><thead><tr class="ijRowHead" id="-lijfm2_60"><th id="-lijfm2_62"><p>Kotlin</p></th><th id="-lijfm2_63"><p>GraphQL</p></th></tr></thead><tbody><tr id="-lijfm2_61"><td id="-lijfm2_64"><div class="code-block" data-lang="kotlin">
+</div></td></tr></tbody></table></div><p id="rjtjw8_50">Empty Kotlin interfaces are mapped to GraphQL unions:</p><div class="table-wrapper"><table class="wide" id="rjtjw8_51"><thead><tr class="ijRowHead" id="rjtjw8_60"><th id="rjtjw8_62"><p>Kotlin</p></th><th id="rjtjw8_63"><p>GraphQL</p></th></tr></thead><tbody><tr id="rjtjw8_61"><td id="rjtjw8_64"><div class="code-block" data-lang="kotlin">
 sealed interface Actor 
 class User(
     val id: String,
@@ -69,7 +69,7 @@ class User(
 class Organisation(
     val users: List&lt;User&gt;
 ) : Actor
-</div></td><td id="-lijfm2_65"><div class="code-block" data-lang="none">
+</div></td><td id="rjtjw8_65"><div class="code-block" data-lang="none">
 union Actor = User | Organisation
 type User {
     val id: String!
@@ -78,47 +78,47 @@ type User {
 type Organisation {
     val users: [User]
 }
-</div></td></tr></tbody></table></div></section><section class="chapter"><h2 id="enums" data-toc="enums">Enums</h2><p id="-lijfm2_68">Kotlin enums are mapped to GraphQL enums:</p><div class="table-wrapper"><table class="wide" id="-lijfm2_69"><thead><tr class="ijRowHead" id="-lijfm2_70"><th id="-lijfm2_72"><p>Kotlin</p></th><th id="-lijfm2_73"><p>GraphQL</p></th></tr></thead><tbody><tr id="-lijfm2_71"><td id="-lijfm2_74"><div class="code-block" data-lang="kotlin">
+</div></td></tr></tbody></table></div></section><section class="chapter"><h2 id="enums" data-toc="enums">Enums</h2><p id="rjtjw8_68">Kotlin enums are mapped to GraphQL enums:</p><div class="table-wrapper"><table class="wide" id="rjtjw8_69"><thead><tr class="ijRowHead" id="rjtjw8_70"><th id="rjtjw8_72"><p>Kotlin</p></th><th id="rjtjw8_73"><p>GraphQL</p></th></tr></thead><tbody><tr id="rjtjw8_71"><td id="rjtjw8_74"><div class="code-block" data-lang="kotlin">
 enum class Role {
     Read,
     Write,
     Admin
 }
-</div></td><td id="-lijfm2_75"><div class="code-block" data-lang="none">
+</div></td><td id="rjtjw8_75"><div class="code-block" data-lang="none">
 enum Role {
     Read,
     Write,
     Admin
 }
-</div></td></tr></tbody></table></div></section><section class="chapter"><h2 id="scalars" data-toc="scalars">Scalars</h2><p id="-lijfm2_78">Classes annotated with <code class="code" id="-lijfm2_83">@GraphQLScalar</code> are mapped to GraphQL scalars:</p><div class="table-wrapper"><table class="wide" id="-lijfm2_79"><thead><tr class="ijRowHead" id="-lijfm2_84"><th id="-lijfm2_86"><p>Kotlin</p></th><th id="-lijfm2_87"><p>GraphQL</p></th></tr></thead><tbody><tr id="-lijfm2_85"><td id="-lijfm2_88"><div class="code-block" data-lang="kotlin">
+</div></td></tr></tbody></table></div></section><section class="chapter"><h2 id="scalars" data-toc="scalars">Scalars</h2><p id="rjtjw8_78">Classes annotated with <code class="code" id="rjtjw8_83">@GraphQLScalar</code> are mapped to GraphQL scalars:</p><div class="table-wrapper"><table class="wide" id="rjtjw8_79"><thead><tr class="ijRowHead" id="rjtjw8_84"><th id="rjtjw8_86"><p>Kotlin</p></th><th id="rjtjw8_87"><p>GraphQL</p></th></tr></thead><tbody><tr id="rjtjw8_85"><td id="rjtjw8_88"><div class="code-block" data-lang="kotlin">
 @GraphQLScalar(GeoPointCoercing::class)
 class GeoPoint(
     val latitude: Double, 
     val longitude: Double
 )
-</div></td><td id="-lijfm2_89"><div class="code-block" data-lang="none">
+</div></td><td id="rjtjw8_89"><div class="code-block" data-lang="none">
 scalar GeoPoint
-</div></td></tr></tbody></table></div><p id="-lijfm2_80">You can also map existing classes that you don't own to GraphQL scalars using <code class="code" id="-lijfm2_92">typealias</code></p><div class="table-wrapper"><table class="wide" id="-lijfm2_81"><thead><tr class="ijRowHead" id="-lijfm2_93"><th id="-lijfm2_95"><p>Kotlin</p></th><th id="-lijfm2_96"><p>GraphQL</p></th></tr></thead><tbody><tr id="-lijfm2_94"><td id="-lijfm2_97"><div class="code-block" data-lang="kotlin">
+</div></td></tr></tbody></table></div><p id="rjtjw8_80">You can also map existing classes that you don't own to GraphQL scalars using <code class="code" id="rjtjw8_92">typealias</code></p><div class="table-wrapper"><table class="wide" id="rjtjw8_81"><thead><tr class="ijRowHead" id="rjtjw8_93"><th id="rjtjw8_95"><p>Kotlin</p></th><th id="rjtjw8_96"><p>GraphQL</p></th></tr></thead><tbody><tr id="rjtjw8_94"><td id="rjtjw8_97"><div class="code-block" data-lang="kotlin">
 import kotlinx.datetime.LocalDateTime
 @GraphQLScalar(DateTimeCoercing::class)
 typealias DateTime = LocalDateTime
-</div></td><td id="-lijfm2_98"><div class="code-block" data-lang="none">
+</div></td><td id="rjtjw8_98"><div class="code-block" data-lang="none">
 scalar DateTime
-</div></td></tr></tbody></table></div><aside class="prompt" data-type="note" data-title="" id="-lijfm2_82"><p id="-lijfm2_102">Scalars require defining an associated Coercing. You can read more in the dedicated <a href="scalars.html" id="-lijfm2_103" data-tooltip="You can define a new custom scalar using @GraphQLScalar:">scalars page</a>.</p></aside></section><section class="chapter"><h2 id="arguments" data-toc="arguments">Arguments</h2><p id="-lijfm2_104">Kotlin parameters are mapped to GraphQL arguments:</p><div class="table-wrapper"><table class="wide" id="-lijfm2_105"><thead><tr class="ijRowHead" id="-lijfm2_108"><th id="-lijfm2_110"><p>Kotlin</p></th><th id="-lijfm2_111"><p>GraphQL</p></th></tr></thead><tbody><tr id="-lijfm2_109"><td id="-lijfm2_112"><div class="code-block" data-lang="kotlin">
+</div></td></tr></tbody></table></div><aside class="prompt" data-type="note" data-title="" id="rjtjw8_82"><p id="rjtjw8_102">Scalars require defining an associated Coercing. You can read more in the dedicated <a href="scalars.html" id="rjtjw8_103" data-tooltip="You can define a new custom scalar using @GraphQLScalar:">scalars page</a>.</p></aside></section><section class="chapter"><h2 id="arguments" data-toc="arguments">Arguments</h2><p id="rjtjw8_104">Kotlin parameters are mapped to GraphQL arguments:</p><div class="table-wrapper"><table class="wide" id="rjtjw8_105"><thead><tr class="ijRowHead" id="rjtjw8_108"><th id="rjtjw8_110"><p>Kotlin</p></th><th id="rjtjw8_111"><p>GraphQL</p></th></tr></thead><tbody><tr id="rjtjw8_109"><td id="rjtjw8_112"><div class="code-block" data-lang="kotlin">
 class Organisation {
     fun users(
         first: Int, 
         after: String
     ): UserConnection
 }
-</div></td><td id="-lijfm2_113"><div class="code-block" data-lang="none">
+</div></td><td id="rjtjw8_113"><div class="code-block" data-lang="none">
 type Organisation {
     users(
         first: Int!,
         after: String!
     ): UserConnection!
 }
-</div></td></tr></tbody></table></div><p id="-lijfm2_106">Kotlin parameters may be of class type in which case the class is generated as a GraphQL input object:</p><div class="table-wrapper"><table class="wide" id="-lijfm2_107"><thead><tr class="ijRowHead" id="-lijfm2_116"><th id="-lijfm2_118"><p>Kotlin</p></th><th id="-lijfm2_119"><p>GraphQL</p></th></tr></thead><tbody><tr id="-lijfm2_117"><td id="-lijfm2_120"><div class="code-block" data-lang="kotlin">
+</div></td></tr></tbody></table></div><p id="rjtjw8_106">Kotlin parameters may be of class type in which case the class is generated as a GraphQL input object:</p><div class="table-wrapper"><table class="wide" id="rjtjw8_107"><thead><tr class="ijRowHead" id="rjtjw8_116"><th id="rjtjw8_118"><p>Kotlin</p></th><th id="rjtjw8_119"><p>GraphQL</p></th></tr></thead><tbody><tr id="rjtjw8_117"><td id="rjtjw8_120"><div class="code-block" data-lang="kotlin">
 class UserFilter(
     val role: Role?, 
     val organisationId: String?
@@ -128,7 +128,7 @@ class Query {
         where: UserFilter, 
     ): List&lt;User&gt;
 }
-</div></td><td id="-lijfm2_121"><div class="code-block" data-lang="none">
+</div></td><td id="rjtjw8_121"><div class="code-block" data-lang="none">
 input UserFilter {
     role: Role,
     organisationId: String
@@ -138,17 +138,17 @@ type Query {
         where: UserFilter!,
     ): [User!]
 }
-</div></td></tr></tbody></table></div></section><section class="chapter"><h2 id="names" data-toc="names">Names</h2><p id="-lijfm2_124">The GraphQL name can be customized using <code class="code" id="-lijfm2_126">@GraphQLName</code>:</p><div class="table-wrapper"><table class="wide" id="-lijfm2_125"><thead><tr class="ijRowHead" id="-lijfm2_127"><th id="-lijfm2_129"><p>Kotlin</p></th><th id="-lijfm2_130"><p>GraphQL</p></th></tr></thead><tbody><tr id="-lijfm2_128"><td id="-lijfm2_131"><div class="code-block" data-lang="kotlin">
+</div></td></tr></tbody></table></div></section><section class="chapter"><h2 id="names" data-toc="names">Names</h2><p id="rjtjw8_124">The GraphQL name can be customized using <code class="code" id="rjtjw8_126">@GraphQLName</code>:</p><div class="table-wrapper"><table class="wide" id="rjtjw8_125"><thead><tr class="ijRowHead" id="rjtjw8_127"><th id="rjtjw8_129"><p>Kotlin</p></th><th id="rjtjw8_130"><p>GraphQL</p></th></tr></thead><tbody><tr id="rjtjw8_128"><td id="rjtjw8_131"><div class="code-block" data-lang="kotlin">
 @GraphQLName(&quot;User&quot;)
 class DomainUser {
     @GraphQLName(&quot;email&quot;)
     fun emailAddress(): String
 }
-</div></td><td id="-lijfm2_132"><div class="code-block" data-lang="none">
+</div></td><td id="rjtjw8_132"><div class="code-block" data-lang="none">
 type User {
     email: String
 }
-</div></td></tr></tbody></table></div></section><section class="chapter"><h2 id="descriptions" data-toc="descriptions">Descriptions</h2><p id="-lijfm2_135">The GraphQL description is generated from the KDoc:</p><div class="table-wrapper"><table class="wide" id="-lijfm2_136"><thead><tr class="ijRowHead" id="-lijfm2_137"><th id="-lijfm2_139"><p>Kotlin</p></th><th id="-lijfm2_140"><p>GraphQL</p></th></tr></thead><tbody><tr id="-lijfm2_138"><td id="-lijfm2_141"><div class="code-block" data-lang="kotlin">
+</div></td></tr></tbody></table></div></section><section class="chapter"><h2 id="descriptions" data-toc="descriptions">Descriptions</h2><p id="rjtjw8_135">The GraphQL description is generated from the KDoc:</p><div class="table-wrapper"><table class="wide" id="rjtjw8_136"><thead><tr class="ijRowHead" id="rjtjw8_137"><th id="rjtjw8_139"><p>Kotlin</p></th><th id="rjtjw8_140"><p>GraphQL</p></th></tr></thead><tbody><tr id="rjtjw8_138"><td id="rjtjw8_141"><div class="code-block" data-lang="kotlin">
 /**
  * A logged-in user of the service.
  */
@@ -158,7 +158,7 @@ class User {
      */
     fun email(): String
 }
-</div></td><td id="-lijfm2_142"><div class="code-block" data-lang="none">
+</div></td><td id="rjtjw8_142"><div class="code-block" data-lang="none">
 &quot;&quot;&quot;
 A logged-in user of the service.
 &quot;&quot;&quot;
@@ -168,37 +168,37 @@ type User {
     &quot;&quot;&quot;
     email: String
 }
-</div></td></tr></tbody></table></div></section><section class="chapter"><h2 id="nullability" data-toc="nullability">Nullability</h2><p id="-lijfm2_145">Nullable fields and input fields are also nullable in GraphQL:</p><div class="table-wrapper"><table class="wide" id="-lijfm2_146"><thead><tr class="ijRowHead" id="-lijfm2_148"><th id="-lijfm2_150"><p>Kotlin</p></th><th id="-lijfm2_151"><p>GraphQL</p></th></tr></thead><tbody><tr id="-lijfm2_149"><td id="-lijfm2_152"><div class="code-block" data-lang="kotlin">
+</div></td></tr></tbody></table></div></section><section class="chapter"><h2 id="nullability" data-toc="nullability">Nullability</h2><p id="rjtjw8_145">Nullable fields and input fields are also nullable in GraphQL:</p><div class="table-wrapper"><table class="wide" id="rjtjw8_146"><thead><tr class="ijRowHead" id="rjtjw8_148"><th id="rjtjw8_150"><p>Kotlin</p></th><th id="rjtjw8_151"><p>GraphQL</p></th></tr></thead><tbody><tr id="rjtjw8_149"><td id="rjtjw8_152"><div class="code-block" data-lang="kotlin">
 class User {
     fun email(): String?
 }
-</div></td><td id="-lijfm2_153"><div class="code-block" data-lang="none">
+</div></td><td id="rjtjw8_153"><div class="code-block" data-lang="none">
 type User {
     email: String
 }
-</div></td></tr></tbody></table></div><aside class="prompt" data-type="tip" data-title="" id="-lijfm2_147"><p id="-lijfm2_156">Note how the logic is inverted. In GraphQL, fields are nullable by default.</p></aside></section><section class="chapter"><h2 id="directives" data-toc="directives">Directives</h2><p id="-lijfm2_157">Define custom directives using <code class="code" id="-lijfm2_167">@GraphQLDirective</code>:</p><div class="table-wrapper"><table class="wide" id="-lijfm2_158"><thead><tr class="ijRowHead" id="-lijfm2_168"><th id="-lijfm2_170"><p>Kotlin</p></th><th id="-lijfm2_171"><p>GraphQL</p></th></tr></thead><tbody><tr id="-lijfm2_169"><td id="-lijfm2_172"><div class="code-block" data-lang="kotlin">
+</div></td></tr></tbody></table></div><aside class="prompt" data-type="tip" data-title="" id="rjtjw8_147"><p id="rjtjw8_156">Note how the logic is inverted. In GraphQL, fields are nullable by default.</p></aside></section><section class="chapter"><h2 id="directives" data-toc="directives">Directives</h2><p id="rjtjw8_157">Define custom directives using <code class="code" id="rjtjw8_167">@GraphQLDirective</code>:</p><div class="table-wrapper"><table class="wide" id="rjtjw8_158"><thead><tr class="ijRowHead" id="rjtjw8_168"><th id="rjtjw8_170"><p>Kotlin</p></th><th id="rjtjw8_171"><p>GraphQL</p></th></tr></thead><tbody><tr id="rjtjw8_169"><td id="rjtjw8_172"><div class="code-block" data-lang="kotlin">
 /**
  * A field requires a specific opt-in
  */
 @GraphQLDirective
 annotation class requiresOptIn(val feature: String)
-</div></td><td id="-lijfm2_173"><div class="code-block" data-lang="none">
+</div></td><td id="rjtjw8_173"><div class="code-block" data-lang="none">
 &quot;&quot;&quot;
 A field requires a specific opt-in
 &quot;&quot;&quot;
 directive @requiresOptIn(feature: String!) on FIELD_DEFINITION
-</div></td></tr></tbody></table></div><aside class="prompt" data-type="note" data-title="" id="-lijfm2_159"><p id="-lijfm2_176">The directive locations and repeatable values are inferred automatically from the usages.</p></aside><p id="-lijfm2_160">Use your directive by annotating your Kotlin code:</p><div class="table-wrapper"><table class="wide" id="-lijfm2_161"><thead><tr class="ijRowHead" id="-lijfm2_177"><th id="-lijfm2_179"><p>Kotlin</p></th><th id="-lijfm2_180"><p>GraphQL</p></th></tr></thead><tbody><tr id="-lijfm2_178"><td id="-lijfm2_181"><div class="code-block" data-lang="kotlin">
+</div></td></tr></tbody></table></div><aside class="prompt" data-type="note" data-title="" id="rjtjw8_159"><p id="rjtjw8_176">The directive locations and repeatable values are inferred automatically from the usages.</p></aside><p id="rjtjw8_160">Use your directive by annotating your Kotlin code:</p><div class="table-wrapper"><table class="wide" id="rjtjw8_161"><thead><tr class="ijRowHead" id="rjtjw8_177"><th id="rjtjw8_179"><p>Kotlin</p></th><th id="rjtjw8_180"><p>GraphQL</p></th></tr></thead><tbody><tr id="rjtjw8_178"><td id="rjtjw8_181"><div class="code-block" data-lang="kotlin">
 class Query {
     @requiresOptIn(feature = &quot;experimental&quot;)
     fun experimentalField(): String { 
         TODO() 
     }
 }
-</div></td><td id="-lijfm2_182"><div class="code-block" data-lang="none">
+</div></td><td id="rjtjw8_182"><div class="code-block" data-lang="none">
 type Query {
     experimentalField: String! @requiresOptIn(feature: &quot;experimental&quot;)
 }
-</div></td></tr></tbody></table></div><p id="-lijfm2_162">The order of the directives in the GraphQL schema is the same as the order of the annotations in the Kotlin code.</p><p id="-lijfm2_163">Kotlin annotation classes are mapped to input objects when used as parameter types:</p><div class="table-wrapper"><table class="wide" id="-lijfm2_164"><thead><tr class="ijRowHead" id="-lijfm2_185"><th id="-lijfm2_187"><p>Kotlin</p></th><th id="-lijfm2_188"><p>GraphQL</p></th></tr></thead><tbody><tr id="-lijfm2_186"><td id="-lijfm2_189"><div class="code-block" data-lang="kotlin">
+</div></td></tr></tbody></table></div><p id="rjtjw8_162">The order of the directives in the GraphQL schema is the same as the order of the annotations in the Kotlin code.</p><p id="rjtjw8_163">Kotlin annotation classes are mapped to input objects when used as parameter types:</p><div class="table-wrapper"><table class="wide" id="rjtjw8_164"><thead><tr class="ijRowHead" id="rjtjw8_185"><th id="rjtjw8_187"><p>Kotlin</p></th><th id="rjtjw8_188"><p>GraphQL</p></th></tr></thead><tbody><tr id="rjtjw8_186"><td id="rjtjw8_189"><div class="code-block" data-lang="kotlin">
 enum class OptInLevel {
     Ignore,
     Warning,
@@ -210,7 +210,7 @@ val level: OptInLevel
 )
 @GraphQLDirective
 annotation class requiresOptIn(val feature: OptInFeature)
-</div></td><td id="-lijfm2_190"><div class="code-block" data-lang="none">
+</div></td><td id="rjtjw8_190"><div class="code-block" data-lang="none">
 enum OptInLevel {
     Ignore,
     Warning,
@@ -221,28 +221,28 @@ input OptInFeature {
     level: OptInLevel!
 }
 directive @requiresOptIn(feature: OptInFeature!) on FIELD_DEFINITION
-</div></td></tr></tbody></table></div><p id="-lijfm2_165">Limitations:</p><ol class="list _decimal" id="-lijfm2_166" type="1"><li class="list__item" id="-lijfm2_195"><p>It is impossible to reuse other input objects in directive arguments. The directive input objects can only be used in directives. This is because <a href="https://kotlinlang.org/docs/annotations.html#constructors" id="-lijfm2_197" data-external="true" rel="noopener noreferrer">Kotlin annotations do not support regular class paramaters, only annotation classes</a> unlike regular function parameters.</p></li><li class="list__item" id="-lijfm2_196"><p>Directive arguments cannot have default values. This is because KSP does not support reading Kotlin default values and using <code class="code" id="-lijfm2_198">@GraphQLDefault</code> only without a default value would not compile.</p></li></ol></section><section class="chapter"><h2 id="deprecation" data-toc="deprecation">Deprecation</h2><p id="-lijfm2_199">Kotlin symbols annotated as <code class="code" id="-lijfm2_202">@Deprecated</code> are marked deprecated in GraphQL when applicable:</p><div class="table-wrapper"><table class="wide" id="-lijfm2_200"><thead><tr class="ijRowHead" id="-lijfm2_203"><th id="-lijfm2_205"><p>Kotlin</p></th><th id="-lijfm2_206"><p>GraphQL</p></th></tr></thead><tbody><tr id="-lijfm2_204"><td id="-lijfm2_207"><div class="code-block" data-lang="kotlin">
+</div></td></tr></tbody></table></div><p id="rjtjw8_165">Limitations:</p><ol class="list _decimal" id="rjtjw8_166" type="1"><li class="list__item" id="rjtjw8_195"><p>It is impossible to reuse other input objects in directive arguments. The directive input objects can only be used in directives. This is because <a href="https://kotlinlang.org/docs/annotations.html#constructors" id="rjtjw8_197" data-external="true" rel="noopener noreferrer">Kotlin annotations do not support regular class paramaters, only annotation classes</a> unlike regular function parameters.</p></li><li class="list__item" id="rjtjw8_196"><p>Directive arguments cannot have default values. This is because KSP does not support reading Kotlin default values and using <code class="code" id="rjtjw8_198">@GraphQLDefault</code> only without a default value would not compile.</p></li></ol></section><section class="chapter"><h2 id="deprecation" data-toc="deprecation">Deprecation</h2><p id="rjtjw8_199">Kotlin symbols annotated as <code class="code" id="rjtjw8_202">@Deprecated</code> are marked deprecated in GraphQL when applicable:</p><div class="table-wrapper"><table class="wide" id="rjtjw8_200"><thead><tr class="ijRowHead" id="rjtjw8_203"><th id="rjtjw8_205"><p>Kotlin</p></th><th id="rjtjw8_206"><p>GraphQL</p></th></tr></thead><tbody><tr id="rjtjw8_204"><td id="rjtjw8_207"><div class="code-block" data-lang="kotlin">
 class User {
     fun role(): Role
     @Deprecated(&quot;Check for `role == Admin` instead&quot;)
     fun isAdmin(): Boolean
 }
-</div></td><td id="-lijfm2_208"><div class="code-block" data-lang="none">
+</div></td><td id="rjtjw8_208"><div class="code-block" data-lang="none">
 type User {
     isAdmin: String @deprecated(&quot;Check for `role == Admin` instead&quot;)
 }
-</div></td></tr></tbody></table></div><aside class="prompt" data-type="note" data-title="" id="-lijfm2_201"><p id="-lijfm2_211">As of 2024, field, input fields, arguments and enum values support deprecation in GraphQL. Other locations, and especially objects and input objects cannot be deprecated. See <a href="https://github.com/graphql/graphql-spec/issues/550" id="-lijfm2_212" data-external="true" rel="noopener noreferrer">graphql-spec#550</a> for more details.</p></aside></section><section class="chapter"><h2 id="default-values" data-toc="default-values">Default values</h2><p id="-lijfm2_213"><a href="https://github.com/google/ksp/issues/642" id="-lijfm2_217" data-external="true" rel="noopener noreferrer">KSP cannot read default parameter values</a>.</p><p id="-lijfm2_214">In order to define a default value for your arguments, use <code class="code" id="-lijfm2_218">@GraphQLDefault</code> and pass the value <a href="https://spec.graphql.org/draft/#Value" id="-lijfm2_219" data-external="true" rel="noopener noreferrer">encoded as GraphQL</a>:</p><div class="table-wrapper"><table class="wide" id="-lijfm2_215"><thead><tr class="ijRowHead" id="-lijfm2_220"><th id="-lijfm2_222"><p>Kotlin</p></th><th id="-lijfm2_223"><p>GraphQL</p></th></tr></thead><tbody><tr id="-lijfm2_221"><td id="-lijfm2_224"><div class="code-block" data-lang="kotlin">
+</div></td></tr></tbody></table></div><aside class="prompt" data-type="note" data-title="" id="rjtjw8_201"><p id="rjtjw8_211">As of 2024, field, input fields, arguments and enum values support deprecation in GraphQL. Other locations, and especially objects and input objects cannot be deprecated. See <a href="https://github.com/graphql/graphql-spec/issues/550" id="rjtjw8_212" data-external="true" rel="noopener noreferrer">graphql-spec#550</a> for more details.</p></aside></section><section class="chapter"><h2 id="default-values" data-toc="default-values">Default values</h2><p id="rjtjw8_213"><a href="https://github.com/google/ksp/issues/642" id="rjtjw8_217" data-external="true" rel="noopener noreferrer">KSP cannot read default parameter values</a>.</p><p id="rjtjw8_214">In order to define a default value for your arguments, use <code class="code" id="rjtjw8_218">@GraphQLDefault</code> and pass the value <a href="https://spec.graphql.org/draft/#Value" id="rjtjw8_219" data-external="true" rel="noopener noreferrer">encoded as GraphQL</a>:</p><div class="table-wrapper"><table class="wide" id="rjtjw8_215"><thead><tr class="ijRowHead" id="rjtjw8_220"><th id="rjtjw8_222"><p>Kotlin</p></th><th id="rjtjw8_223"><p>GraphQL</p></th></tr></thead><tbody><tr id="rjtjw8_221"><td id="rjtjw8_224"><div class="code-block" data-lang="kotlin">
 class Organisation {
     fun users(
         @GraphQLDefault(&quot;100&quot;) first: Int, 
         @GraphQLDefault(&quot;null&quot;) after: String?
     ): UserConnection
 }
-</div></td><td id="-lijfm2_225"><div class="code-block" data-lang="none">
+</div></td><td id="rjtjw8_225"><div class="code-block" data-lang="none">
 type Organisation {
     users(
         first: Int! = 100,
         after: String = null
     ): UserConnection!
 }
-</div></td></tr></tbody></table></div><aside class="prompt" data-type="note" data-title="" id="-lijfm2_216"><p id="-lijfm2_228">Default values are not supported in directives</p></aside></section><section class="chapter"><h2 id="built-in-types" data-toc="built-in-types">Built-in types</h2><p id="-lijfm2_229">Kotlin built-in types map to their GraphQL equivalent:</p><div class="table-wrapper"><table class="wide" id="-lijfm2_230"><thead><tr class="ijRowHead" id="-lijfm2_231"><th id="-lijfm2_237"><p>Kotlin</p></th><th id="-lijfm2_238"><p>GraphQL</p></th></tr></thead><tbody><tr id="-lijfm2_232"><td id="-lijfm2_239"><p>Int</p></td><td id="-lijfm2_240"><p>Int</p></td></tr><tr id="-lijfm2_233"><td id="-lijfm2_241"><p>String</p></td><td id="-lijfm2_242"><p>String</p></td></tr><tr id="-lijfm2_234"><td id="-lijfm2_243"><p>Double</p></td><td id="-lijfm2_244"><p>Float</p></td></tr><tr id="-lijfm2_235"><td id="-lijfm2_245"><p>Boolean</p></td><td id="-lijfm2_246"><p>Boolean</p></td></tr><tr id="-lijfm2_236"><td id="-lijfm2_247"><p>List</p></td><td id="-lijfm2_248"><p>List</p></td></tr></tbody></table></div></section><div class="last-modified">Last modified: 29 August 2024</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="getting-started.html" class="navigation-links__prev">Getting started</a><a href="scalars.html" class="navigation-links__next">Custom scalars</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="https://resources.jetbrains.com/writerside/apidoc/6.10.0-b408/app.js"></script></body></html>
+</div></td></tr></tbody></table></div><aside class="prompt" data-type="note" data-title="" id="rjtjw8_216"><p id="rjtjw8_228">Default values are not supported in directives</p></aside></section><section class="chapter"><h2 id="built-in-types" data-toc="built-in-types">Built-in types</h2><p id="rjtjw8_229">Kotlin built-in types map to their GraphQL equivalent:</p><div class="table-wrapper"><table class="wide" id="rjtjw8_230"><thead><tr class="ijRowHead" id="rjtjw8_231"><th id="rjtjw8_237"><p>Kotlin</p></th><th id="rjtjw8_238"><p>GraphQL</p></th></tr></thead><tbody><tr id="rjtjw8_232"><td id="rjtjw8_239"><p>Int</p></td><td id="rjtjw8_240"><p>Int</p></td></tr><tr id="rjtjw8_233"><td id="rjtjw8_241"><p>String</p></td><td id="rjtjw8_242"><p>String</p></td></tr><tr id="rjtjw8_234"><td id="rjtjw8_243"><p>Double</p></td><td id="rjtjw8_244"><p>Float</p></td></tr><tr id="rjtjw8_235"><td id="rjtjw8_245"><p>Boolean</p></td><td id="rjtjw8_246"><p>Boolean</p></td></tr><tr id="rjtjw8_236"><td id="rjtjw8_247"><p>List</p></td><td id="rjtjw8_248"><p>List</p></td></tr></tbody></table></div></section><div class="last-modified">Last modified: 29 August 2024</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="getting-started.html" class="navigation-links__prev">Getting started</a><a href="scalars.html" class="navigation-links__next">Custom scalars</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="https://resources.jetbrains.com/writerside/apidoc/6.10.0-b408/app.js"></script></body></html>
