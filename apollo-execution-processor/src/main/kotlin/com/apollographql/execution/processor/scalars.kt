@@ -27,6 +27,14 @@ internal fun KSAnnotated.getCoercing(logger: KSPLogger): SirCoercing? {
     return null
   }
 
+  val isCoercing = declaration.superTypes.any {
+    it.resolve().declaration.asClassName().asString() == "com.apollographql.execution.Coercing"
+  }
+  if (!isCoercing) {
+    logger.error("Coercing must implement 'com.apollographql.execution.Coercing'", declaration)
+    return null
+  }
+
   val instantiation = declaration.instantiation()
   if (instantiation == Instantiation.UNKNOWN) {
     logger.error("Coercing implementation must either be objects or have a no-arg constructor", declaration)
