@@ -22,4 +22,4 @@ import kotlin.reflect.KClass
  * When using type aliases, you may use either the alias or the original type.
  */
 @Target(AnnotationTarget.CLASS, AnnotationTarget.TYPEALIAS)
-annotation class GraphQLScalar(val coercing: KClass<out Coercing<*>>)
+annotation class GraphQLScalar(val coercing: KClass<*>)
