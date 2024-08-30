@@ -3,6 +3,10 @@
 # Version 0.0.3
 _2024-08-30_
 
+* Rename `@GraphQLQueryRoot` to `@GraphQLQuery`, `@GraphQLMutationRoot` to `@GraphQLMutation`, `@GraphQLSubscriptionRoot` to `@GraphQLSubscription`,
+* Remove `@GraphQLCoercing`
+* `@GraphQLScalar` now takes the coercing as a parameter
+
 # Version 0.0.2
 _2024-07-08_
 
