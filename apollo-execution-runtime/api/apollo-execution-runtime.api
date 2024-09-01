@@ -71,6 +71,17 @@ public final class com/apollographql/execution/FloatCoercing : com/apollographql
 	public synthetic fun serialize (Ljava/lang/Object;)Ljava/lang/Object;
 }
 
+public final class com/apollographql/execution/GraphQLError : com/apollographql/execution/GraphQLResult {
+	public fun <init> (Ljava/lang/Exception;)V
+	public fun <init> (Ljava/lang/String;)V
+	public fun exceptionOrNull ()Ljava/lang/Exception;
+	public fun fold (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public final fun getException ()Ljava/lang/Exception;
+	public fun getOrThrow ()Ljava/lang/Object;
+	public fun isFailure ()Z
+	public fun isSuccess ()Z
+}
+
 public final class com/apollographql/execution/GraphQLRequest {
 	public final fun getDocument ()Ljava/lang/String;
 	public final fun getExtensions ()Ljava/util/Map;
@@ -96,10 +107,10 @@ public final class com/apollographql/execution/GraphQLRequest$Builder {
 }
 
 public final class com/apollographql/execution/GraphQLRequestKt {
-	public static final fun parseGraphQLRequest (Ljava/lang/String;)Ljava/lang/Object;
-	public static final fun parseGraphQLRequest (Ljava/util/Map;)Ljava/lang/Object;
-	public static final fun parseGraphQLRequest (Lokio/BufferedSource;)Ljava/lang/Object;
-	public static final fun parseGraphQLRequestFromMultiMap (Ljava/util/Map;)Ljava/lang/Object;
+	public static final fun parseGraphQLRequest (Ljava/lang/String;)Lcom/apollographql/execution/GraphQLResult;
+	public static final fun parseGraphQLRequest (Ljava/util/Map;)Lcom/apollographql/execution/GraphQLResult;
+	public static final fun parseGraphQLRequest (Lokio/BufferedSource;)Lcom/apollographql/execution/GraphQLResult;
+	public static final fun toExternalValueMap (Ljava/util/Map;)Lcom/apollographql/execution/GraphQLResult;
 }
 
 public final class com/apollographql/execution/GraphQLResponse {
@@ -122,6 +133,36 @@ public final class com/apollographql/execution/GraphQLResponse$Builder {
 	public final fun setData (Ljava/util/Map;)V
 	public final fun setErrors (Ljava/util/List;)V
 	public final fun setExtensions (Ljava/util/Map;)V
+}
+
+public abstract interface class com/apollographql/execution/GraphQLResult {
+	public abstract fun exceptionOrNull ()Ljava/lang/Exception;
+	public abstract fun fold (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public abstract fun getOrThrow ()Ljava/lang/Object;
+	public abstract fun isFailure ()Z
+	public abstract fun isSuccess ()Z
+}
+
+public final class com/apollographql/execution/GraphQLResult$DefaultImpls {
+	public static fun exceptionOrNull (Lcom/apollographql/execution/GraphQLResult;)Ljava/lang/Exception;
+	public static fun fold (Lcom/apollographql/execution/GraphQLResult;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public static fun getOrThrow (Lcom/apollographql/execution/GraphQLResult;)Ljava/lang/Object;
+	public static fun isFailure (Lcom/apollographql/execution/GraphQLResult;)Z
+	public static fun isSuccess (Lcom/apollographql/execution/GraphQLResult;)Z
+}
+
+public final class com/apollographql/execution/GraphQLResultKt {
+	public static final fun flatMap (Lcom/apollographql/execution/GraphQLResult;Lkotlin/jvm/functions/Function1;)Lcom/apollographql/execution/GraphQLResult;
+}
+
+public final class com/apollographql/execution/GraphQLSuccess : com/apollographql/execution/GraphQLResult {
+	public fun <init> (Ljava/lang/Object;)V
+	public fun exceptionOrNull ()Ljava/lang/Exception;
+	public fun fold (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
+	public fun getOrThrow ()Ljava/lang/Object;
+	public final fun getValue ()Ljava/lang/Object;
+	public fun isFailure ()Z
+	public fun isSuccess ()Z
 }
 
 public final class com/apollographql/execution/InMemoryPersistedDocumentCache : com/apollographql/execution/PersistedDocumentCache {

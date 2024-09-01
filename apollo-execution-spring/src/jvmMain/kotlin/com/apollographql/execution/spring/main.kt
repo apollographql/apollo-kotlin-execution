@@ -7,7 +7,7 @@ import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
 import org.springframework.web.reactive.function.server.*
 
-suspend fun ServerRequest.toGraphQLRequest(): Result<GraphQLRequest> {
+suspend fun ServerRequest.toGraphQLRequest(): GraphQLResult<GraphQLRequest> {
   return when (this.method()) {
     HttpMethod.GET -> this.queryParams().parseGraphQLRequest()
     HttpMethod.POST -> {
@@ -15,7 +15,7 @@ suspend fun ServerRequest.toGraphQLRequest(): Result<GraphQLRequest> {
         Buffer().writeUtf8(it).parseGraphQLRequest()
       }
     }
-    else -> Result.failure(Exception("Unhandled method: ${method()}"))
+    else -> GraphQLError(Exception("Unhandled method: ${method()}"))
   }
 }
 

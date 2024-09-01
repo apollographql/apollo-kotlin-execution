@@ -13,6 +13,7 @@
         <toc-element topic="schema.md"/>
         <toc-element topic="scalars.md"/>
         <toc-element topic="execution-context.md"/>
+        <toc-element topic="persisted-documents.md"/>
         <toc-element topic="schema-dump.md"/>
     </toc-element>
     <toc-element toc-title="Integrations">

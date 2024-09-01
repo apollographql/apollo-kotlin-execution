@@ -1,11 +1,7 @@
 package com.apollographql.execution.ktor
 
 import com.apollographql.apollo.api.ExecutionContext
-import com.apollographql.execution.ExecutableSchema
-import com.apollographql.execution.GraphQLRequest
-import com.apollographql.execution.GraphQLResponse
-import com.apollographql.execution.parseGraphQLRequest
-import com.apollographql.execution.sandboxHtml
+import com.apollographql.execution.*
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
@@ -74,11 +70,11 @@ private fun GraphQLResponse.toByteArray(): ByteArray {
   return buffer.readByteArray()
 }
 
-suspend fun ApplicationRequest.toGraphQLRequest(): Result<GraphQLRequest> {
+suspend fun ApplicationRequest.toGraphQLRequest(): GraphQLResult<GraphQLRequest> {
   return when (httpMethod) {
     HttpMethod.Post -> receiveChannel().buffer().parseGraphQLRequest()
     HttpMethod.Get -> queryString().parseGraphQLRequest()
-    else -> Result.failure(Exception("Unhandled method: $httpMethod"))
+    else -> GraphQLError(Exception("Unhandled method: $httpMethod"))
   }
 }
 

@@ -24,6 +24,17 @@ abstract interface com.apollographql.execution/PersistedDocumentCache { // com.a
     abstract fun get(kotlin/String): com.apollographql.execution/PersistedDocument? // com.apollographql.execution/PersistedDocumentCache.get|get(kotlin.String){}[0]
     abstract fun put(kotlin/String, com.apollographql.execution/PersistedDocument) // com.apollographql.execution/PersistedDocumentCache.put|put(kotlin.String;com.apollographql.execution.PersistedDocument){}[0]
 }
+final class <#A: out kotlin/Any?> com.apollographql.execution/GraphQLError : com.apollographql.execution/GraphQLResult<#A> { // com.apollographql.execution/GraphQLError|null[0]
+    constructor <init>(kotlin/Exception) // com.apollographql.execution/GraphQLError.<init>|<init>(kotlin.Exception){}[0]
+    constructor <init>(kotlin/String) // com.apollographql.execution/GraphQLError.<init>|<init>(kotlin.String){}[0]
+    final val exception // com.apollographql.execution/GraphQLError.exception|{}exception[0]
+        final fun <get-exception>(): kotlin/Exception // com.apollographql.execution/GraphQLError.exception.<get-exception>|<get-exception>(){}[0]
+}
+final class <#A: out kotlin/Any?> com.apollographql.execution/GraphQLSuccess : com.apollographql.execution/GraphQLResult<#A> { // com.apollographql.execution/GraphQLSuccess|null[0]
+    constructor <init>(#A) // com.apollographql.execution/GraphQLSuccess.<init>|<init>(1:0){}[0]
+    final val value // com.apollographql.execution/GraphQLSuccess.value|{}value[0]
+        final fun <get-value>(): #A // com.apollographql.execution/GraphQLSuccess.value.<get-value>|<get-value>(){}[0]
+}
 final class com.apollographql.execution.websocket/ConnectionInitError : com.apollographql.execution.websocket/ConnectionInitResult { // com.apollographql.execution.websocket/ConnectionInitError|null[0]
     constructor <init>(com.apollographql.apollo.api/Optional<kotlin/Any?> = ...) // com.apollographql.execution.websocket/ConnectionInitError.<init>|<init>(com.apollographql.apollo.api.Optional<kotlin.Any?>){}[0]
     final val payload // com.apollographql.execution.websocket/ConnectionInitError.payload|{}payload[0]
@@ -173,10 +184,11 @@ final class com.apollographql.execution/SubscriptionResponse : com.apollographql
         final fun <get-response>(): com.apollographql.execution/GraphQLResponse // com.apollographql.execution/SubscriptionResponse.response.<get-response>|<get-response>(){}[0]
 }
 final fun (com.apollographql.apollo.api/ExecutionContext).com.apollographql.execution.websocket/subscriptionId(): kotlin/String // com.apollographql.execution.websocket/subscriptionId|subscriptionId@com.apollographql.apollo.api.ExecutionContext(){}[0]
-final fun (kotlin.collections/Map<kotlin/String, kotlin.collections/List<kotlin/String>>).com.apollographql.execution/parseGraphQLRequest(): kotlin/Result<com.apollographql.execution/GraphQLRequest> // com.apollographql.execution/parseGraphQLRequest|parseGraphQLRequest@kotlin.collections.Map<kotlin.String,kotlin.collections.List<kotlin.String>>(){}[0]
-final fun (kotlin.collections/Map<kotlin/String, kotlin/Any?>).com.apollographql.execution/parseGraphQLRequest(): kotlin/Result<com.apollographql.execution/GraphQLRequest> // com.apollographql.execution/parseGraphQLRequest|parseGraphQLRequest@kotlin.collections.Map<kotlin.String,kotlin.Any?>(){}[0]
-final fun (kotlin/String).com.apollographql.execution/parseGraphQLRequest(): kotlin/Result<com.apollographql.execution/GraphQLRequest> // com.apollographql.execution/parseGraphQLRequest|parseGraphQLRequest@kotlin.String(){}[0]
-final fun (okio/BufferedSource).com.apollographql.execution/parseGraphQLRequest(): kotlin/Result<com.apollographql.execution/GraphQLRequest> // com.apollographql.execution/parseGraphQLRequest|parseGraphQLRequest@okio.BufferedSource(){}[0]
+final fun (kotlin.collections/Map<kotlin/String, kotlin.collections/List<kotlin/String>>).com.apollographql.execution/toExternalValueMap(): com.apollographql.execution/GraphQLResult<kotlin.collections/Map<kotlin/String, kotlin/Any?>> // com.apollographql.execution/toExternalValueMap|toExternalValueMap@kotlin.collections.Map<kotlin.String,kotlin.collections.List<kotlin.String>>(){}[0]
+final fun (kotlin.collections/Map<kotlin/String, kotlin/Any?>).com.apollographql.execution/parseGraphQLRequest(): com.apollographql.execution/GraphQLResult<com.apollographql.execution/GraphQLRequest> // com.apollographql.execution/parseGraphQLRequest|parseGraphQLRequest@kotlin.collections.Map<kotlin.String,kotlin.Any?>(){}[0]
+final fun (kotlin/String).com.apollographql.execution/parseGraphQLRequest(): com.apollographql.execution/GraphQLResult<com.apollographql.execution/GraphQLRequest> // com.apollographql.execution/parseGraphQLRequest|parseGraphQLRequest@kotlin.String(){}[0]
+final fun (okio/BufferedSource).com.apollographql.execution/parseGraphQLRequest(): com.apollographql.execution/GraphQLResult<com.apollographql.execution/GraphQLRequest> // com.apollographql.execution/parseGraphQLRequest|parseGraphQLRequest@okio.BufferedSource(){}[0]
+final fun <#A: kotlin/Any?, #B: kotlin/Any?> (com.apollographql.execution/GraphQLResult<#A>).com.apollographql.execution/flatMap(kotlin/Function1<#A, com.apollographql.execution/GraphQLResult<#B>>): com.apollographql.execution/GraphQLResult<#B> // com.apollographql.execution/flatMap|flatMap@com.apollographql.execution.GraphQLResult<0:0>(kotlin.Function1<0:0,com.apollographql.execution.GraphQLResult<0:1>>){0§<kotlin.Any?>;1§<kotlin.Any?>}[0]
 final fun com.apollographql.execution/sandboxHtml(kotlin/String, kotlin/String): kotlin/String // com.apollographql.execution/sandboxHtml|sandboxHtml(kotlin.String;kotlin.String){}[0]
 final object com.apollographql.execution.websocket/ConnectionInitAck : com.apollographql.execution.websocket/ConnectionInitResult { // com.apollographql.execution.websocket/ConnectionInitAck|null[0]
     final fun equals(kotlin/Any?): kotlin/Boolean // com.apollographql.execution.websocket/ConnectionInitAck.equals|equals(kotlin.Any?){}[0]
@@ -244,6 +256,15 @@ open annotation class com.apollographql.execution.annotation/GraphQLScalar : kot
 }
 open annotation class com.apollographql.execution.annotation/GraphQLSubscription : kotlin/Annotation { // com.apollographql.execution.annotation/GraphQLSubscription|null[0]
     constructor <init>() // com.apollographql.execution.annotation/GraphQLSubscription.<init>|<init>(){}[0]
+}
+sealed interface <#A: out kotlin/Any?> com.apollographql.execution/GraphQLResult { // com.apollographql.execution/GraphQLResult|null[0]
+    open fun <#A1: kotlin/Any?> fold(kotlin/Function1<#A, #A1>, kotlin/Function1<kotlin/Throwable, #A1>): #A1 // com.apollographql.execution/GraphQLResult.fold|fold(kotlin.Function1<1:0,0:0>;kotlin.Function1<kotlin.Throwable,0:0>){0§<kotlin.Any?>}[0]
+    open fun exceptionOrNull(): kotlin/Exception? // com.apollographql.execution/GraphQLResult.exceptionOrNull|exceptionOrNull(){}[0]
+    open fun getOrThrow(): #A // com.apollographql.execution/GraphQLResult.getOrThrow|getOrThrow(){}[0]
+    open val isFailure // com.apollographql.execution/GraphQLResult.isFailure|{}isFailure[0]
+        open fun <get-isFailure>(): kotlin/Boolean // com.apollographql.execution/GraphQLResult.isFailure.<get-isFailure>|<get-isFailure>(){}[0]
+    open val isSuccess // com.apollographql.execution/GraphQLResult.isSuccess|{}isSuccess[0]
+        open fun <get-isSuccess>(): kotlin/Boolean // com.apollographql.execution/GraphQLResult.isSuccess.<get-isSuccess>|<get-isSuccess>(){}[0]
 }
 sealed interface com.apollographql.execution.websocket/ConnectionInitResult // com.apollographql.execution.websocket/ConnectionInitResult|null[0]
 sealed interface com.apollographql.execution.websocket/WebSocketMessage // com.apollographql.execution.websocket/WebSocketMessage|null[0]
