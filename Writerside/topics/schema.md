@@ -21,11 +21,12 @@ class Mutation { }
 class Subscription { }
 ```
 
-
 From those root classes, the Apollo Kotlin Execution processor traverses the Kotlin class graph and builds the matching GraphQL schema:
 * Classes used in output positions are mapped to objects, unions and interfaces.
 * Classes used in input positions are mapped to input objects.
 * Scalars and Enum can happen in both input and output position.
+
+Whenever possible, the order of fields in the generated GraphQL schema is the same as the declaration order in Kotlin.
 
 > Non-root classes do not need to be annotated and are added to the GraphQL schema automatically.
 

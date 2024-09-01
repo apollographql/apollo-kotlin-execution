@@ -231,7 +231,7 @@ private class TypeDefinitionContext(
             GQLDirectiveLocation.ARGUMENT_DEFINITION
           )
         ) {
-          val arguments = it.getArgumentValueAsString("reason")?.let {
+          val arguments = it.getArgumentValueAsString("message")?.let {
             listOf(SirArgument("reason", GQLStringValue(null, it)))
           } ?: emptyList()
 
