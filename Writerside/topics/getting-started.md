@@ -38,6 +38,9 @@ apolloExecution {
 }
 ```
 
+> Apollo Kotlin Execution requires Java 17
+{style=note}
+
 ## Define your root query
 
 Write your root query class in a `Query.kt` file:
