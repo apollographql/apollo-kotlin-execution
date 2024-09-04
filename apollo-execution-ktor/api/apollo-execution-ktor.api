@@ -1,6 +1,6 @@
 public final class com/apollographql/execution/ktor/MainKt {
-	public static final fun apolloModule (Lio/ktor/server/application/Application;Lcom/apollographql/execution/ExecutableSchema;Ljava/lang/String;)V
-	public static synthetic fun apolloModule$default (Lio/ktor/server/application/Application;Lcom/apollographql/execution/ExecutableSchema;Ljava/lang/String;ILjava/lang/Object;)V
+	public static final fun apolloModule (Lio/ktor/server/application/Application;Lcom/apollographql/execution/ExecutableSchema;Ljava/lang/String;Lcom/apollographql/apollo/api/ExecutionContext;)V
+	public static synthetic fun apolloModule$default (Lio/ktor/server/application/Application;Lcom/apollographql/execution/ExecutableSchema;Ljava/lang/String;Lcom/apollographql/apollo/api/ExecutionContext;ILjava/lang/Object;)V
 	public static final fun apolloSandboxModule (Lio/ktor/server/application/Application;Ljava/lang/String;Ljava/lang/String;)V
 	public static synthetic fun apolloSandboxModule$default (Lio/ktor/server/application/Application;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)V
 	public static final fun respondGraphQL (Lio/ktor/server/application/ApplicationCall;Lcom/apollographql/execution/ExecutableSchema;Lcom/apollographql/apollo/api/ExecutionContext;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;

@@ -81,7 +81,7 @@ suspend fun ApplicationRequest.toGraphQLRequest(): GraphQLResult<GraphQLRequest>
 fun Application.apolloModule(
     executableSchema: ExecutableSchema,
     path: String = "/graphql",
-    executionContext: ExecutionContext
+    executionContext: ExecutionContext = ExecutionContext.Empty
 ) {
   routing {
     post(path) {
