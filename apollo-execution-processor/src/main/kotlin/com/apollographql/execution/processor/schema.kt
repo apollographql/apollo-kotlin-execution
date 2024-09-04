@@ -25,7 +25,7 @@ internal fun schemaString(definitions: List<SirDefinition>): String {
   )
 
   return GQLDocument(
-    definitions = listOf(schemaDefinition) + definitions.map { it.toGQL() },
+    definitions = listOf(schemaDefinition) + definitions.map { it.toGQL() } + builtinDefinitions(),
     sourceLocation = null
   ).toSDL("  ")
 }
