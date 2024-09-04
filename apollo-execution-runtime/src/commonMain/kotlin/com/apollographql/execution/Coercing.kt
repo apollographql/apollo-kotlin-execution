@@ -12,6 +12,8 @@ interface Coercing<T> {
   /**
    * Serializes from an internal value (Kotlin) to an external value (typically JSON).
    *
+   * Used to generate the response JSON.
+   *
    * For an example Date --> String
    */
   fun serialize(internalValue: T): ExternalValue
@@ -19,12 +21,18 @@ interface Coercing<T> {
   /**
    * Deserializes from an external value (typically JSON) to an internal value (Kotlin).
    *
+   * Used to parse the request variables.
+   *
    * For an example String --> Date
    */
   fun deserialize(value: ExternalValue): T
 
   /**
-   * Parses from a GraphQL value to an internal value (Kotlin)
+   * Deserializes from a GraphQL value to an internal value (Kotlin).
+   *
+   * Used to parse literal argument values in GraphQL documents.
+   *
+   * For an example GQLStringValue --> Date
    */
   fun parseLiteral(value: GQLValue): T
 }
