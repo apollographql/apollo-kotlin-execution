@@ -3,6 +3,7 @@ package com.apollographql.execution.http4k
 import com.apollographql.apollo.api.ExecutionContext
 import com.apollographql.execution.ExecutableSchema
 import com.apollographql.execution.parseGraphQLRequest
+import com.apollographql.execution.parseUrlToGraphQLRequest
 import com.apollographql.execution.websocket.ConnectionInitAck
 import com.apollographql.execution.websocket.ConnectionInitError
 import com.apollographql.execution.websocket.ConnectionInitHandler
@@ -24,6 +25,7 @@ import org.http4k.core.Response
 import org.http4k.core.Status.Companion.BAD_REQUEST
 import org.http4k.core.Status.Companion.OK
 import org.http4k.routing.RoutingHttpHandler
+import org.http4k.routing.bind
 import org.http4k.routing.routes
 import org.http4k.websocket.WsMessage
 import org.http4k.websocket.*
@@ -33,7 +35,7 @@ internal class GraphQLHttpHandler(private val executableSchema: ExecutableSchema
   override fun invoke(request: Request): Response {
 
     val graphQLRequestResult = when (request.method) {
-      Method.GET -> request.uri.toString().parseGraphQLRequest()
+      Method.GET -> request.uri.toString().parseUrlToGraphQLRequest()
       Method.POST -> request.body.stream.source().buffer().use { it.parseGraphQLRequest() }
       else -> error("")
     }
@@ -124,11 +126,12 @@ private fun WebSocketMessage.toWsMessage(): WsMessage {
 
 fun apolloHandler(
     executableSchema: ExecutableSchema,
+    path: String = "/graphql",
     executionContext: ExecutionContext = ExecutionContext.Empty,
 ): RoutingHttpHandler {
   return routes(
-      Method.GET to GraphQLHttpHandler(executableSchema, executionContext),
-      Method.POST to GraphQLHttpHandler(executableSchema, executionContext)
+      path bind Method.GET to GraphQLHttpHandler(executableSchema, executionContext),
+      path bind Method.POST to GraphQLHttpHandler(executableSchema, executionContext)
   )
 }
 

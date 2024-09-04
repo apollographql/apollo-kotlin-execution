@@ -116,7 +116,7 @@ fun BufferedSource.parseGraphQLRequest(): GraphQLResult<GraphQLRequest> {
 /**
  * Parses an url to a GraphQL request
  */
-fun String.parseGraphQLRequest(): GraphQLResult<GraphQLRequest> {
+fun String.parseUrlToGraphQLRequest(): GraphQLResult<GraphQLRequest> {
   var fragmentStart = indexOfLast { it == '#' }
   if (fragmentStart < 0) {
     fragmentStart = length
@@ -128,14 +128,27 @@ fun String.parseGraphQLRequest(): GraphQLResult<GraphQLRequest> {
     }
     queryStart--
   }
-  // go back to after '?' (or beginning if no '?')
+
+  if (queryStart == 0) {
+    return GraphQLError("No GraphQL query parameters found in '$this'")
+  }
+
+  // go back to after '?'
   queryStart++
 
   val query = substring(queryStart, fragmentStart)
-  val pairs = query.split("&")
 
-  return pairs.map {
-    it.split("=").let {
+  return query.parseQueryToGraphQLRequest()
+}
+
+fun String.parseQueryToGraphQLRequest(): GraphQLResult<GraphQLRequest> {
+  val pairs = split("&")
+
+  return pairs.filter { it.isNotBlank() }.map { pair ->
+    pair.split("=").let {
+      if (it.size != 2) {
+        return GraphQLError("Invalid query parameter '$pair'")
+      }
       it.get(0).urlDecode() to it.get(1).urlDecode()
     }
   }.groupBy { it.first }
@@ -146,7 +159,6 @@ fun String.parseGraphQLRequest(): GraphQLResult<GraphQLRequest> {
     .flatMap {
       it.parseGraphQLRequest()
     }
-
 }
 
 /**
