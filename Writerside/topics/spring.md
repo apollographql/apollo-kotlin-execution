@@ -11,7 +11,7 @@ dependencies {
 }
 ```
 
-`apollo-execution-springs` provides `apolloGraphQLRoutes(ExecutableSchema)` to add GET and POST `/graphql` routes to your application:
+`apollo-execution-spring` provides `apolloGraphQLRoutes(ExecutableSchema)` to add GET and POST `/graphql` routes to your application:
 
 ```kotlin
 @SpringBootApplication
