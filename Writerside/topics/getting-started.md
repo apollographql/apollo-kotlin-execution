@@ -13,7 +13,15 @@ Under the hood, Apollo Kotlin Execution uses [KSP](https://kotlinlang.org/docs/k
 
 ## Gradle configuration
 
-Add the `com.apollographql.execution` Gradle plugin and dependencies to your build script:
+Apollo Kotlin Execution comes with a Gradle plugin that:
+
+* Configures KSP:
+  * Adds `apollo-execution-processor` to the KSP configuration.
+  * Configure `service` & `packageName` KSP arguments.
+* Configures dependency resolution to align Apollo Kotlin Execution versions if none is specified.
+* Adds `apolloCheckSchema` and `apolloDumpSchema` tasks (see [Monitoring the generated schema](schema-dump.md))
+
+Configure your Gradle build:
 
 ```kotlin
 // build.gradle.kts
@@ -27,7 +35,7 @@ plugins {
 
 dependencies {
   // Add the runtime dependency
-  implementation("com.apollographql.execution:apollo-execution-runtime:%latest_version%")
+  implementation("com.apollographql.execution:apollo-execution-runtime")
 }
 
 // Configure codegen
@@ -65,6 +73,8 @@ Run the codegen:
 
 ```shell
 ./gradlew kspKotlin
+# or if multiplatform
+./gradlew kspCommonMainKotlinMetadata
 ```
 
 ## Execute your query

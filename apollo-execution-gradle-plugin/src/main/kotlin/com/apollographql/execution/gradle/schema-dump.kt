@@ -9,6 +9,7 @@ import org.gradle.api.file.RegularFileProperty
 private fun Project.defaultSchemaDump(): RegularFile {
   return layout.projectDirectory.file("graphql/schema.graphqls")
 }
+
 fun Project.enableSchemaDump(kspSchemaPath: String, kspTaskName: String, schemaDump: RegularFileProperty) {
   val dumpSchema = tasks.register(apolloDumpSchema, ApolloDumpSchema::class.java) {
     it.dependsOn(kspTaskName)

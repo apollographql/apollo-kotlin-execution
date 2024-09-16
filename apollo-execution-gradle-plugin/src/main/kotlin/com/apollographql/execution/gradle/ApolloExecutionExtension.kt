@@ -1,7 +1,5 @@
 package com.apollographql.execution.gradle
 
-import com.apollographql.execution.gradle.internal.ApolloCheckSchema
-import com.apollographql.execution.gradle.internal.ApolloDumpSchema
 import com.google.devtools.ksp.gradle.KspExtension
 import org.gradle.api.Action
 import org.gradle.api.Project
@@ -57,7 +55,7 @@ abstract class ApolloExecutionExtension @Inject constructor(val project: Project
 
     project.dependencies.add(
       configurationName,
-      "com.apollographql.execution:apollo-execution-processor:$VERSION"
+      "com.apollographql.execution:apollo-execution-processor"
     )
 
     project.enableSchemaDump(
