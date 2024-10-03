@@ -593,13 +593,14 @@ private class TypeDefinitionContext(
         type = argumentType
       } else {
         if (!hasDefaultValue && isMarkedNullable) {
-          /**
-           * Inputs that are nullable and don't have a default value may be absent and must be modeled as such in Kotlin.
-           *
-           * Note that with variables, that value may be absent at runtime but this will be caught during coercion before it reaches the user code.
-           */
           logger.error(
-            "Input value is nullable and doesn't have a default value: it must also be optional",
+            """
+              Input value is nullable and doesn't have a default value: it must also be optional.
+              
+              If the type is nullable with a default value and no value is provided by the user, the default value is passed to the resolver, the resolver code does not need to handle the `Absent` case.
+              If the type is non-nullable and there is no default value, variable values may still be absent at runtime. These cases are caught during coercion before it reaches the resolver code.
+
+            """.trimIndent(),
             debugContext.node
           )
           return SirErrorType

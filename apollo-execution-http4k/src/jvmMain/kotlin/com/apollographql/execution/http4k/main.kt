@@ -1,9 +1,12 @@
+@file:Suppress("RemoveSingleExpressionStringTemplate")
+
 package com.apollographql.execution.http4k
 
 import com.apollographql.apollo.api.ExecutionContext
 import com.apollographql.execution.ExecutableSchema
 import com.apollographql.execution.parseGraphQLRequest
 import com.apollographql.execution.parseUrlToGraphQLRequest
+import com.apollographql.execution.sandboxHtml
 import com.apollographql.execution.websocket.ConnectionInitAck
 import com.apollographql.execution.websocket.ConnectionInitError
 import com.apollographql.execution.websocket.ConnectionInitHandler
@@ -17,22 +20,19 @@ import kotlinx.coroutines.SupervisorJob
 import okio.Buffer
 import okio.buffer
 import okio.source
-import org.http4k.core.HttpHandler
-import org.http4k.core.MemoryBody
-import org.http4k.core.Method
-import org.http4k.core.Request
-import org.http4k.core.Response
+import org.http4k.core.*
 import org.http4k.core.Status.Companion.BAD_REQUEST
 import org.http4k.core.Status.Companion.OK
+import org.http4k.core.Status.Companion.PERMANENT_REDIRECT
+import org.http4k.lens.Header
 import org.http4k.routing.RoutingHttpHandler
 import org.http4k.routing.bind
 import org.http4k.routing.routes
 import org.http4k.websocket.WsMessage
 import org.http4k.websocket.*
 
-
-internal class GraphQLHttpHandler(private val executableSchema: ExecutableSchema, private val executionContext: ExecutionContext) : HttpHandler {
-  override fun invoke(request: Request): Response {
+fun apolloHandler(executableSchema: ExecutableSchema, executionContext: (Request) -> ExecutionContext = { ExecutionContext.Empty }) : HttpHandler {
+  return { request ->
 
     val graphQLRequestResult = when (request.method) {
       Method.GET -> request.uri.toString().parseUrlToGraphQLRequest()
@@ -41,23 +41,23 @@ internal class GraphQLHttpHandler(private val executableSchema: ExecutableSchema
     }
 
     if (graphQLRequestResult.isFailure) {
-      return Response(BAD_REQUEST).body(graphQLRequestResult.exceptionOrNull()!!.message!!)
-    }
+      Response(BAD_REQUEST).body(graphQLRequestResult.exceptionOrNull()!!.message!!)
+    } else {
+      val response = executableSchema.execute(graphQLRequestResult.getOrThrow(), executionContext(request))
 
-    val response = executableSchema.execute(graphQLRequestResult.getOrThrow(), executionContext)
+      val buffer = Buffer()
+      response.serialize(buffer)
+      val responseText = buffer.readUtf8()
 
-    val buffer = Buffer()
-    response.serialize(buffer)
-    val responseText = buffer.readUtf8()
-
-    return Response(OK)
+      Response(OK)
         .header("content-type", "application/json")
         .body(responseText)
+    }
   }
 }
 
 
-fun apolloWebSocketHandler(executableSchema: ExecutableSchema, executionContext: (Websocket) -> ExecutionContext): WsHandler {
+fun apolloWebSocketHandler(executableSchema: ExecutableSchema, executionContext: (Websocket) -> ExecutionContext = { ExecutionContext.Empty }): WsHandler {
   val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
   return { _: Request ->
     WsResponse { ws: Websocket ->
@@ -124,21 +124,29 @@ private fun WebSocketMessage.toWsMessage(): WsMessage {
   }
 }
 
-fun apolloHandler(
+fun apolloRoutingHttpHandler(
     executableSchema: ExecutableSchema,
     path: String = "/graphql",
-    executionContext: ExecutionContext = ExecutionContext.Empty,
+    executionContext: (Request) ->ExecutionContext,
 ): RoutingHttpHandler {
-  return routes(
-      path bind Method.GET to GraphQLHttpHandler(executableSchema, executionContext),
-      path bind Method.POST to GraphQLHttpHandler(executableSchema, executionContext)
-  )
+  return path bind apolloHandler(executableSchema, executionContext)
 }
 
-fun apolloSandboxHandler(): HttpHandler {
-  return object : HttpHandler {
-    override fun invoke(request: Request): Response {
-      return Response(OK).body(javaClass.classLoader!!.getResourceAsStream("sandbox.html")!!)
-    }
+fun apolloSandboxRoutingHttpHandler(
+  title: String = "API sandbox",
+  sandboxPath: String = "/sandbox",
+  graphqlPath: String = "/graphql",
+): RoutingHttpHandler {
+  val sanboxHandler: HttpHandler = { request ->
+    Response(OK).body(sandboxHtml(title, request.uri.copy(path = graphqlPath).toString()))
   }
+  val redirectHandler: HttpHandler = { request ->
+    Response(PERMANENT_REDIRECT).with(Header.LOCATION of Uri.of(request.uri.copy(path = "$sandboxPath/index.html").toString()))
+  }
+  return routes(
+    "$sandboxPath/index.html" bind Method.GET to sanboxHandler,
+    "$sandboxPath" bind Method.GET to redirectHandler,
+    "$sandboxPath/" bind Method.GET to redirectHandler,
+    "$sandboxPath/{unused:.*}" bind Method.GET to redirectHandler,
+  )
 }

@@ -38,12 +38,13 @@ fun CoRouterFunctionDsl.apolloGraphQLRoutes(
 
 fun CoRouterFunctionDsl.apolloSandboxRoutes(
   title: String = "API sandbox",
+  sandboxPath: String = "/sandbox",
   graphqlPath: String = "/graphql",
 ) {
-  GET("/sandbox/index.html") {
+  GET("$sandboxPath/index.html") {
     ok().contentType(MediaType.TEXT_HTML).bodyValueAndAwait(sandboxHtml(title, it.uriBuilder().replacePath(graphqlPath).build().toString()))
   }
-  GET("/sandbox/**") {
+  GET("$sandboxPath/**") {
     permanentRedirect(it.uriBuilder().replacePath("/sandbox/index.html").build()).buildAndAwait()
   }
 }

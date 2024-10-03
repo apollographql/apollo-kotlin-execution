@@ -94,15 +94,17 @@ fun Application.apolloModule(
 }
 
 fun Application.apolloSandboxModule(
-    title: String = "API sandbox",
-    initialEndpoint: String = "http://localhost:8080/graphql"
+  title: String = "API sandbox",
+  sandboxPath: String = "/sandbox",
+  graphqlPath: String = "/graphql",
 ) {
   routing {
     get(Regex("/sandbox/?")) {
-      call.respondRedirect(call.url { path("/sandbox/index.html") })
+      call.respondRedirect(call.url { path("/sandbox/index.html") }, permanent = true)
     }
-    get("/sandbox/index.html") {
-      call.respondText(sandboxHtml(title, initialEndpoint ), ContentType.parse("text/html"))
+    get("$sandboxPath/index.html") {
+      val initialEndpoint = call.url { path(graphqlPath) }
+      call.respondText(sandboxHtml(title, initialEndpoint), ContentType.parse("text/html"))
     }
   }
 }
