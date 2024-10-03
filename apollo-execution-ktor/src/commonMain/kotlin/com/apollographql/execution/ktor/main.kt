@@ -73,7 +73,7 @@ private fun GraphQLResponse.toByteArray(): ByteArray {
 suspend fun ApplicationRequest.toGraphQLRequest(): GraphQLResult<GraphQLRequest> {
   return when (httpMethod) {
     HttpMethod.Post -> receiveChannel().buffer().parseGraphQLRequest()
-    HttpMethod.Get -> queryString().parseGraphQLRequest()
+    HttpMethod.Get -> queryString().parseUrlToGraphQLRequest()
     else -> GraphQLError(Exception("Unhandled method: $httpMethod"))
   }
 }
@@ -81,27 +81,30 @@ suspend fun ApplicationRequest.toGraphQLRequest(): GraphQLResult<GraphQLRequest>
 fun Application.apolloModule(
     executableSchema: ExecutableSchema,
     path: String = "/graphql",
+    executionContext: ExecutionContext = ExecutionContext.Empty
 ) {
   routing {
     post(path) {
-      call.respondGraphQL(executableSchema)
+      call.respondGraphQL(executableSchema, executionContext)
     }
     get(path) {
-      call.respondGraphQL(executableSchema)
+      call.respondGraphQL(executableSchema, executionContext)
     }
   }
 }
 
 fun Application.apolloSandboxModule(
-    title: String = "API sandbox",
-    initialEndpoint: String = "http://localhost:8080/graphql"
+  title: String = "API sandbox",
+  sandboxPath: String = "/sandbox",
+  graphqlPath: String = "/graphql",
 ) {
   routing {
     get(Regex("/sandbox/?")) {
-      call.respondRedirect(call.url { path("/sandbox/index.html") })
+      call.respondRedirect(call.url { path("/sandbox/index.html") }, permanent = true)
     }
-    get("/sandbox/index.html") {
-      call.respondText(sandboxHtml(title, initialEndpoint ), ContentType.parse("text/html"))
+    get("$sandboxPath/index.html") {
+      val initialEndpoint = call.url { path(graphqlPath) }
+      call.respondText(sandboxHtml(title, initialEndpoint), ContentType.parse("text/html"))
     }
   }
 }

@@ -1,8 +1,8 @@
 public final class com/apollographql/execution/spring/MainKt {
 	public static final fun apolloGraphQLRoutes (Lorg/springframework/web/reactive/function/server/CoRouterFunctionDsl;Lcom/apollographql/execution/ExecutableSchema;Ljava/lang/String;Lcom/apollographql/apollo/api/ExecutionContext;)V
 	public static synthetic fun apolloGraphQLRoutes$default (Lorg/springframework/web/reactive/function/server/CoRouterFunctionDsl;Lcom/apollographql/execution/ExecutableSchema;Ljava/lang/String;Lcom/apollographql/apollo/api/ExecutionContext;ILjava/lang/Object;)V
-	public static final fun apolloSandboxRoutes (Lorg/springframework/web/reactive/function/server/CoRouterFunctionDsl;Ljava/lang/String;Ljava/lang/String;)V
-	public static synthetic fun apolloSandboxRoutes$default (Lorg/springframework/web/reactive/function/server/CoRouterFunctionDsl;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)V
+	public static final fun apolloSandboxRoutes (Lorg/springframework/web/reactive/function/server/CoRouterFunctionDsl;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+	public static synthetic fun apolloSandboxRoutes$default (Lorg/springframework/web/reactive/function/server/CoRouterFunctionDsl;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)V
 	public static final fun toGraphQLRequest (Lorg/springframework/web/reactive/function/server/ServerRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 

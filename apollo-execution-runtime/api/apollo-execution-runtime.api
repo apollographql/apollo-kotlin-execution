@@ -107,9 +107,10 @@ public final class com/apollographql/execution/GraphQLRequest$Builder {
 }
 
 public final class com/apollographql/execution/GraphQLRequestKt {
-	public static final fun parseGraphQLRequest (Ljava/lang/String;)Lcom/apollographql/execution/GraphQLResult;
 	public static final fun parseGraphQLRequest (Ljava/util/Map;)Lcom/apollographql/execution/GraphQLResult;
 	public static final fun parseGraphQLRequest (Lokio/BufferedSource;)Lcom/apollographql/execution/GraphQLResult;
+	public static final fun parseQueryToGraphQLRequest (Ljava/lang/String;)Lcom/apollographql/execution/GraphQLResult;
+	public static final fun parseUrlToGraphQLRequest (Ljava/lang/String;)Lcom/apollographql/execution/GraphQLResult;
 	public static final fun toExternalValueMap (Ljava/util/Map;)Lcom/apollographql/execution/GraphQLResult;
 }
 
