@@ -9,10 +9,10 @@ import org.springframework.web.reactive.function.server.*
 
 suspend fun ServerRequest.toGraphQLRequest(): GraphQLResult<GraphQLRequest> {
   return when (this.method()) {
-    HttpMethod.GET -> this.queryParams().parseGraphQLRequest()
+    HttpMethod.GET -> this.queryParams().parseAsGraphQLRequest()
     HttpMethod.POST -> {
       awaitBody<String>().let {
-        Buffer().writeUtf8(it).parseGraphQLRequest()
+        Buffer().writeUtf8(it).parseAsGraphQLRequest()
       }
     }
     else -> GraphQLError(Exception("Unhandled method: ${method()}"))

@@ -1,6 +1,5 @@
 package test
 
-import com.apollographql.execution.DefaultQueryRoot
 import com.apollographql.execution.ExecutableSchema
 import com.apollographql.execution.ResolveInfo
 import com.apollographql.execution.Resolver
@@ -13,9 +12,9 @@ import kotlin.test.Ignore
 import kotlin.test.Test
 
 class MyDefaultResolver: Resolver {
-  override fun resolve(resolveInfo: ResolveInfo): Any? {
+  override suspend fun resolve(resolveInfo: ResolveInfo): Any? {
     return when (val parent = resolveInfo.parentObject) {
-      is DefaultQueryRoot -> mapOf("foo" to "bar")
+      null -> mapOf("foo" to "bar")
       else -> (parent as Map<String, *>).get(resolveInfo.fieldName)
     }
   }

@@ -2,50 +2,15 @@ package com.apollographql.execution.internal
 
 import com.apollographql.apollo.api.Error
 import com.apollographql.apollo.api.ExecutionContext
-import com.apollographql.apollo.ast.GQLBooleanValue
-import com.apollographql.apollo.ast.GQLDirective
-import com.apollographql.apollo.ast.GQLEnumTypeDefinition
-import com.apollographql.apollo.ast.GQLField
-import com.apollographql.apollo.ast.GQLFragmentDefinition
-import com.apollographql.apollo.ast.GQLFragmentSpread
-import com.apollographql.apollo.ast.GQLInlineFragment
-import com.apollographql.apollo.ast.GQLInputObjectTypeDefinition
-import com.apollographql.apollo.ast.GQLInterfaceTypeDefinition
-import com.apollographql.apollo.ast.GQLListType
-import com.apollographql.apollo.ast.GQLNamedType
-import com.apollographql.apollo.ast.GQLNonNullType
-import com.apollographql.apollo.ast.GQLObjectTypeDefinition
-import com.apollographql.apollo.ast.GQLOperationDefinition
-import com.apollographql.apollo.ast.GQLScalarTypeDefinition
-import com.apollographql.apollo.ast.GQLSelection
-import com.apollographql.apollo.ast.GQLType
-import com.apollographql.apollo.ast.GQLUnionTypeDefinition
-import com.apollographql.apollo.ast.GQLVariableValue
-import com.apollographql.apollo.ast.Schema
-import com.apollographql.apollo.ast.definitionFromScope
-import com.apollographql.apollo.ast.responseName
-import com.apollographql.execution.Coercing
-import com.apollographql.execution.GraphQLResponse
-import com.apollographql.execution.Instrumentation
-import com.apollographql.execution.ResolveInfo
-import com.apollographql.execution.ResolveTypeInfo
-import com.apollographql.execution.Resolver
-import com.apollographql.execution.Roots
-import com.apollographql.execution.SubscriptionError
-import com.apollographql.execution.SubscriptionEvent
-import com.apollographql.execution.SubscriptionResponse
-import com.apollographql.execution.leafCoercingSerialize
-import com.apollographql.execution.errorResponse
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
+import com.apollographql.apollo.ast.*
+import com.apollographql.execution.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 
 /**
- * Returns the typename of the given `obj`
+ * Returns the GraphQL object typename of the given Kotlin `obj` or null to trigger a GraphQL error.
  *
  * This is used for polymorphic types to return the correct __typename depending on the runtime type of `obj`.
- * This function must return a non-null String for any Kotlin instance that represents a GraphQL type that implements an interface or is part of a union.
  *
  * Example:
  * ```
@@ -54,7 +19,6 @@ import kotlinx.coroutines.flow.map
  * }
  * ```
  *
- * Returns the name of the GraphQL type for this runtime instance or null if this runtime instance is not found, which will trigger a GraphQL error.
  */
 typealias ResolveType = (obj: Any, resolveTypeInfo: ResolveTypeInfo) -> String?
 
@@ -63,181 +27,307 @@ typealias ResolveType = (obj: Any, resolveTypeInfo: ResolveTypeInfo) -> String?
  */
 typealias TypeChecker = (obj: Any) -> Boolean
 
+internal sealed interface OperationExecutionResult
+
+/**
+ * @param data the pending data for this operation. Use [finalize] to await it.
+ */
+internal class OperationExecutionSuccess(val data: Deferred<ExternalValue>) : OperationExecutionResult
+/**
+ * An error happened while executing this operation
+ */
+internal class OperationExecutionError(val error: Error) : OperationExecutionResult
+
+/**
+ * Bags of constant properties used while resolving the operation.
+ *
+ * 2 important methods are [resolveFieldValueOrThrow] and [completeValueOrThrow]. They are the core of field resolution,
+ * are suspend and may throw.
+ * Exceptions may happen from resolvers, coercing, and type resolvers which are typically outside our code.
+ *
+ * Their counterparts [resolveFieldValue] and [completeValue] return an [Error] in case something goes wrong.
+ *
+ * [executeField] returns a [Deferred] that must be awaited using [finalize]
+ *
+ */
 internal class OperationExecutor(
-    val operation: GQLOperationDefinition,
-    val fragments: Map<String, GQLFragmentDefinition>,
-    val executionContext: ExecutionContext,
-    val variables: Map<String, ExternalValue>,
-    val schema: Schema,
-    val resolvers: Map<String, Resolver>,
-    val coercings: Map<String, Coercing<*>>,
-    val defaultResolver: Resolver,
-    val resolveType: ResolveType,
-    val instrumentations: List<Instrumentation>,
-    val roots: Roots,
+  private val fragments: Map<String, GQLFragmentDefinition>,
+  private val executionContext: ExecutionContext,
+  private val schema: Schema,
+  private val resolvers: Map<String, Resolver>,
+  private val coercings: Map<String, Coercing<*>>,
+  private val defaultResolver: Resolver,
+  private val resolveType: ResolveType,
+  private val instrumentations: List<Instrumentation>,
+  private val roots: Roots,
+  private val bubbles: Boolean,
+  private val variableValues: Map<String, InternalValue>,
 ) {
-  private var errors = mutableListOf<Error>()
+  private fun graphQLError(message: String) = Error.Builder(message).build()
 
-  private val coercedVariables by lazy {
-    coerceVariablesValues(schema, operation.variableDefinitions, variables, coercings)
-  }
+  private fun graphqlErrorResponse(message: String) = GraphQLResponse.Builder().errors(listOf(graphQLError(message))).build()
 
-  fun execute(): GraphQLResponse {
-    val operationDefinition = operation
-    val rootTypename = schema.rootTypeNameOrNullFor(operationDefinition.operationType)
+  /**
+   * executes the given operation and awaits its result.
+   *
+   * Note: a future version may add an "executeAsync" function so we can start sending some data before the whole
+   * map is computed.
+   */
+  suspend fun execute(
+    operation: GQLOperationDefinition,
+  ): GraphQLResponse {
+    val rootTypename = schema.rootTypeNameOrNullFor(operation.operationType)
     if (rootTypename == null) {
-      return errorResponse("'${operationDefinition.operationType}' is not supported")
+      return graphqlErrorResponse("'${operation.operationType}' is not supported")
     }
-    val rootObject = when (operationDefinition.operationType) {
-      "query" -> roots.query()
-      "mutation" -> roots.mutation()
-      "subscription" -> return errorResponse("Use executeSubscription() to execute subscriptions")
-      else -> errorResponse("Unknown operation type '${operationDefinition.operationType}")
+    val rootObject = when (operation.operationType) {
+      "query" -> roots.query?.invoke()
+      "mutation" -> roots.mutation?.invoke()
+      "subscription" -> {
+        return graphqlErrorResponse("Use executeSubscription() to execute subscriptions")
+      }
+
+      else -> {
+        return graphqlErrorResponse("Unknown operation type '${operation.operationType}")
+      }
     }
     val typeDefinition = schema.typeDefinition(schema.rootTypeNameFor(operation.operationType))
-    val data = try {
-      executeSelectionSet(operation.selections, typeDefinition as GQLObjectTypeDefinition, rootObject, emptyList())
-    } catch (e: BubbleNullException) {
-      null
-    } catch (e: Exception) {
-      /**
-       * This happens when variable coercion fails. Maybe other cases?
-       */
-      errors.add(Error.Builder(e.message ?: "Error executing selection set").build())
-      null
+
+    val groupedFieldSet = collectFields(typeDefinition.name, operation.selections, variableValues)
+
+    return coroutineScope {
+      async(start = CoroutineStart.UNDISPATCHED) {
+        executeGroupedFieldSet(
+          this,
+          groupedFieldSet,
+          typeDefinition as GQLObjectTypeDefinition,
+          rootObject,
+          variableValues,
+          emptyList(),
+          operation.operationType == "mutation"
+        )
+      }.toGraphQLResponse()
+    }
+  }
+
+  fun subscribe(
+    operation: GQLOperationDefinition,
+  ): Flow<SubscriptionEvent> {
+    val rootObject = when (operation.operationType) {
+      "subscription" -> roots.subscription?.invoke()
+      else -> return subscriptionError("Unknown operation type '${operation.operationType}.")
     }
 
-    return GraphQLResponse(data, errors.orNullIfEmpty(), null)
+    val eventStream = try {
+      createSourceEventStream(operation, rootObject)
+    } catch (e: Exception) {
+      return subscriptionError("Cannot create source event stream: ${e.message}")
+    }
+    return mapSourceToResponseEvent(eventStream, variableValues).catch {
+      emit(SubscriptionError(listOf(Error.Builder("Error collecting the source event stream: ${it.message}").build())))
+    }
   }
+
 
   private fun subscriptionError(message: String): Flow<SubscriptionError> {
     return flowOf(SubscriptionError(listOf(Error.Builder(message).build())))
   }
 
-  private fun resolveFieldEventStream(subscriptionType: GQLObjectTypeDefinition, rootValue: ResolverValue, fields: List<GQLField>, coercedArgumentValues: Map<String, InternalValue>, responseName: String): Flow<PendingField> {
-    val flow = resolveFieldValue(subscriptionType, rootValue, fields, arguments = coercedArgumentValues)
-    if (flow == null) {
-      error("root subscription field returned null")
-    }
-
-    if (flow !is Flow<*>) {
-      error("Subscription resolvers must return a Flow<> for root fields")
-    }
-
-    return flow.map {
-      PendingFieldItem(
-          parentType = subscriptionType.name,
-          objectValue = it,
-          fields = fields,
-          responseName = responseName
-      )
+  private fun resolveFieldEventStream(
+    subscriptionType: GQLObjectTypeDefinition,
+    rootValue: ResolverValue,
+    fields: List<GQLField>,
+    argumentValues: Map<String, InternalValue>,
+    responseName: String
+  ): Flow<FieldEvent> {
+    return flow {
+      emit(resolveFieldValue(subscriptionType, rootValue, fields, arguments = argumentValues, emptyList()))
+    }.flatMapConcat {
+      if (it !is Flow<*>) {
+        flowOf(FieldEventError("Subscription resolvers must return a Flow<> (got '$it')"))
+      } else {
+        it.map { objectValue ->
+          FieldEventItem(
+            parentType = subscriptionType.name,
+            objectValue = objectValue,
+            fields = fields,
+            responseName = responseName
+          )
+        }
+      }
     }
   }
 
-  sealed interface PendingField
-  private class PendingFieldItem(
-      val parentType: String,
-      val objectValue: InternalValue,
-      val fields: List<GQLField>,
-      val responseName: String,
-  ) : PendingField
+  sealed interface FieldEvent
+  private class FieldEventItem(
+    val parentType: String,
+    val objectValue: InternalValue,
+    val fields: List<GQLField>,
+    val responseName: String,
+  ) : FieldEvent
 
-  private class PendingFieldError(
-      val message: String,
-  ) : PendingField
+  private class FieldEventError(
+    val message: String,
+  ) : FieldEvent
 
-  private fun createSourceEventStream(initialValue: ResolverValue): Flow<PendingField> {
-    val rootTypename = schema.rootTypeNameOrNullFor(operation.operationType)
+  private fun createSourceEventStream(
+    subscription: GQLOperationDefinition,
+    rootValue: ResolverValue
+  ): Flow<FieldEvent> {
+    val rootTypename = schema.rootTypeNameOrNullFor(subscription.operationType)
     if (rootTypename == null) {
-      return flowOf(PendingFieldError("'${operation.operationType}' is not supported"))
+      return flowOf(FieldEventError("'${subscription.operationType}' is not supported"))
     }
 
     val typeDefinition = schema.typeDefinition(rootTypename)
     check(typeDefinition is GQLObjectTypeDefinition) {
       "Root typename '${typeDefinition.name} must be of object type"
     }
-    val selections = operation.selections
-    val groupedFieldsSet = collectFields(typeDefinition.name, selections, coercedVariables)
+    val selections = subscription.selections
+    val groupedFieldsSet = collectFields(typeDefinition.name, selections, variableValues)
     check(groupedFieldsSet.size == 1) {
-      return flowOf(PendingFieldError("Subscriptions must have a single root field"))
+      return flowOf(FieldEventError("Subscriptions must have a single root field"))
     }
-    val fields = groupedFieldsSet.values.first()
-    return resolveFieldEventStream(typeDefinition, initialValue, fields, coerceArgumentValues(schema, typeDefinition.name, fields.first(), coercings, coercedVariables), responseName = fields.first().responseName())
+    val fields = groupedFieldsSet.entries.single().value
+    val field = fields.first()
+    val argumentValues = coerceArgumentValues(schema, typeDefinition.name, field, coercings, variableValues)
+    return resolveFieldEventStream(
+      subscriptionType = typeDefinition,
+      rootValue = rootValue,
+      fields = fields,
+      argumentValues = argumentValues,
+      responseName = fields.first().responseName()
+    )
   }
 
-  fun executeSubscription(): Flow<SubscriptionEvent> {
-    val rootObject = when (operation.operationType) {
-      "subscription" -> roots.subscription()
-      else -> return subscriptionError("Unknown operation type '${operation.operationType}.")
-    }
-
-    val eventStream = try {
-      createSourceEventStream(rootObject)
-    } catch (e: Exception) {
-      return subscriptionError(e.message ?: "cannot create source event stream")
-    }
-    return mapSourceToResponseEvent(eventStream).catch {
-      emit(SubscriptionError(listOf(Error.Builder(it.message ?: "error collecting the source event stream").build())))
-    }
-  }
-
-  private fun mapSourceToResponseEvent(sourceStream: Flow<PendingField>): Flow<SubscriptionEvent> {
+  private fun mapSourceToResponseEvent(
+    sourceStream: Flow<FieldEvent>,
+    variableValues: Map<String, ExternalValue>
+  ): Flow<SubscriptionEvent> {
     return sourceStream.map {
       // TODO: allow implementers to terminate the stream with an exception
       SubscriptionResponse(executeSubscriptionEvent(it))
     }
   }
 
-  private fun executeSubscriptionEvent(event: PendingField): GraphQLResponse {
+  private suspend fun executeSubscriptionEvent(
+    event: FieldEvent,
+  ): GraphQLResponse {
     return when (event) {
-      is PendingFieldError -> GraphQLResponse.Builder().errors(listOf(Error.Builder(event.message).build())).build()
-      is PendingFieldItem -> {
-        val data = try {
-          mapOf(
-              event.responseName to completeValue(
-                  event.fields.first().definitionFromScope(schema, event.parentType)!!.type,
-                  fields = event.fields,
-                  event.objectValue,
-                  variables,
-                  listOf(event.responseName)
-              )
+      is FieldEventError -> GraphQLResponse.Builder().errors(listOf(Error.Builder(event.message).build())).build()
+      is FieldEventItem -> {
+        coroutineScope {
+          val errors = mutableListOf<Error>()
+          val fieldData = completeValue(
+            scope = this,
+            fieldType = event.fields.first().definitionFromScope(schema, event.parentType)!!.type,
+            fields = event.fields,
+            result = event.objectValue,
+            path = listOf(event.responseName)
           )
-        } catch (e: Exception) {
-          e.printStackTrace()
-          null
+
+          GraphQLResponse(mapOf(event.responseName to fieldData?.finalize(errors)), errors.orNullIfEmpty(), null)
         }
-        GraphQLResponse(data, errors.orNullIfEmpty(), null)
       }
     }
   }
 
-
-  private fun executeField(objectType: GQLObjectTypeDefinition, objectValue: ResolverValue, fieldType: GQLType, fields: List<GQLField>, coercedVariables: Map<String, InternalValue>, path: List<Any>): ExternalValue {
+  /**
+   * executes the given field.
+   *
+   * @param scope a scope where to execute asynchronous work.
+   * @param objectType the parent type of the field. Always a concrete object type.
+   * @param objectValue the parent object as returned from a resolver.
+   * @param fieldType the field type as in the schema field definition.
+   * @param fields the merged fields
+   * @param variableValues the coerced variable values.
+   */
+  private fun executeField(
+    scope: CoroutineScope,
+    objectType: GQLObjectTypeDefinition,
+    objectValue: ResolverValue,
+    fieldType: GQLType,
+    fields: List<GQLField>,
+    variableValues: Map<String, InternalValue>,
+    path: List<Any>,
+  ): Deferred<ExternalValue> {
     val field = fields.first()
-    val arguments = coerceArgumentValues(schema, objectType.name, field, coercings, coercedVariables)
+    val argumentValues = coerceArgumentValues(schema, objectType.name, field, coercings, variableValues)
 
-    val resolvedValue = resolveFieldValue(objectType, objectValue, fields, arguments)
-    return completeValue(fieldType, fields, resolvedValue, coercedVariables, path)
+    return scope.async(start = CoroutineStart.UNDISPATCHED) {
+        val resolvedValue = resolveFieldValue(objectType, objectValue, fields, argumentValues, path)
+        completeValue(
+          scope = scope,
+          fieldType = fieldType,
+          fields = fields,
+          result = resolvedValue,
+          path = path
+        )
+    }
   }
 
-  private fun completeValue(fieldType: GQLType, fields: List<GQLField>, result: ResolverValue, coercedVariables: Map<String, InternalValue>, path: List<Any>): ExternalValue {
+  private suspend fun completeValue(
+    scope: CoroutineScope,
+    fieldType: GQLType,
+    fields: List<GQLField>,
+    result: ResolverValue,
+    path: List<Any>
+  ): ExternalValueOrDeferred {
+    return runFieldOrError(path) {
+      completeValueOrThrow(
+        scope,
+        fieldType,
+        fields,
+        result,
+        path
+      )
+    }
+  }
+
+  /**
+   * @throws IllegalStateException if coercing fails.
+   * @throws Exception if [resolveType] fails.
+   */
+  private suspend fun completeValueOrThrow(
+    scope: CoroutineScope,
+    fieldType: GQLType,
+    fields: List<GQLField>,
+    result: ResolverValue,
+    path: List<Any>
+  ): ExternalValueOrDeferred {
+    if (result is Error) {
+      // fast path if the resolver failed
+      return result
+    }
+
     if (fieldType is GQLNonNullType) {
-      val completedResult = completeValue(fieldType.type, fields, result, coercedVariables, path)
+      val completedResult = completeValue(scope, fieldType.type, fields, result, path)
       if (completedResult == null) {
-        error("A resolver returned null in a non-null position")
+        return Error.Builder("Cannot return null for non-nullable field").build()
       }
       return completedResult
     }
 
     if (result == null) {
-      return null
+      return result
     }
 
     if (fieldType is GQLListType) {
       if (result !is List<*>) {
-        error("A resolver returned non-list in a list position")
+        return Error.Builder("A resolver returned non-list in a list position")
+          .path(path)
+          .build()
       }
-      return result.map { completeValue(fieldType.type, fields, it, coercedVariables, path) }
+
+      val list = mutableListOf<ExternalValueOrDeferred>()
+      result.forEachIndexed { index, item ->
+        val completed = completeValue(scope, fieldType.type, fields, item, path + index)
+        if (bubbles && completed is Error && fieldType.type is GQLNonNullType) {
+          return completed
+        }
+        list.add(completed)
+      }
+      return list
     }
 
     fieldType as GQLNamedType
@@ -245,7 +335,7 @@ internal class OperationExecutor(
     return when (typeDefinition) {
       is GQLEnumTypeDefinition,
       is GQLScalarTypeDefinition,
-      -> {
+        -> {
         // leaf type
         leafCoercingSerialize(result, coercings, typeDefinition)
       }
@@ -253,35 +343,85 @@ internal class OperationExecutor(
       is GQLInterfaceTypeDefinition,
       is GQLObjectTypeDefinition,
       is GQLUnionTypeDefinition,
-      -> {
+        -> {
         val typename = if (typeDefinition is GQLObjectTypeDefinition) {
           typeDefinition.name
         } else {
           resolveType(result, ResolveTypeInfo(typeDefinition.name, schema))
         }
         if (typename == null) {
-          error("Cannot resolve object __typename for instance '$result' of abstract type '${typeDefinition.name}'.\nConfigure `resolveType` or `typeCheckers`.")
+          return Error.Builder("Cannot resolve object __typename for instance '$result' of abstract type '${typeDefinition.name}'.\nConfigure `resolveType` or `typeCheckers`.")
+            .path(path)
+            .build()
         }
 
         val selections = fields.flatMap { it.selections }
-        return executeSelectionSet(selections, schema.typeDefinition(typename) as GQLObjectTypeDefinition, result, path)
+        val groupedFieldSet = collectFields(typename, selections, variableValues)
+        return executeGroupedFieldSet(
+          scope = scope,
+          groupedFieldSet = groupedFieldSet,
+          typeDefinition = schema.typeDefinition(typename) as GQLObjectTypeDefinition,
+          objectValue = result,
+          variableValues = variableValues,
+          path = path,
+          serial = false,
+        )
       }
 
       is GQLInputObjectTypeDefinition -> {
-        error("Input type in output position")
+        return Error.Builder("Input type used in output position")
+          .path(path)
+          .build()
       }
     }
   }
 
-  private fun resolveFieldValue(typeDefinition: GQLObjectTypeDefinition, objectValue: ResolverValue, fields: List<GQLField>, arguments: Map<String, InternalValue>): ResolverValue {
+  private suspend fun runFieldOrError(
+    path: List<Any>,
+    block: suspend () -> ExternalValueOrDeferred
+  ): Any? {
+    return try {
+      block()
+    } catch (e: Exception) {
+      if (e is CancellationException) {
+        throw e
+      }
+      Error.Builder("Cannot resolve '${path.lastOrNull()}': ${e.message}")
+        .path(path)
+        .build()
+    }
+  }
+
+  private suspend fun resolveFieldValue(
+    typeDefinition: GQLObjectTypeDefinition,
+    objectValue: ResolverValue,
+    fields: List<GQLField>,
+    arguments: Map<String, InternalValue>,
+    path: List<Any>,
+  ): ResolverValueOrError {
+    return runFieldOrError(path) {
+      resolveFieldValueOrThrow(typeDefinition, objectValue, fields, arguments)
+    }
+  }
+
+  /**
+   * Calls the resolver.
+   *
+   * @throws [Exception] when the resolver throws.
+   */
+  private suspend fun resolveFieldValueOrThrow(
+    typeDefinition: GQLObjectTypeDefinition,
+    objectValue: ResolverValue,
+    fields: List<GQLField>,
+    arguments: Map<String, InternalValue>,
+  ): ResolverValue {
     val resolveInfo = ResolveInfo(
-        parentObject = objectValue,
-        executionContext = executionContext,
-        fields = fields,
-        schema = schema,
-        variables = coercedVariables,
-        arguments = arguments,
-        parentType = typeDefinition.name
+      parentObject = objectValue,
+      executionContext = executionContext,
+      fields = fields,
+      schema = schema,
+      arguments = arguments,
+      parentType = typeDefinition.name
     )
 
     instrumentations.forEach { it.beforeResolve(resolveInfo) }
@@ -289,43 +429,53 @@ internal class OperationExecutor(
     return when {
       resolveInfo.fieldName == "__typename" -> typeDefinition.name
       else -> {
-        (resolvers.get(resolveInfo.coordinates()) ?: defaultResolver).resolve(resolveInfo)
+        val resolver = resolvers.get(resolveInfo.coordinates()) ?: defaultResolver
+        resolver.resolve(resolveInfo)
       }
     }
   }
 
-  private fun executeSelectionSet(selections: List<GQLSelection>, typeDefinition: GQLObjectTypeDefinition, objectValue: ResolverValue, path: List<Any>): Map<String, ExternalValue> {
+  private class Entry(
+    val key: String,
+    val value: Deferred<ExternalValue>,
+    val nullable: Boolean
+  )
+
+  private suspend fun executeGroupedFieldSet(
+    scope: CoroutineScope,
+    groupedFieldSet: Map<String, List<GQLField>>,
+    typeDefinition: GQLObjectTypeDefinition,
+    objectValue: ResolverValue,
+    variableValues: Map<String, InternalValue>,
+    path: List<Any>,
+    serial: Boolean
+  ): ExternalValue {
     val typename = typeDefinition.name
-    val groupedFieldSet = collectFields(typename, selections, coercedVariables)
-    return groupedFieldSet.entries.associate { entry ->
+    val entries = groupedFieldSet.entries.map { entry ->
       val field = entry.value.first()
       val fieldDefinition = field.definitionFromScope(schema, typename)!!
       val fieldPath = path + field.responseName()
 
-      val fieldData = try {
-        executeField(typeDefinition, objectValue, fieldDefinition.type, entry.value, coercedVariables, fieldPath)
-      } catch (e: Exception) {
-        if (e !is BubbleNullException) {
-          /**
-           * Only add if it was not already added downstream
-           */
-          errors.add(
-              Error.Builder("Cannot resolve '${field.name}': ${e.message}")
-                  .path(path)
-                  .build()
-          )
-          e.printStackTrace()
-        }
-        if (fieldDefinition.type is GQLNonNullType) {
-          throw BubbleNullException
-        }
-        null
+      val deferred =
+        executeField(scope, typeDefinition, objectValue, fieldDefinition.type, entry.value, variableValues, fieldPath)
+      if (serial) {
+        deferred.await()
       }
-      entry.key to fieldData
+      Entry(entry.key, deferred, fieldDefinition.type !is GQLNonNullType)
     }
-  }
 
-  object BubbleNullException : Exception()
+    val result = mutableMapOf<String, ExternalValue>()
+    entries.forEach {
+      val value = it.value.await()
+      if (bubbles && value is Error && !it.nullable) {
+        return value
+      }
+
+      result.put(it.key, it.value)
+    }
+
+    return result
+  }
 
   /**
    * Assumes validation and or variable coercion caught errors, crashes else.
@@ -371,9 +521,9 @@ internal class OperationExecutor(
   }
 
   private fun collectFields(
-      objectType: String,
-      selections: List<GQLSelection>,
-      coercedVariables: Map<String, InternalValue>,
+    objectType: String,
+    selections: List<GQLSelection>,
+    coercedVariables: Map<String, InternalValue>,
   ): Map<String, List<GQLField>> {
     val groupedFields = mutableMapOf<String, List<GQLField>>()
     collectFields(objectType, selections, coercedVariables, mutableSetOf(), groupedFields)
@@ -381,11 +531,11 @@ internal class OperationExecutor(
   }
 
   private fun collectFields(
-      objectType: String,
-      selections: List<GQLSelection>,
-      coercedVariables: Map<String, InternalValue>,
-      visitedFragments: MutableSet<String>,
-      groupedFields: MutableMap<String, List<GQLField>>,
+    objectType: String,
+    selections: List<GQLSelection>,
+    coercedVariables: Map<String, InternalValue>,
+    visitedFragments: MutableSet<String>,
+    groupedFields: MutableMap<String, List<GQLField>>,
   ) {
     selections.forEach { selection ->
       if (selection.directives.shouldSkip(coercedVariables)) {
@@ -429,8 +579,10 @@ private fun <E> List<E>.orNullIfEmpty(): List<E>? {
 }
 
 
-private val GQLSelection.directives: List<GQLDirective> get() = when(this) {
-  is GQLField -> directives
-  is GQLFragmentSpread -> directives
-  is GQLInlineFragment -> directives
-}
+private val GQLSelection.directives: List<GQLDirective>
+  get() = when (this) {
+    is GQLField -> directives
+    is GQLFragmentSpread -> directives
+    is GQLInlineFragment -> directives
+  }
+

@@ -210,32 +210,3 @@ private fun coerceInputObject(schema: Schema, definition: GQLInputObjectTypeDefi
     map
   }
 }
-
-internal fun coerceInputMaps(value: Any?, schema: Schema, expectedType: GQLType , coercings: Map<String, Coercing<*>>): InternalValue {
-  if (value == null) {
-    return null
-  }
-
-  return when (expectedType) {
-    is GQLNonNullType -> {
-      coerceInputMaps(value, schema, expectedType.type, coercings)
-    }
-    is GQLListType -> {
-      check(value is List<*>)
-      value.map { coerceInputMaps(it, schema, expectedType.type, coercings) }
-    }
-    is GQLNamedType -> {
-      val definition = schema.typeDefinition(expectedType.name)
-      if (definition is GQLInputObjectTypeDefinition) {
-        val coercing = coercings.get(definition.name)
-        return if (coercing != null) {
-          coercing.deserialize(value)
-        } else {
-          value
-        }
-      } else {
-        value
-      }
-    }
-  }
-}

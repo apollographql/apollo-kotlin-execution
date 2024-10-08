@@ -15,7 +15,7 @@ import com.apollographql.execution.GraphQLResponse
 import com.apollographql.execution.SubscriptionError
 import com.apollographql.execution.SubscriptionResponse
 import com.apollographql.execution.jsonWriter
-import com.apollographql.execution.parseGraphQLRequest
+import com.apollographql.execution.parseAsGraphQLRequest
 import com.apollographql.execution.writeError
 import kotlinx.atomicfu.locks.reentrantLock
 import kotlinx.atomicfu.locks.withLock
@@ -72,7 +72,7 @@ class SubscriptionWebSocketHandler(
           return
         }
 
-        val flow = executableSchema.executeSubscription(clientMessage.request, executionContext + CurrentSubscription(clientMessage.id))
+        val flow = executableSchema.subscribe(clientMessage.request, executionContext + CurrentSubscription(clientMessage.id))
 
         val job = scope.launch {
           flow.collect {
@@ -268,7 +268,7 @@ internal fun String.parseApolloWebsocketClientMessage(): SubscriptionWebsocketCl
         }
 
         @Suppress("UNCHECKED_CAST")
-        val request = (payload as Map<String, Any?>).parseGraphQLRequest()
+        val request = (payload as Map<String, Any?>).parseAsGraphQLRequest()
         return request.fold(
             onFailure = { SubscriptionWebsocketClientMessageParseError("Cannot parse start payload: '${it.message}'") },
             onSuccess = { SubscriptionWebsocketStart(id, request = it) }

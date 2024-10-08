@@ -4,6 +4,7 @@ import com.apollographql.apollo.api.json.JsonNumber
 import com.apollographql.apollo.ast.*
 import com.apollographql.execution.internal.ExternalValue
 import com.apollographql.execution.internal.InternalValue
+import com.apollographql.execution.internal.JsonValue
 
 /**
  * See https://www.graphql.de/blog/scalars-in-depth/
@@ -16,7 +17,7 @@ interface Coercing<T> {
    *
    * For an example Date --> String
    */
-  fun serialize(internalValue: T): ExternalValue
+  fun serialize(internalValue: T): JsonValue
 
   /**
    * Deserializes from an external value (typically JSON) to an internal value (Kotlin).
@@ -25,7 +26,7 @@ interface Coercing<T> {
    *
    * For an example String --> Date
    */
-  fun deserialize(value: ExternalValue): T
+  fun deserialize(value: JsonValue): T
 
   /**
    * Deserializes from a GraphQL value to an internal value (Kotlin).

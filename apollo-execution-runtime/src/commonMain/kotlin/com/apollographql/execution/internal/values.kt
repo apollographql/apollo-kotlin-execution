@@ -1,5 +1,6 @@
 package com.apollographql.execution.internal
 
+import com.apollographql.apollo.api.Error
 import com.apollographql.apollo.api.json.JsonNumber
 import com.apollographql.apollo.ast.GQLBooleanValue
 import com.apollographql.apollo.ast.GQLEnumValue
@@ -11,13 +12,9 @@ import com.apollographql.apollo.ast.GQLObjectValue
 import com.apollographql.apollo.ast.GQLStringValue
 import com.apollographql.apollo.ast.GQLValue
 import com.apollographql.apollo.ast.GQLVariableValue
+import com.apollographql.execution.GraphQLResponse
+import kotlinx.coroutines.Deferred
 
-/**
- * An external value, usually JSON
- * - Numbers are stored as Int, Long, Double or JsonNumber for arbitrary precision
- * - Enums are stored as Strings
- */
-typealias ExternalValue = Any?
 
 /**
  * An internal value
@@ -35,11 +32,55 @@ typealias InternalValue = Any?
 /**
  * The result of a resolver
  *
- * For leaf types, it's an [InternalValue]
- * For composite output types, it's an opaque value
- * For list types, it's a kotlin List
+ * - an [InternalValue] for leaf types
+ * - an opaque value for composite types
+ * - a [kotlin.collections.List] for list types
  */
 internal typealias ResolverValue = Any?
+
+/**
+ * Any of [ResolverValue] or [Error]
+ */
+internal typealias ResolverValueOrError = Any?
+/**
+ * A JSON value.
+ * - Numbers are stored as Int, Long, Double or JsonNumber for arbitrary precision
+ * - Enums are stored as Strings
+ */
+typealias JsonValue = Any?
+
+/**
+ * Any of [JsonValue] or an error
+ */
+typealias ExternalValue = Any?
+
+/**
+ * Any of [ExternalValue] or [Deferred]<[ExternalValue]>
+ */
+typealias ExternalValueOrDeferred = Any?
+
+internal suspend fun ExternalValueOrDeferred.finalize(errors: MutableList<Error>): ExternalValue {
+  return when (this) {
+    is Deferred<*> -> await()?.finalize(errors)
+
+    is Error -> {
+      errors.add(this)
+      null
+    }
+
+    is Map<*, *> -> mapValues { it.value?.finalize(errors) }
+    is List<*> -> map { it?.finalize(errors) }
+    else -> this
+  }
+}
+
+internal suspend fun ExternalValueOrDeferred.toGraphQLResponse(): GraphQLResponse {
+  val errors = mutableListOf<Error>()
+
+  val data = this.finalize(errors)
+
+  return GraphQLResponse(data, errors.ifEmpty { null }, null)
+}
 
 /**
  * This function is a bit weird and only exists because default values are not coerced.

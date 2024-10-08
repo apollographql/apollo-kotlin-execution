@@ -1,7 +1,6 @@
 package com.apollographql.execution.internal
 
 import com.apollographql.apollo.ast.GQLEnumTypeDefinition
-import com.apollographql.apollo.ast.GQLEnumValue
 import com.apollographql.apollo.ast.GQLInputObjectTypeDefinition
 import com.apollographql.apollo.ast.GQLInterfaceTypeDefinition
 import com.apollographql.apollo.ast.GQLListType
@@ -11,13 +10,12 @@ import com.apollographql.apollo.ast.GQLObjectTypeDefinition
 import com.apollographql.apollo.ast.GQLScalarTypeDefinition
 import com.apollographql.apollo.ast.GQLType
 import com.apollographql.apollo.ast.GQLUnionTypeDefinition
-import com.apollographql.apollo.ast.GQLValue
 import com.apollographql.apollo.ast.GQLVariableDefinition
 import com.apollographql.apollo.ast.Schema
 import com.apollographql.execution.Coercing
 import com.apollographql.execution.scalarCoercingDeserialize
 
-internal fun coerceVariablesValues(
+internal fun coerceVariableValues(
     schema: Schema,
     variableDefinitions: List<GQLVariableDefinition>,
     variables: Map<String, ExternalValue>,

@@ -62,7 +62,7 @@ class GraphQLRequest internal constructor(
  * Note: this is typically used by subscriptions and/or post requests. GET request encode "variables" and "extensions" as JSON and
  * need to be preprocessed first. See [toExternalValueMap].
  */
-fun Map<String, ExternalValue>.parseGraphQLRequest(): GraphQLResult<GraphQLRequest> {
+fun Map<String, ExternalValue>.parseAsGraphQLRequest(): GraphQLResult<GraphQLRequest> {
   val map = this
 
   val document = map.get("query")
@@ -95,7 +95,7 @@ fun Map<String, ExternalValue>.parseGraphQLRequest(): GraphQLResult<GraphQLReque
 }
 
 @OptIn(ApolloInternal::class)
-fun BufferedSource.parseGraphQLRequest(): GraphQLResult<GraphQLRequest> {
+fun BufferedSource.parseAsGraphQLRequest(): GraphQLResult<GraphQLRequest> {
   val map = try {
     jsonReader().use {
       it.readAny()
@@ -110,38 +110,15 @@ fun BufferedSource.parseGraphQLRequest(): GraphQLResult<GraphQLRequest> {
 
   map as Map<String, ExternalValue>
 
-  return map.parseGraphQLRequest()
+  return map.parseAsGraphQLRequest()
 }
 
 /**
- * Parses an url to a GraphQL request
+ * Parses the given query string to a GraphQL request
+ *
+ * @receiver an HTTP query string like `"key1=value1&key2=value2"`
  */
-fun String.parseUrlToGraphQLRequest(): GraphQLResult<GraphQLRequest> {
-  var fragmentStart = indexOfLast { it == '#' }
-  if (fragmentStart < 0) {
-    fragmentStart = length
-  }
-  var queryStart = fragmentStart - 1
-  while (queryStart > 0) {
-    if (get(queryStart) == '?') {
-      break
-    }
-    queryStart--
-  }
-
-  if (queryStart == 0) {
-    return GraphQLError("No GraphQL query parameters found in '$this'")
-  }
-
-  // go back to after '?'
-  queryStart++
-
-  val query = substring(queryStart, fragmentStart)
-
-  return query.parseQueryToGraphQLRequest()
-}
-
-fun String.parseQueryToGraphQLRequest(): GraphQLResult<GraphQLRequest> {
+fun String.parseAsGraphQLRequest(): GraphQLResult<GraphQLRequest> {
   val pairs = split("&")
 
   return pairs.filter { it.isNotBlank() }.map { pair ->
@@ -157,8 +134,14 @@ fun String.parseQueryToGraphQLRequest(): GraphQLResult<GraphQLRequest> {
     }
     .toExternalValueMap()
     .flatMap {
-      it.parseGraphQLRequest()
+      it.parseAsGraphQLRequest()
     }
+}
+
+fun String.toGraphQLRequest(): GraphQLRequest {
+  return GraphQLRequest.Builder()
+    .document(this)
+    .build()
 }
 
 /**

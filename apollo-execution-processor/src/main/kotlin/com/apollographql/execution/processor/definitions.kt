@@ -361,6 +361,7 @@ private class TypeDefinitionContext(
         return@mapNotNull null
       }
       usedNames.add(name)
+
       when (it) {
         is KSPropertyDeclaration -> {
           it.toSirFieldDefinition(operationType)

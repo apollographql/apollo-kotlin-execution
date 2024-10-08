@@ -2,6 +2,8 @@ package test
 
 import com.apollographql.apollo.api.ExecutionContext
 import com.apollographql.execution.ExecutableSchema
+import com.apollographql.execution.toGraphQLRequest
+import kotlinx.coroutines.runBlocking
 import okio.FileSystem
 import okio.Path.Companion.toPath
 import okio.buffer
@@ -9,7 +11,7 @@ import kotlin.test.Test
 
 class IntrospectionTest {
   @Test
-  fun introspection() {
+  fun introspection() = runBlocking {
     val schema = """
             type Query {
                 foo: String!

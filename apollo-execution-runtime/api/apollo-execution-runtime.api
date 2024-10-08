@@ -39,8 +39,10 @@ public final class com/apollographql/execution/DefaultSubscriptionRoot : com/apo
 }
 
 public final class com/apollographql/execution/ExecutableSchema {
-	public final fun execute (Lcom/apollographql/execution/GraphQLRequest;Lcom/apollographql/apollo/api/ExecutionContext;)Lcom/apollographql/execution/GraphQLResponse;
-	public final fun executeSubscription (Lcom/apollographql/execution/GraphQLRequest;Lcom/apollographql/apollo/api/ExecutionContext;)Lkotlinx/coroutines/flow/Flow;
+	public final fun execute (Lcom/apollographql/execution/GraphQLRequest;Lcom/apollographql/apollo/api/ExecutionContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun execute$default (Lcom/apollographql/execution/ExecutableSchema;Lcom/apollographql/execution/GraphQLRequest;Lcom/apollographql/apollo/api/ExecutionContext;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public final fun subscribe (Lcom/apollographql/execution/GraphQLRequest;Lcom/apollographql/apollo/api/ExecutionContext;)Lkotlinx/coroutines/flow/Flow;
+	public static synthetic fun subscribe$default (Lcom/apollographql/execution/ExecutableSchema;Lcom/apollographql/execution/GraphQLRequest;Lcom/apollographql/apollo/api/ExecutionContext;ILjava/lang/Object;)Lkotlinx/coroutines/flow/Flow;
 }
 
 public final class com/apollographql/execution/ExecutableSchema$Builder {
@@ -107,11 +109,11 @@ public final class com/apollographql/execution/GraphQLRequest$Builder {
 }
 
 public final class com/apollographql/execution/GraphQLRequestKt {
-	public static final fun parseGraphQLRequest (Ljava/util/Map;)Lcom/apollographql/execution/GraphQLResult;
-	public static final fun parseGraphQLRequest (Lokio/BufferedSource;)Lcom/apollographql/execution/GraphQLResult;
-	public static final fun parseQueryToGraphQLRequest (Ljava/lang/String;)Lcom/apollographql/execution/GraphQLResult;
-	public static final fun parseUrlToGraphQLRequest (Ljava/lang/String;)Lcom/apollographql/execution/GraphQLResult;
+	public static final fun parseAsGraphQLRequest (Ljava/lang/String;)Lcom/apollographql/execution/GraphQLResult;
+	public static final fun parseAsGraphQLRequest (Ljava/util/Map;)Lcom/apollographql/execution/GraphQLResult;
+	public static final fun parseAsGraphQLRequest (Lokio/BufferedSource;)Lcom/apollographql/execution/GraphQLResult;
 	public static final fun toExternalValueMap (Ljava/util/Map;)Lcom/apollographql/execution/GraphQLResult;
+	public static final fun toGraphQLRequest (Ljava/lang/String;)Lcom/apollographql/execution/GraphQLRequest;
 }
 
 public final class com/apollographql/execution/GraphQLResponse {
@@ -209,7 +211,6 @@ public final class com/apollographql/execution/ResolveInfo {
 	public final fun getParentType ()Ljava/lang/String;
 	public final fun getRequiredArgument (Ljava/lang/String;)Ljava/lang/Object;
 	public final fun getSchema ()Lcom/apollographql/apollo/ast/Schema;
-	public final fun getVariables ()Ljava/util/Map;
 }
 
 public final class com/apollographql/execution/ResolveTypeInfo {
@@ -219,7 +220,7 @@ public final class com/apollographql/execution/ResolveTypeInfo {
 }
 
 public abstract interface class com/apollographql/execution/Resolver {
-	public abstract fun resolve (Lcom/apollographql/execution/ResolveInfo;)Ljava/lang/Object;
+	public abstract fun resolve (Lcom/apollographql/execution/ResolveInfo;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class com/apollographql/execution/SandboxKt {

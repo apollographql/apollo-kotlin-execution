@@ -16,7 +16,8 @@ kotlin {
         api(libs.apollo.ast)
         api(libs.apollo.api)
         implementation(libs.atomicfu)
-        implementation(libs.coroutines)
+        api(libs.coroutines)
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
       }
     }
 

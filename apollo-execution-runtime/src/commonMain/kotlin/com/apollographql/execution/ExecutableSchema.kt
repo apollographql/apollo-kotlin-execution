@@ -4,25 +4,22 @@ import com.apollographql.apollo.annotations.ApolloExperimental
 import com.apollographql.apollo.api.Error
 import com.apollographql.apollo.api.ExecutionContext
 import com.apollographql.apollo.ast.*
-import com.apollographql.execution.internal.OperationExecutor
-import com.apollographql.execution.internal.ResolveType
-import com.apollographql.execution.internal.TypeChecker
-import com.apollographql.execution.internal.introspectionCoercings
-import com.apollographql.execution.internal.introspectionResolvers
+import com.apollographql.execution.internal.*
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 @Suppress("UNCHECKED_CAST")
 @OptIn(ApolloExperimental::class)
 class ExecutableSchema internal constructor(
-    private val schema: Schema,
-    private val persistedDocumentCache: PersistedDocumentCache?,
-    private val instrumentations: List<Instrumentation>,
-    private val resolvers: Map<String, Resolver>,
-    private val coercings: Map<String, Coercing<*>>,
-    private val defaultResolver: Resolver,
-    private val resolveType: ResolveType,
-    private val roots: Roots,
+  private val schema: Schema,
+  private val persistedDocumentCache: PersistedDocumentCache?,
+  private val instrumentations: List<Instrumentation>,
+  private val resolvers: Map<String, Resolver>,
+  private val coercings: Map<String, Coercing<*>>,
+  private val defaultResolver: Resolver,
+  private val resolveType: ResolveType,
+  private val roots: Roots,
 ) {
 
   class Builder {
@@ -86,7 +83,8 @@ class ExecutableSchema internal constructor(
     }
 
     fun build(): ExecutableSchema {
-      val definitions = builtinDefinitions().filter { it !is GQLScalarTypeDefinition } + (schema?.definitions ?: error("A schema is required to build an ExecutableSchema"))
+      val definitions = builtinDefinitions().filter { it !is GQLScalarTypeDefinition } + (schema?.definitions
+        ?: error("A schema is required to build an ExecutableSchema"))
       val schema = GQLDocument(definitions, null).toSchema()
 
       val resolvers = buildMap {
@@ -107,18 +105,18 @@ class ExecutableSchema internal constructor(
       }
 
       return ExecutableSchema(
-          schema,
-          persistedDocumentCache,
-          instrumentations,
-          resolvers,
-          coercings,
-          defaultResolver ?: ThrowingResolver,
-          resolveType,
-          Roots.create(
-              queryRoot = queryRoot,
-              mutationRoot = mutationRoot,
-              subscriptionRoot = subscriptionRoot
-          )
+        schema,
+        persistedDocumentCache,
+        instrumentations,
+        resolvers,
+        coercings,
+        defaultResolver ?: ThrowingResolver,
+        resolveType,
+        Roots(
+          query = queryRoot,
+          mutation = mutationRoot,
+          subscription = subscriptionRoot
+        )
       )
     }
 
@@ -135,8 +133,8 @@ class ExecutableSchema internal constructor(
     }
   }
 
-  private fun validateDocument(document: String): PersistedDocument {
-    val parseResult = document.parseAsGQLDocument()
+  private fun parseAndValidateDocument(documentString: String): PersistedDocument {
+    val parseResult = documentString.parseAsGQLDocument()
     var issues = parseResult.issues.filter { it is GraphQLIssue }
     if (issues.isNotEmpty()) {
       return PersistedDocument(null, issues)
@@ -153,11 +151,29 @@ class ExecutableSchema internal constructor(
   }
 
   internal sealed interface DocumentResult
-  internal class DocumentError(val errors: List<Error>) : DocumentResult  {
-    constructor(message: String): this(listOf(Error.Builder(message).build()))
+  internal class DocumentError(val errors: List<Error>) : DocumentResult {
+    constructor(message: String) : this(listOf(Error.Builder(message).build()))
   }
 
   internal class DocumentSuccess(val document: GQLDocument) : DocumentResult
+
+  internal sealed interface OperationResult
+
+  /**
+   * @property errors the errors while getting this operation:
+   * - validation errors
+   * - operation name not found
+   */
+  internal class OperationError(val errors: List<Error>) : OperationResult {
+    constructor(message: String) : this(listOf(Error.Builder(message).build()))
+  }
+
+  internal class OperationSuccess(
+    val operation: GQLOperationDefinition,
+    val fragments: Map<String, GQLFragmentDefinition>,
+    val variableValues: Map<String, InternalValue>
+  ) :
+    OperationResult
 
   private fun getValidatedDocument(request: GraphQLRequest): DocumentResult {
     val persistedQuery = request.extensions.get("persistedQuery")
@@ -185,7 +201,7 @@ class ExecutableSchema internal constructor(
           return DocumentError("PersistedQueryNotFound")
         }
 
-        persistedDocument = validateDocument(request.document)
+        persistedDocument = parseAndValidateDocument(request.document)
 
         /**
          * Note this code trusts the client for the id. Given that APQs are not a security
@@ -197,7 +213,7 @@ class ExecutableSchema internal constructor(
       if (request.document == null) {
         return DocumentError("no GraphQL document found")
       }
-      persistedDocument = validateDocument(request.document)
+      persistedDocument = parseAndValidateDocument(request.document)
     }
 
     if (persistedDocument.issues.isNotEmpty()) {
@@ -212,25 +228,17 @@ class ExecutableSchema internal constructor(
     return DocumentSuccess(gqlDocument)
   }
 
-  internal sealed interface OperationExecutorResult
-  internal class OperationExecutorError(val errors: List<Error>) : OperationExecutorResult {
-    constructor(message: String): this(listOf(Error.Builder(message).build()))
-  }
-  internal class OperationExecutorSuccess(val operationExecutor: OperationExecutor) : OperationExecutorResult
-
-  private fun getOperationExecutor(request: GraphQLRequest, context: ExecutionContext): OperationExecutorResult {
+  private fun getOperation(request: GraphQLRequest): OperationResult {
     val documentResult = getValidatedDocument(request)
-
     if (documentResult is DocumentError) {
-      return OperationExecutorError(documentResult.errors)
+      return OperationError(documentResult.errors)
     }
-
     val document = (documentResult as DocumentSuccess).document
 
     val operations = document.definitions.filterIsInstance<GQLOperationDefinition>()
     val operation = when {
       operations.isEmpty() -> {
-        return OperationExecutorError("The document does not contain any operation.")
+        return OperationError("The document does not contain any operation.")
       }
 
       operations.size == 1 -> {
@@ -239,75 +247,97 @@ class ExecutableSchema internal constructor(
 
       else -> {
         if (request.operationName == null) {
-          return OperationExecutorError("The document contains multiple operations. Use 'operationName' to indicate which one to execute.")
+          return OperationError("The document contains multiple operations. Use 'operationName' to indicate which one to execute.")
         }
         val ret = operations.firstOrNull { it.name == request.operationName }
         if (ret == null) {
-          return OperationExecutorError("No operation named '${request.operationName}' found. Double check operationName.")
+          return OperationError("No operation named '${request.operationName}' found. Double check operationName.")
         }
         ret
       }
     }
     val fragments = document.definitions.filterIsInstance<GQLFragmentDefinition>().associateBy { it.name }
 
-    return OperationExecutorSuccess(
-        OperationExecutor(
-            operation = operation,
-            fragments = fragments,
-            executionContext = context,
-            variables = request.variables,
-            schema = schema,
-            resolvers = resolvers,
-            defaultResolver = defaultResolver,
-            resolveType = resolveType,
-            coercings = coercings,
-            instrumentations = instrumentations,
-            roots = roots
-        )
+    val variableValues = try {
+      coerceVariableValues(schema, operation.variableDefinitions, request.variables, coercings)
+    } catch (e: Exception) {
+      return OperationError("Cannot coerce variable values: '${e.message}'")
+    }
+    return OperationSuccess(operation, fragments, variableValues)
+  }
+
+  private fun GQLOperationDefinition.bubbles(): Boolean {
+    return !directives.any { it.name == "noBubblesPlease" }
+  }
+
+  suspend fun execute(
+    request: GraphQLRequest,
+    executionContext: ExecutionContext = ExecutionContext.Empty
+  ): GraphQLResponse {
+    val operationResult = getOperation(request)
+
+    when (operationResult) {
+      is OperationError -> {
+        return GraphQLResponse.Builder()
+          .errors(operationResult.errors)
+          .build()
+      }
+
+      is OperationSuccess -> {
+        return coroutineScope {
+          val operationExecutor = operationExecutor(operationResult, executionContext)
+          operationExecutor.execute(operationResult.operation)
+        }
+      }
+    }
+  }
+
+  fun subscribe(
+    request: GraphQLRequest,
+    executionContext: ExecutionContext = ExecutionContext.Empty
+  ): Flow<SubscriptionEvent> {
+    val operationResult = getOperation(request)
+    return when (operationResult) {
+      is OperationError -> flowOf(SubscriptionError(operationResult.errors))
+      is OperationSuccess -> {
+        val operationExecutor = operationExecutor(operationResult, executionContext)
+        operationExecutor.subscribe(operationResult.operation)
+      }
+    }
+  }
+
+  private fun operationExecutor(operationResult: OperationSuccess, executionContext: ExecutionContext) =
+    OperationExecutor(
+      fragments = operationResult.fragments,
+      variableValues = operationResult.variableValues,
+      bubbles = operationResult.operation.bubbles(),
+      executionContext = executionContext,
+      coercings = coercings,
+      defaultResolver = defaultResolver,
+      instrumentations = instrumentations,
+      resolveType = resolveType,
+      resolvers = resolvers,
+      roots = roots,
+      schema = schema,
     )
-  }
-
-  fun execute(request: GraphQLRequest, context: ExecutionContext): GraphQLResponse {
-    return when (val result = getOperationExecutor(request, context)) {
-      is OperationExecutorError -> GraphQLResponse(null, result.errors, null)
-      is OperationExecutorSuccess -> result.operationExecutor.execute()
-    }
-  }
-
-  fun executeSubscription(request: GraphQLRequest, context: ExecutionContext): Flow<SubscriptionEvent> {
-    return when (val result = getOperationExecutor(request, context)) {
-      is OperationExecutorError -> flowOf(SubscriptionError(result.errors))
-      is OperationExecutorSuccess -> result.operationExecutor.executeSubscription()
-    }
-  }
-
-  private fun errorResponse(errors: List<Error>): GraphQLResponse {
-    return GraphQLResponse(null, errors, null)
-  }
 
   private fun List<Issue>.toErrors(): List<Error> {
     return map {
       Error.Builder(
-          message = it.message,
+        message = it.message,
       ).locations(
-          listOf(Error.Location(it.sourceLocation!!.line, it.sourceLocation!!.column))
+        listOf(Error.Location(it.sourceLocation!!.line, it.sourceLocation!!.column))
       ).build()
     }
   }
 }
 
-private fun resolveType(typeCheckers: Map<String, TypeChecker>) : ResolveType {
+private fun resolveType(typeCheckers: Map<String, TypeChecker>): ResolveType {
   return { obj, resolveTypeInfo ->
     resolveTypeInfo.schema.possibleTypes(resolveTypeInfo.type).first {
       typeCheckers.get(it)?.invoke(obj) == true
     }
   }
-}
-
-internal fun errorResponse(message: String): GraphQLResponse {
-  return GraphQLResponse.Builder()
-      .errors(listOf(Error.Builder(message).build()))
-      .build()
 }
 
 /**
@@ -318,7 +348,7 @@ sealed interface SubscriptionEvent
 /**
  * A response from the stream. May contain field errors.
  */
-class SubscriptionResponse(val response: GraphQLResponse): SubscriptionEvent
+class SubscriptionResponse(val response: GraphQLResponse) : SubscriptionEvent
 
 /**
  * This subscription failed.
@@ -327,4 +357,4 @@ class SubscriptionResponse(val response: GraphQLResponse): SubscriptionEvent
  * For convenience, [SubscriptionError] uses the same error type as the GraphQL errors but these are not in the same domain. Another server
  * implementation could decide to use something else.
  */
-class SubscriptionError(val errors: List<Error>): SubscriptionEvent
+class SubscriptionError(val errors: List<Error>) : SubscriptionEvent

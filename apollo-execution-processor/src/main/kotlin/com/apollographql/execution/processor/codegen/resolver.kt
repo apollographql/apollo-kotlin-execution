@@ -50,7 +50,7 @@ private fun argumentCodeBlock(sirArgument: SirArgumentDefinition): CodeBlock {
           "getRequiredArgument"
         }
         add(
-            "%L·=·it.$getArgument(%S).cast()",
+            "%L·=·it.$getArgument(%S)",
             sirArgument.kotlinName,
             sirArgument.name,
         )

@@ -7,6 +7,8 @@ import com.apollographql.apollo.ast.GQLFieldDefinition
 import com.apollographql.apollo.ast.Schema
 import com.apollographql.apollo.ast.definitionFromScope
 import com.apollographql.execution.internal.InternalValue
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlin.coroutines.coroutineContext
 
 fun interface Resolver {
   /**
@@ -19,44 +21,28 @@ fun interface Resolver {
    * }
    * ```
    *
+   * @param resolveInfo information about the field being resolved
    * @return the resolved result:
    * - If the field type is a non-nullable type and [resolve] returns null, a field error is raised.
    * - For leaf types (scalars and enums), the resolved result must be coercible according to the type of the field.
    * - For composite types, the resolved result is an opaque type that is passed down to child resolvers.
    * - For list types, the resolved result must be a kotlin List.
    */
-  fun resolve(resolveInfo: ResolveInfo): Any?
+  suspend fun resolve(resolveInfo: ResolveInfo): Any?
 }
 
-internal interface Roots {
-  fun query(): Any
-  fun mutation(): Any
-  fun subscription(): Any
 
-  companion object {
-    fun create(queryRoot: (() -> Any)?, mutationRoot: (() -> Any)?, subscriptionRoot: (() -> Any)?): Roots {
-      return object : Roots {
-        override fun query(): Any {
-          return queryRoot?.invoke() ?: DefaultQueryRoot
-        }
-
-        override fun mutation(): Any {
-          return mutationRoot?.invoke() ?: DefaultMutationRoot
-        }
-
-        override fun subscription(): Any {
-          return subscriptionRoot?.invoke() ?: DefaultSubscriptionRoot
-        }
-      }
-    }
-  }
-}
+internal class Roots(
+  val query: (() -> Any?)?,
+  val mutation: (() -> Any?)?,
+  val subscription: (() -> Any?)?
+)
 
 /**
  * A resolver that always throws
  */
 internal object ThrowingResolver : Resolver {
-  override fun resolve(resolveInfo: ResolveInfo): Any? {
+  override suspend fun resolve(resolveInfo: ResolveInfo): Any? {
     error("No resolver found for '${resolveInfo.coordinates()}' and no defaultResolver set.")
   }
 }
@@ -69,31 +55,27 @@ interface Instrumentation {
 }
 
 class ResolveTypeInfo(
-    val type: String,
-    val schema: Schema
+  val type: String,
+  val schema: Schema
 )
 
 class ResolveInfo internal constructor(
-    /**
-     * The parent object
-     *
-     * @see [ExecutableSchema.Builder.queryRoot]
-     * @see [ExecutableSchema.Builder.mutationRoot]
-     * @see [ExecutableSchema.Builder.subscriptionRoot]
-     */
-    val parentObject: Any?,
-    val executionContext: ExecutionContext,
-    val fields: List<GQLField>,
-    val schema: Schema,
-    /**
-     * Coerced variables
-     */
-    val variables: Map<String, Any?>,
-    /**
-     * Coerced arguments
-     */
-    private val arguments: Map<String, Any?>,
-    val parentType: String,
+  /**
+   * The parent object
+   *
+   * @see [ExecutableSchema.Builder.queryRoot]
+   * @see [ExecutableSchema.Builder.mutationRoot]
+   * @see [ExecutableSchema.Builder.subscriptionRoot]
+   */
+  val parentObject: Any?,
+  val executionContext: ExecutionContext,
+  val fields: List<GQLField>,
+  val schema: Schema,
+  /**
+   * Coerced arguments
+   */
+  private val arguments: Map<String, Any?>,
+  val parentType: String,
 ) {
   val field: GQLField
     get() = fields.first()
@@ -103,27 +85,32 @@ class ResolveInfo internal constructor(
 
   fun fieldDefinition(): GQLFieldDefinition {
     return field.definitionFromScope(schema, parentType)
-        ?: error("Cannot find fieldDefinition $parentType.${field.name}")
+      ?: error("Cannot find fieldDefinition $parentType.${field.name}")
   }
 
   /**
-   * Returns the argument for field [name]
+   * Returns the argument for [name]. It is the caller responsibility to use a type parameter [T] matching
+   * the expected argument type. If not, [getArgument] may succeed but subsequent calls may fail with [ClassCastException].
    *
-   * The argument is coerced according to the configured [Coercing] so it is safe to force cast the result to the matching type.
+   * @param T the type of the expected [InternalValue]. The caller must have knowledge of what Kotlin type
+   * to expect for this argument. T
    *
+   * @return the argument for [name] or [Optional.Absent] if that argument is not present. The return
+   * value is automatically cast to [T].
    */
-  fun getArgument(
-      name: String,
-  ): Optional<InternalValue> {
-    return if(!arguments.containsKey(name)) {
+  fun <T> getArgument(
+    name: String,
+  ): Optional<T> {
+    return if (!arguments.containsKey(name)) {
       Optional.absent()
     } else {
-      Optional.present(arguments.get(name))
+      @Suppress("UNCHECKED_CAST")
+      Optional.present(arguments.get(name)) as Optional<T>
     }
   }
 
-  fun getRequiredArgument(name: String): InternalValue {
-    return getArgument(name).getOrThrow()
+  fun <T> getRequiredArgument(name: String): T {
+    return getArgument<T>(name).getOrThrow()
   }
 
   fun coordinates(): String {

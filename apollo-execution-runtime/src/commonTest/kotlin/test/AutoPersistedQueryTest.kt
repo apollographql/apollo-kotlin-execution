@@ -4,6 +4,7 @@ import com.apollographql.apollo.api.ExecutionContext
 import com.apollographql.execution.ExecutableSchema
 import com.apollographql.execution.GraphQLRequest
 import com.apollographql.execution.InMemoryPersistedDocumentCache
+import kotlinx.coroutines.runBlocking
 import okio.Buffer
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -23,7 +24,7 @@ class AutoPersistedQueryTest {
         """.trimIndent()
 
     @Test
-    fun queryIsPersisted() {
+    fun queryIsPersisted() = runBlocking {
         val executableSchema = ExecutableSchema.Builder()
             .schema(schema)
             .persistedDocumentCache(InMemoryPersistedDocumentCache())
@@ -51,7 +52,7 @@ class AutoPersistedQueryTest {
     }
 
     @Test
-    fun errorIsReceivedIfNoCache() {
+    fun errorIsReceivedIfNoCache() = runBlocking {
         val executableSchema = ExecutableSchema.Builder()
             .schema(schema)
             .build()

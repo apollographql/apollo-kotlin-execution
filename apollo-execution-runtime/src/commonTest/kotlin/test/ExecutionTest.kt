@@ -1,110 +1,157 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package test
 
+import com.apollographql.apollo.api.Error
 import com.apollographql.apollo.api.ExecutionContext
-import com.apollographql.apollo.ast.GQLListType
-import com.apollographql.apollo.ast.GQLNamedType
-import com.apollographql.apollo.ast.GQLNonNullType
-import com.apollographql.apollo.ast.GQLObjectTypeDefinition
-import com.apollographql.apollo.ast.GQLScalarTypeDefinition
-import com.apollographql.apollo.ast.GQLType
-import com.apollographql.apollo.ast.Schema
-import com.apollographql.execution.ExecutableSchema
-import com.apollographql.execution.GraphQLRequest
-import com.apollographql.execution.ResolveInfo
-import com.apollographql.execution.Resolver
+import com.apollographql.execution.*
+import com.apollographql.execution.internal.toGraphQLResponse
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
-private val randomResolver = object : Resolver {
-    fun GQLType.randomValue(schema: Schema): Any? {
-        return when (this) {
-            is GQLNonNullType -> type.randomValue(schema)
-            is GQLListType -> listOf(type.randomValue(schema))
-            is GQLNamedType -> {
-                when (schema.typeDefinition(name)) {
-                    is GQLObjectTypeDefinition -> mapOf("__typename" to name)
-                    is GQLScalarTypeDefinition -> when (name) {
-                        "String" -> "Hello"
-                        "Int" -> 42
-                        "Float" -> 3.0
-                        "Boolean" -> true
-                        else -> error("No scalar for type '$name'")
-                    }
-                    else -> error("No random value for type '$name'")
-                }
-            }
-        }
-    }
-
-    override fun resolve(resolveInfo: ResolveInfo): Any? {
-        val type = resolveInfo.fieldDefinition().type
-
-        return type.randomValue(resolveInfo.schema)
-    }
-}
-
-internal fun String.toGraphQLRequest(): GraphQLRequest = GraphQLRequest.Builder()
-    .document(this)
-    .build()
 
 class ExecutionTest {
 
-    @Test
-    fun simple() {
-        // language=graphql
-        val schema = """
+  @Test
+  fun simple() = runBlocking {
+    val schema = """
             type Query {
                 foo: String!
             }
         """.trimIndent()
 
-        // language=graphql
-        val document = """
+    val document = """
             {
                 foo
             }
         """.trimIndent()
 
-        val simpleMainResolver = object : Resolver {
-            override fun resolve(resolveInfo: ResolveInfo): Any? {
-                if (resolveInfo.parentType != "Query" || resolveInfo.fieldName != "foo") return null
-                return "42"
-            }
-        }
-
-        val response = ExecutableSchema.Builder()
-            .schema(schema)
-            .defaultResolver(simpleMainResolver)
-            .build()
-            .execute(document.toGraphQLRequest(), ExecutionContext.Empty)
-        println(response.data)
-        println(response.errors)
+    val simpleMainResolver = object : Resolver {
+      override suspend fun resolve(resolveInfo: ResolveInfo): Any? {
+        if (resolveInfo.parentType != "Query" || resolveInfo.fieldName != "foo") return null
+        return "42"
+      }
     }
 
-    @Test
-    fun argument() {
-        val schema = """
+    val response = ExecutableSchema.Builder()
+      .schema(schema)
+      .defaultResolver(simpleMainResolver)
+      .build()
+      .execute(document.toGraphQLRequest(), ExecutionContext.Empty)
+    assertEquals(mapOf("foo" to "42"), response.data)
+    assertEquals(null, response.errors)
+  }
+
+  @Test
+  fun argument() = runBlocking {
+    val schema = """
             type Query {
                 foo(first: Int): String!
             }
         """.trimIndent()
 
-        val document = """
+    val document = """
             {
-                foo(first = ${'$'}first)
+                foo(first: 42)
             }
         """.trimIndent()
 
 
-        val response = ExecutableSchema.Builder()
-            .schema(schema)
-            .defaultResolver(randomResolver)
-            .resolveType { obj, _ ->
-                @Suppress("UNCHECKED_CAST")
-                (obj as Map<String, String?>).get("__typename")
-            }
-            .build()
-            .execute(document.toGraphQLRequest(), ExecutionContext.Empty)
-        println(response.data)
-        println(response.errors)
+    val resolver = Resolver { resolveInfo ->
+      resolveInfo.getArgument<Int>("first").getOrNull()?.toString(16)
     }
+
+    val response = ExecutableSchema.Builder()
+      .schema(schema)
+      .defaultResolver(resolver)
+      .build()
+      .execute(document.toGraphQLRequest(), ExecutionContext.Empty)
+
+    assertEquals(mapOf("foo" to "2a"), response.data)
+    assertEquals(null, response.errors)
+  }
+
+  @Test
+  fun subscription() {
+    val schema = """
+            type Query {
+                foo: String
+            }
+            type Subscription {
+                foo: Int
+            }
+        """.trimIndent()
+
+    val document = """
+            subscription {
+                foo
+            }
+        """.trimIndent()
+
+    val executableSchema = ExecutableSchema.Builder()
+      .schema(schema)
+      .defaultResolver { resolveInfo ->
+        val ret: Flow<Int> = when (resolveInfo.parentType) {
+          "Subscription" -> flow {
+            repeat(5) {
+              emit(it)
+              delay(1)
+            }
+          }
+
+          else -> error("never called")
+        }
+
+        ret
+      }
+      .build()
+
+    val response = runBlocking {
+      executableSchema.subscribe(document.toGraphQLRequest()).toList()
+    }
+
+    assertEquals(
+      listOf(0, 1, 2, 3, 4),
+      response.filterIsInstance<SubscriptionResponse>().map { it.response.data as Map<String, Any?> }
+        .map { it.get("foo") }
+    )
+  }
+
+  @Test
+  fun invalidDSubscription() {
+    val schema = """
+            type Query {
+                foo: String
+            }
+            type Subscription {
+                foo: Int
+            }
+        """.trimIndent()
+
+    val document = """
+            subscription {
+                # invalid field
+                bar
+            }
+        """.trimIndent()
+
+    val executableSchema = ExecutableSchema.Builder()
+      .schema(schema)
+      .build()
+
+    val response = runBlocking {
+      executableSchema.subscribe(document.toGraphQLRequest()).toList()
+    }
+
+    response.filterIsInstance<SubscriptionError>().single().errors.single().apply {
+      assertEquals("Can't query `bar` on type `Subscription`", message)
+      assertEquals(3, locations.orEmpty().single().line)
+      assertEquals(5, locations.orEmpty().single().column)
+    }
+  }
 }

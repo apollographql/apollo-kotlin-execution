@@ -72,8 +72,8 @@ private fun GraphQLResponse.toByteArray(): ByteArray {
 
 suspend fun ApplicationRequest.toGraphQLRequest(): GraphQLResult<GraphQLRequest> {
   return when (httpMethod) {
-    HttpMethod.Post -> receiveChannel().buffer().parseGraphQLRequest()
-    HttpMethod.Get -> queryString().parseUrlToGraphQLRequest()
+    HttpMethod.Post -> receiveChannel().buffer().parseAsGraphQLRequest()
+    HttpMethod.Get -> queryString().parseAsGraphQLRequest()
     else -> GraphQLError(Exception("Unhandled method: $httpMethod"))
   }
 }
