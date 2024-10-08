@@ -328,19 +328,22 @@ private class TypeDefinitionContext(
       logger.error("Cannot map to a GraphQL output type", this)
       return null
     }
-    val propertyFields = getDeclaredProperties().filter {
-      it.isPublic()
-    }.map {
-      it.toSirFieldDefinition(operationType)
-    }
 
-    val functionFields = getDeclaredFunctions().filter {
-      it.isPublic() && !it.isConstructor()
-    }.mapNotNull {
-      it.toSirFieldDefinition(operationType)
-    }
-
-    val allFields = propertyFields.toList() + functionFields.toList()
+    val allFields = declarations.filter { it.isPublic() }.mapNotNull {
+      when (it) {
+        is KSPropertyDeclaration -> {
+          it.toSirFieldDefinition(operationType)
+        }
+        is KSFunctionDeclaration -> {
+          if (it.isConstructor()) {
+            null
+          } else {
+            it.toSirFieldDefinition(operationType)
+          }
+        }
+        else ->null
+      }
+    }.toList()
 
     val name = graphqlName()
     val description = docString
