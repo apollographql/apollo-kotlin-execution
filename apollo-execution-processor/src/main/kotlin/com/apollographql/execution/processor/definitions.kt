@@ -56,6 +56,8 @@ private class TypeDefinitionContext(
    */
   val directiveDefinitions = mutableMapOf<String, SirDirectiveDefinition?>()
 
+  val usedDirectiveNames = mutableSetOf<String>()
+
   val ksFiles = mutableListOf<KSFile?>()
 
   /**
@@ -84,6 +86,7 @@ private class TypeDefinitionContext(
       declarationsToVisit.add(DeclarationToVisit(subscription, VisitContext.OUTPUT, "subscription"))
     }
 
+    val usedNames = mutableSetOf<String>()
     while (declarationsToVisit.isNotEmpty()) {
       val declarationToVisit = declarationsToVisit.removeFirst()
       val declaration = declarationToVisit.declaration
@@ -98,6 +101,13 @@ private class TypeDefinitionContext(
         typeDefinitions.put(qualifiedName, builtinScalarDefinition(qualifiedName))
         continue
       }
+
+      val name = declaration.graphqlName()
+      if (usedNames.contains(name)) {
+        logger.error("Duplicate type '$name'. Either rename the declaration or use @GraphQLName.", declaration)
+        continue
+      }
+      usedNames.add(name)
 
       /**
        * Track the files
@@ -246,6 +256,14 @@ private class TypeDefinitionContext(
         // Eagerly build the directive definitions as we need the kotlin -> graphql argument mapping
         val declaration = it.annotationType.resolve().declaration
         ksFiles.add(declaration.containingFile)
+
+        val name = declaration.graphqlName()
+        if (usedDirectiveNames.contains(name)) {
+          logger.error("Duplicate directive '$name'. Either rename the declaration or use @GraphQLName.", it)
+          return@forEach
+        }
+        usedDirectiveNames.add(name)
+
         declaration.toSirDirectiveDefinition().also {
           directiveDefinitions.put(qn, it)
         }
