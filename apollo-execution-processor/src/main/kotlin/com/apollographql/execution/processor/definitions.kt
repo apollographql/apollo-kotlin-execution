@@ -56,6 +56,8 @@ private class TypeDefinitionContext(
    */
   val directiveDefinitions = mutableMapOf<String, SirDirectiveDefinition?>()
 
+  val usedDirectiveNames = mutableSetOf<String>()
+
   val ksFiles = mutableListOf<KSFile?>()
 
   /**
@@ -84,6 +86,7 @@ private class TypeDefinitionContext(
       declarationsToVisit.add(DeclarationToVisit(subscription, VisitContext.OUTPUT, "subscription"))
     }
 
+    val usedNames = mutableSetOf<String>()
     while (declarationsToVisit.isNotEmpty()) {
       val declarationToVisit = declarationsToVisit.removeFirst()
       val declaration = declarationToVisit.declaration
@@ -94,20 +97,26 @@ private class TypeDefinitionContext(
         // Already visited
         continue
       }
+
       if (builtinTypes.contains(qualifiedName)) {
         typeDefinitions.put(qualifiedName, builtinScalarDefinition(qualifiedName))
         continue
       }
 
-      /**
-       * Track the files
-       */
-      ksFiles.add(declaration.containingFile)
+      val name = declaration.graphqlName()
+      if (usedNames.contains(name)) {
+        logger.error("Duplicate type '$name'. Either rename the declaration or use @GraphQLName.", declaration)
+        typeDefinitions.put(qualifiedName, null)
+        continue
+      }
+      usedNames.add(name)
 
       if (declaration.typeParameters.isNotEmpty()) {
         logger.error("Generic classes are not supported")
+        typeDefinitions.put(qualifiedName, null)
         continue
       }
+
       if (unsupportedTypes.contains(qualifiedName)) {
         logger.error(
           "'$qualifiedName' is not a supported built-in type. Either use one of the built-in types (Boolean, String, Int, Double) or use a custom scalar.",
@@ -116,6 +125,7 @@ private class TypeDefinitionContext(
         typeDefinitions.put(qualifiedName, null)
         continue
       }
+
       if (declaration.isExternal()) {
         logger.error(
           "'$qualifiedName' doesn't have a containing file and probably comes from a dependency.",
@@ -124,6 +134,12 @@ private class TypeDefinitionContext(
         typeDefinitions.put(qualifiedName, null)
         continue
       }
+
+      /**
+       * Track the files
+       */
+      ksFiles.add(declaration.containingFile)
+      
       if (declaration is KSTypeAlias) {
         typeDefinitions.put(qualifiedName, declaration.toSirScalarDefinition(qualifiedName))
         continue
@@ -246,6 +262,14 @@ private class TypeDefinitionContext(
         // Eagerly build the directive definitions as we need the kotlin -> graphql argument mapping
         val declaration = it.annotationType.resolve().declaration
         ksFiles.add(declaration.containingFile)
+
+        val name = declaration.graphqlName()
+        if (usedDirectiveNames.contains(name)) {
+          logger.error("Duplicate directive '$name'. Either rename the declaration or use @GraphQLName.", it)
+          return@forEach
+        }
+        usedDirectiveNames.add(name)
+
         declaration.toSirDirectiveDefinition().also {
           directiveDefinitions.put(qn, it)
         }
@@ -329,7 +353,14 @@ private class TypeDefinitionContext(
       return null
     }
 
+    val usedNames = mutableSetOf<String>()
     val allFields = declarations.filter { it.isPublic() }.mapNotNull {
+      val name = it.graphqlName()
+      if (usedNames.contains(name)) {
+        logger.error("Duplicate field '$name'. Either rename the declaration or use @GraphQLName.", it)
+        return@mapNotNull null
+      }
+      usedNames.add(name)
       when (it) {
         is KSPropertyDeclaration -> {
           it.toSirFieldDefinition(operationType)
