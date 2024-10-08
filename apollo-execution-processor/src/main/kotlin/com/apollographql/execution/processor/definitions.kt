@@ -329,7 +329,14 @@ private class TypeDefinitionContext(
       return null
     }
 
+    val usedNames = mutableSetOf<String>()
     val allFields = declarations.filter { it.isPublic() }.mapNotNull {
+      val name = it.graphqlName()
+      if (usedNames.contains(name)) {
+        logger.error("Duplicate field '$name'. Either rename the declaration or use @GraphQLName.", it)
+        return@mapNotNull null
+      }
+      usedNames.add(name)
       when (it) {
         is KSPropertyDeclaration -> {
           it.toSirFieldDefinition(operationType)
