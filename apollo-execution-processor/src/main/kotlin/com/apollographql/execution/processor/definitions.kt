@@ -97,6 +97,7 @@ private class TypeDefinitionContext(
         // Already visited
         continue
       }
+
       if (builtinTypes.contains(qualifiedName)) {
         typeDefinitions.put(qualifiedName, builtinScalarDefinition(qualifiedName))
         continue
@@ -105,19 +106,17 @@ private class TypeDefinitionContext(
       val name = declaration.graphqlName()
       if (usedNames.contains(name)) {
         logger.error("Duplicate type '$name'. Either rename the declaration or use @GraphQLName.", declaration)
+        typeDefinitions.put(qualifiedName, null)
         continue
       }
       usedNames.add(name)
 
-      /**
-       * Track the files
-       */
-      ksFiles.add(declaration.containingFile)
-
       if (declaration.typeParameters.isNotEmpty()) {
         logger.error("Generic classes are not supported")
+        typeDefinitions.put(qualifiedName, null)
         continue
       }
+
       if (unsupportedTypes.contains(qualifiedName)) {
         logger.error(
           "'$qualifiedName' is not a supported built-in type. Either use one of the built-in types (Boolean, String, Int, Double) or use a custom scalar.",
@@ -126,6 +125,7 @@ private class TypeDefinitionContext(
         typeDefinitions.put(qualifiedName, null)
         continue
       }
+
       if (declaration.isExternal()) {
         logger.error(
           "'$qualifiedName' doesn't have a containing file and probably comes from a dependency.",
@@ -134,6 +134,12 @@ private class TypeDefinitionContext(
         typeDefinitions.put(qualifiedName, null)
         continue
       }
+
+      /**
+       * Track the files
+       */
+      ksFiles.add(declaration.containingFile)
+      
       if (declaration is KSTypeAlias) {
         typeDefinitions.put(qualifiedName, declaration.toSirScalarDefinition(qualifiedName))
         continue
