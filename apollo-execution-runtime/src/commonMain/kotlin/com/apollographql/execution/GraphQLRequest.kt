@@ -2,11 +2,11 @@
 
 package com.apollographql.execution
 
+import arrow.core.flatMap
 import com.apollographql.apollo.annotations.ApolloInternal
 import com.apollographql.apollo.api.http.internal.urlDecode
 import com.apollographql.apollo.api.json.jsonReader
 import com.apollographql.apollo.api.json.readAny
-import com.apollographql.execution.internal.ExternalValue
 import okio.Buffer
 import okio.BufferedSource
 import okio.use
@@ -62,27 +62,27 @@ class GraphQLRequest internal constructor(
  * Note: this is typically used by subscriptions and/or post requests. GET request encode "variables" and "extensions" as JSON and
  * need to be preprocessed first. See [toExternalValueMap].
  */
-fun Map<String, ExternalValue>.parseAsGraphQLRequest(): GraphQLResult<GraphQLRequest> {
+fun Map<String, ExternalValue>.parseAsGraphQLRequest(): Result<GraphQLRequest> {
   val map = this
 
   val document = map.get("query")
   if (document !is String?) {
-    return GraphQLError("Expected 'query' to be a string")
+    return Result.failure(Exception("Expected 'query' to be a string"))
   }
 
   val variables = map.get("variables")
   if (variables !is Map<*, *>?) {
-    return GraphQLError("Expected 'variables' to be an object")
+    return Result.failure(Exception("Expected 'variables' to be an object"))
   }
 
   val extensions = map.get("extensions")
   if (extensions !is Map<*, *>?) {
-    return GraphQLError("Expected 'extensions' to be an object")
+    return Result.failure(Exception("Expected 'extensions' to be an object"))
   }
 
   val operationName = map.get("operationName")
   if (operationName !is String?) {
-    return GraphQLError("Expected 'operationName' to be a string")
+    return Result.failure(Exception("Expected 'operationName' to be a string"))
   }
   return GraphQLRequest.Builder()
     .document(document)
@@ -90,22 +90,22 @@ fun Map<String, ExternalValue>.parseAsGraphQLRequest(): GraphQLResult<GraphQLReq
     .extensions(extensions as Map<String, Any?>?)
     .operationName(operationName)
     .build().let {
-      GraphQLSuccess(it)
+      Result.success(it)
     }
 }
 
 @OptIn(ApolloInternal::class)
-fun BufferedSource.parseAsGraphQLRequest(): GraphQLResult<GraphQLRequest> {
+fun BufferedSource.parseAsGraphQLRequest(): Result<GraphQLRequest> {
   val map = try {
     jsonReader().use {
       it.readAny()
     }
   } catch (e: Exception) {
-    return GraphQLError(e)
+    return Result.failure(e)
   }
 
   if (map !is Map<*, *>) {
-    return GraphQLError("The received JSON is not an object")
+    return Result.failure(Exception("The received JSON is not an object"))
   }
 
   map as Map<String, ExternalValue>
@@ -118,13 +118,13 @@ fun BufferedSource.parseAsGraphQLRequest(): GraphQLResult<GraphQLRequest> {
  *
  * @receiver an HTTP query string like `"key1=value1&key2=value2"`
  */
-fun String.parseAsGraphQLRequest(): GraphQLResult<GraphQLRequest> {
+fun String.parseAsGraphQLRequest(): Result<GraphQLRequest> {
   val pairs = split("&")
 
   return pairs.filter { it.isNotBlank() }.map { pair ->
     pair.split("=").let {
       if (it.size != 2) {
-        return GraphQLError("Invalid query parameter '$pair'")
+        return Result.failure(Exception("Invalid query parameter '$pair'"))
       }
       it.get(0).urlDecode() to it.get(1).urlDecode()
     }
@@ -147,12 +147,12 @@ fun String.toGraphQLRequest(): GraphQLRequest {
 /**
  * Converts a multi-map such as one from parsed query params to a map of external values.
  */
-fun Map<String, List<String>>.toExternalValueMap(): GraphQLResult<Map<String, ExternalValue>> {
+fun Map<String, List<String>>.toExternalValueMap(): Result<Map<String, ExternalValue>> {
   val map = mapValues {
     when (it.key) {
       "query" -> {
         if (it.value.size != 1) {
-          return GraphQLError("multiple 'query' parameter found")
+          return Result.failure(Exception("multiple 'query' parameter found"))
         }
 
         it.value.first()
@@ -160,31 +160,31 @@ fun Map<String, List<String>>.toExternalValueMap(): GraphQLResult<Map<String, Ex
 
       "variables" -> {
         if (it.value.size != 1) {
-          return GraphQLError("multiple 'variables' parameter found")
+          return Result.failure(Exception("multiple 'variables' parameter found"))
         }
 
         try {
           it.value.first().readAny()
         } catch (e: Exception) {
-          return GraphQLError(e)
+          return Result.failure(e)
         }
       }
 
       "extensions" -> {
         if (it.value.size != 1) {
-          return GraphQLError("multiple 'extensions' parameter found")
+          return Result.failure(Exception("multiple 'extensions' parameter found"))
         }
 
         try {
           it.value.first().readAny()
         } catch (e: Exception) {
-          return GraphQLError(e)
+          return Result.failure(e)
         }
       }
 
       "operationName" -> {
         if (it.value.size != 1) {
-          return GraphQLError("multiple 'operationName' parameter found")
+          return Result.failure(Exception("multiple 'operationName' parameter found"))
         }
 
         it.value.first()
@@ -194,7 +194,7 @@ fun Map<String, List<String>>.toExternalValueMap(): GraphQLResult<Map<String, Ex
     }
   }
 
-  return GraphQLSuccess(map)
+  return Result.success(map)
 }
 
 @OptIn(ApolloInternal::class)

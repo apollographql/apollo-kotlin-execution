@@ -20,14 +20,16 @@ import com.apollographql.apollo.ast.GQLVariableValue
 import com.apollographql.apollo.ast.Schema
 import com.apollographql.apollo.ast.definitionFromScope
 import com.apollographql.execution.Coercing
+import com.apollographql.execution.InternalValue
 import com.apollographql.execution.scalarCoercingParseLiteral
+import com.apollographql.execution.toInternalValue
 
 internal fun coerceArgumentValues(
-    schema: Schema,
-    typename: String,
-    field: GQLField,
-    coercings: Map<String, Coercing<*>>,
-    coercedVariables: Map<String, InternalValue>,
+  schema: Schema,
+  typename: String,
+  field: GQLField,
+  coercings: Map<String, Coercing<*>>,
+  coercedVariables: Map<String, InternalValue>,
 ): Map<String, InternalValue> {
   val coercedValues = mutableMapOf<String, InternalValue>()
   val argumentValues = field.arguments.associate { it.name to it.value }

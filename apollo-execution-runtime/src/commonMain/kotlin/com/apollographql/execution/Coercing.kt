@@ -2,9 +2,6 @@ package com.apollographql.execution
 
 import com.apollographql.apollo.api.json.JsonNumber
 import com.apollographql.apollo.ast.*
-import com.apollographql.execution.internal.ExternalValue
-import com.apollographql.execution.internal.InternalValue
-import com.apollographql.execution.internal.JsonValue
 
 /**
  * See https://www.graphql.de/blog/scalars-in-depth/

@@ -6,13 +6,10 @@ import com.apollographql.apollo.ast.GQLField
 import com.apollographql.apollo.ast.GQLFieldDefinition
 import com.apollographql.apollo.ast.Schema
 import com.apollographql.apollo.ast.definitionFromScope
-import com.apollographql.execution.internal.InternalValue
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlin.coroutines.coroutineContext
 
 fun interface Resolver {
   /**
-   * Resolves a field. A typical implementation is to use [ResolveInfo.parentObject]:
+   * Resolves a field. A typical implementation uses [ResolveInfo.parentObject]:
    *
    * ```kotlin
    * fun resolve(resolveInfo: ResolveInfo): Any? {
@@ -22,60 +19,47 @@ fun interface Resolver {
    * ```
    *
    * @param resolveInfo information about the field being resolved
-   * @return the resolved result:
-   * - If the field type is a non-nullable type and [resolve] returns null, a field error is raised.
-   * - For leaf types (scalars and enums), the resolved result must be coercible according to the type of the field.
-   * - For composite types, the resolved result is an opaque type that is passed down to child resolvers.
-   * - For list types, the resolved result must be a kotlin List.
+   * @return the resolved result
+   * @throws Exception if something wrong happens. A GraphQL error for that field
+   * is generated.
    */
-  suspend fun resolve(resolveInfo: ResolveInfo): Any?
+  suspend fun resolve(resolveInfo: ResolveInfo): ResolverValue
 }
-
-
-internal class Roots(
-  val query: (() -> Any?)?,
-  val mutation: (() -> Any?)?,
-  val subscription: (() -> Any?)?
-)
 
 /**
  * A resolver that always throws
  */
 internal object ThrowingResolver : Resolver {
-  override suspend fun resolve(resolveInfo: ResolveInfo): Any? {
-    error("No resolver found for '${resolveInfo.coordinates()}' and no defaultResolver set.")
+  override suspend fun resolve(resolveInfo: ResolveInfo): ResolverValue {
+    error("Cannot resolve field '${resolveInfo.parentType}.${resolveInfo.fieldName}': no Resolver found.")
   }
 }
 
-interface Instrumentation {
-  /**
-   * For subscriptions, this is called only once on the root field and then for every data in the nested fields
-   */
-  fun beforeResolve(resolveInfo: ResolveInfo)
-}
-
+/**
+ * @property type the abstract type that needs to be resolved. [type] is always the name of
+ * an interface or union.
+ * @property schema a schema that can be used to resolve [type].
+ */
 class ResolveTypeInfo(
   val type: String,
   val schema: Schema
 )
 
+/**
+ * @property parentObject the object returned by the resolver.
+ * @property parentType the type of the parent object. Always a concrete object type.
+ * @property fields the fields being resolved. Because there may be merged fields, this is
+ * a list, but they will all share the same information except for sub selections.
+ * @property executionContext
+ * @property arguments the coerced arguments.
+ */
 class ResolveInfo internal constructor(
-  /**
-   * The parent object
-   *
-   * @see [ExecutableSchema.Builder.queryRoot]
-   * @see [ExecutableSchema.Builder.mutationRoot]
-   * @see [ExecutableSchema.Builder.subscriptionRoot]
-   */
   val parentObject: Any?,
+  val parentType: String,
   val executionContext: ExecutionContext,
   val fields: List<GQLField>,
   val schema: Schema,
-  /**
-   * Coerced arguments
-   */
-  private val arguments: Map<String, Any?>,
-  val parentType: String,
+  private val arguments: Map<String, InternalValue>,
 ) {
   val field: GQLField
     get() = fields.first()

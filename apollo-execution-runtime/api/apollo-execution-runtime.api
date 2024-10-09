@@ -14,31 +14,32 @@ public abstract interface class com/apollographql/execution/Coercing {
 	public abstract fun serialize (Ljava/lang/Object;)Ljava/lang/Object;
 }
 
-public final class com/apollographql/execution/DefaultMutationRoot : com/apollographql/execution/DefaultRoot {
-	public static final field INSTANCE Lcom/apollographql/execution/DefaultMutationRoot;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
+public final class com/apollographql/execution/CompositeResolverBuilder {
+	public fun <init> ()V
+	public final fun build ()Lcom/apollographql/execution/Resolver;
+	public final fun default (Lcom/apollographql/execution/Resolver;)V
+	public final fun type (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
 }
 
-public final class com/apollographql/execution/DefaultQueryRoot : com/apollographql/execution/DefaultRoot {
-	public static final field INSTANCE Lcom/apollographql/execution/DefaultQueryRoot;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
+public final class com/apollographql/execution/CompositeResolverBuilder$TypeBuilder {
+	public fun <init> ()V
+	public final fun field (Ljava/lang/String;Lcom/apollographql/execution/Resolver;)V
 }
 
-public abstract interface class com/apollographql/execution/DefaultRoot {
+public final class com/apollographql/execution/CompositeResolverKt {
+	public static final fun compositeResolver (Lcom/apollographql/execution/ExecutableSchema$Builder;Lkotlin/jvm/functions/Function1;)Lcom/apollographql/execution/ExecutableSchema$Builder;
 }
 
-public final class com/apollographql/execution/DefaultSubscriptionRoot : com/apollographql/execution/DefaultRoot {
-	public static final field INSTANCE Lcom/apollographql/execution/DefaultSubscriptionRoot;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
+public abstract interface annotation class com/apollographql/execution/CompositeResolverMarker : java/lang/annotation/Annotation {
+}
+
+public final class com/apollographql/execution/ErrorPersistedDocument : com/apollographql/execution/PersistedDocument {
+	public fun <init> (Ljava/util/List;)V
+	public final fun getIssues ()Ljava/util/List;
 }
 
 public final class com/apollographql/execution/ExecutableSchema {
+	public fun <init> (Lcom/apollographql/apollo/ast/Schema;Ljava/util/Map;Lcom/apollographql/execution/RootResolver;Lcom/apollographql/execution/RootResolver;Lcom/apollographql/execution/RootResolver;Lcom/apollographql/execution/Resolver;Lcom/apollographql/execution/TypeResolver;Lcom/apollographql/execution/PersistedDocumentCache;)V
 	public final fun execute (Lcom/apollographql/execution/GraphQLRequest;Lcom/apollographql/apollo/api/ExecutionContext;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun execute$default (Lcom/apollographql/execution/ExecutableSchema;Lcom/apollographql/execution/GraphQLRequest;Lcom/apollographql/apollo/api/ExecutionContext;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public final fun subscribe (Lcom/apollographql/execution/GraphQLRequest;Lcom/apollographql/apollo/api/ExecutionContext;)Lkotlinx/coroutines/flow/Flow;
@@ -48,19 +49,15 @@ public final class com/apollographql/execution/ExecutableSchema {
 public final class com/apollographql/execution/ExecutableSchema$Builder {
 	public fun <init> ()V
 	public final fun addCoercing (Ljava/lang/String;Lcom/apollographql/execution/Coercing;)Lcom/apollographql/execution/ExecutableSchema$Builder;
-	public final fun addInstrumentation (Lcom/apollographql/execution/Instrumentation;)Lcom/apollographql/execution/ExecutableSchema$Builder;
-	public final fun addResolver (Ljava/lang/String;Lcom/apollographql/execution/Resolver;)Lcom/apollographql/execution/ExecutableSchema$Builder;
-	public final fun addResolver (Ljava/lang/String;Ljava/lang/String;Lcom/apollographql/execution/Resolver;)Lcom/apollographql/execution/ExecutableSchema$Builder;
-	public final fun addTypeChecker (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lcom/apollographql/execution/ExecutableSchema$Builder;
 	public final fun build ()Lcom/apollographql/execution/ExecutableSchema;
-	public final fun defaultResolver (Lcom/apollographql/execution/Resolver;)Lcom/apollographql/execution/ExecutableSchema$Builder;
-	public final fun mutationRoot (Lkotlin/jvm/functions/Function0;)Lcom/apollographql/execution/ExecutableSchema$Builder;
+	public final fun mutationRoot (Lcom/apollographql/execution/RootResolver;)Lcom/apollographql/execution/ExecutableSchema$Builder;
 	public final fun persistedDocumentCache (Lcom/apollographql/execution/PersistedDocumentCache;)Lcom/apollographql/execution/ExecutableSchema$Builder;
-	public final fun queryRoot (Lkotlin/jvm/functions/Function0;)Lcom/apollographql/execution/ExecutableSchema$Builder;
-	public final fun resolveType (Lkotlin/jvm/functions/Function2;)Lcom/apollographql/execution/ExecutableSchema$Builder;
+	public final fun queryRoot (Lcom/apollographql/execution/RootResolver;)Lcom/apollographql/execution/ExecutableSchema$Builder;
+	public final fun resolver (Lcom/apollographql/execution/Resolver;)Lcom/apollographql/execution/ExecutableSchema$Builder;
 	public final fun schema (Lcom/apollographql/apollo/ast/GQLDocument;)Lcom/apollographql/execution/ExecutableSchema$Builder;
 	public final fun schema (Ljava/lang/String;)Lcom/apollographql/execution/ExecutableSchema$Builder;
-	public final fun subscriptionRoot (Lkotlin/jvm/functions/Function0;)Lcom/apollographql/execution/ExecutableSchema$Builder;
+	public final fun subscriptionRoot (Lcom/apollographql/execution/RootResolver;)Lcom/apollographql/execution/ExecutableSchema$Builder;
+	public final fun typeResolver (Lcom/apollographql/execution/TypeResolver;)Lcom/apollographql/execution/ExecutableSchema$Builder;
 }
 
 public final class com/apollographql/execution/FloatCoercing : com/apollographql/execution/Coercing {
@@ -71,17 +68,6 @@ public final class com/apollographql/execution/FloatCoercing : com/apollographql
 	public synthetic fun parseLiteral (Lcom/apollographql/apollo/ast/GQLValue;)Ljava/lang/Object;
 	public fun serialize (D)Ljava/lang/Object;
 	public synthetic fun serialize (Ljava/lang/Object;)Ljava/lang/Object;
-}
-
-public final class com/apollographql/execution/GraphQLError : com/apollographql/execution/GraphQLResult {
-	public fun <init> (Ljava/lang/Exception;)V
-	public fun <init> (Ljava/lang/String;)V
-	public fun exceptionOrNull ()Ljava/lang/Exception;
-	public fun fold (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
-	public final fun getException ()Ljava/lang/Exception;
-	public fun getOrThrow ()Ljava/lang/Object;
-	public fun isFailure ()Z
-	public fun isSuccess ()Z
 }
 
 public final class com/apollographql/execution/GraphQLRequest {
@@ -109,10 +95,10 @@ public final class com/apollographql/execution/GraphQLRequest$Builder {
 }
 
 public final class com/apollographql/execution/GraphQLRequestKt {
-	public static final fun parseAsGraphQLRequest (Ljava/lang/String;)Lcom/apollographql/execution/GraphQLResult;
-	public static final fun parseAsGraphQLRequest (Ljava/util/Map;)Lcom/apollographql/execution/GraphQLResult;
-	public static final fun parseAsGraphQLRequest (Lokio/BufferedSource;)Lcom/apollographql/execution/GraphQLResult;
-	public static final fun toExternalValueMap (Ljava/util/Map;)Lcom/apollographql/execution/GraphQLResult;
+	public static final fun parseAsGraphQLRequest (Ljava/lang/String;)Ljava/lang/Object;
+	public static final fun parseAsGraphQLRequest (Ljava/util/Map;)Ljava/lang/Object;
+	public static final fun parseAsGraphQLRequest (Lokio/BufferedSource;)Ljava/lang/Object;
+	public static final fun toExternalValueMap (Ljava/util/Map;)Ljava/lang/Object;
 	public static final fun toGraphQLRequest (Ljava/lang/String;)Lcom/apollographql/execution/GraphQLRequest;
 }
 
@@ -138,44 +124,10 @@ public final class com/apollographql/execution/GraphQLResponse$Builder {
 	public final fun setExtensions (Ljava/util/Map;)V
 }
 
-public abstract interface class com/apollographql/execution/GraphQLResult {
-	public abstract fun exceptionOrNull ()Ljava/lang/Exception;
-	public abstract fun fold (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
-	public abstract fun getOrThrow ()Ljava/lang/Object;
-	public abstract fun isFailure ()Z
-	public abstract fun isSuccess ()Z
-}
-
-public final class com/apollographql/execution/GraphQLResult$DefaultImpls {
-	public static fun exceptionOrNull (Lcom/apollographql/execution/GraphQLResult;)Ljava/lang/Exception;
-	public static fun fold (Lcom/apollographql/execution/GraphQLResult;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
-	public static fun getOrThrow (Lcom/apollographql/execution/GraphQLResult;)Ljava/lang/Object;
-	public static fun isFailure (Lcom/apollographql/execution/GraphQLResult;)Z
-	public static fun isSuccess (Lcom/apollographql/execution/GraphQLResult;)Z
-}
-
-public final class com/apollographql/execution/GraphQLResultKt {
-	public static final fun flatMap (Lcom/apollographql/execution/GraphQLResult;Lkotlin/jvm/functions/Function1;)Lcom/apollographql/execution/GraphQLResult;
-}
-
-public final class com/apollographql/execution/GraphQLSuccess : com/apollographql/execution/GraphQLResult {
-	public fun <init> (Ljava/lang/Object;)V
-	public fun exceptionOrNull ()Ljava/lang/Exception;
-	public fun fold (Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Ljava/lang/Object;
-	public fun getOrThrow ()Ljava/lang/Object;
-	public final fun getValue ()Ljava/lang/Object;
-	public fun isFailure ()Z
-	public fun isSuccess ()Z
-}
-
 public final class com/apollographql/execution/InMemoryPersistedDocumentCache : com/apollographql/execution/PersistedDocumentCache {
 	public fun <init> ()V
 	public fun get (Ljava/lang/String;)Lcom/apollographql/execution/PersistedDocument;
 	public fun put (Ljava/lang/String;Lcom/apollographql/execution/PersistedDocument;)V
-}
-
-public abstract interface class com/apollographql/execution/Instrumentation {
-	public abstract fun beforeResolve (Lcom/apollographql/execution/ResolveInfo;)V
 }
 
 public final class com/apollographql/execution/IntCoercing : com/apollographql/execution/Coercing {
@@ -188,10 +140,7 @@ public final class com/apollographql/execution/IntCoercing : com/apollographql/e
 	public synthetic fun serialize (Ljava/lang/Object;)Ljava/lang/Object;
 }
 
-public final class com/apollographql/execution/PersistedDocument {
-	public fun <init> (Lcom/apollographql/apollo/ast/GQLDocument;Ljava/util/List;)V
-	public final fun getDocument ()Lcom/apollographql/apollo/ast/GQLDocument;
-	public final fun getIssues ()Ljava/util/List;
+public abstract interface class com/apollographql/execution/PersistedDocument {
 }
 
 public abstract interface class com/apollographql/execution/PersistedDocumentCache {
@@ -223,6 +172,10 @@ public abstract interface class com/apollographql/execution/Resolver {
 	public abstract fun resolve (Lcom/apollographql/execution/ResolveInfo;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
+public abstract interface class com/apollographql/execution/RootResolver {
+	public abstract fun resolveRoot ()Ljava/lang/Object;
+}
+
 public final class com/apollographql/execution/SandboxKt {
 	public static final fun sandboxHtml (Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
 }
@@ -248,6 +201,15 @@ public abstract interface class com/apollographql/execution/SubscriptionEvent {
 public final class com/apollographql/execution/SubscriptionResponse : com/apollographql/execution/SubscriptionEvent {
 	public fun <init> (Lcom/apollographql/execution/GraphQLResponse;)V
 	public final fun getResponse ()Lcom/apollographql/execution/GraphQLResponse;
+}
+
+public abstract interface class com/apollographql/execution/TypeResolver {
+	public abstract fun resolveType (Ljava/lang/Object;Lcom/apollographql/execution/ResolveTypeInfo;)Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/ValidPersistedDocument : com/apollographql/execution/PersistedDocument {
+	public fun <init> (Lcom/apollographql/apollo/ast/GQLDocument;)V
+	public final fun getDocument ()Lcom/apollographql/apollo/ast/GQLDocument;
 }
 
 public abstract interface annotation class com/apollographql/execution/annotation/GraphQLDefault : java/lang/annotation/Annotation {

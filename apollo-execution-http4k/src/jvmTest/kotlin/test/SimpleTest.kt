@@ -20,7 +20,7 @@ class SimpleTest {
         """.trimIndent()
     val executableSchema = ExecutableSchema.Builder()
         .schema(schema)
-        .defaultResolver {
+        .resolver {
           "bar"
         }
         .build()

@@ -7,7 +7,7 @@ import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
 import org.springframework.web.reactive.function.server.*
 
-suspend fun ServerRequest.toGraphQLRequest(): GraphQLResult<GraphQLRequest> {
+suspend fun ServerRequest.parseAsGraphQLRequest(): Result<GraphQLRequest> {
   return when (this.method()) {
     HttpMethod.GET -> this.queryParams().parseAsGraphQLRequest()
     HttpMethod.POST -> {
@@ -15,7 +15,7 @@ suspend fun ServerRequest.toGraphQLRequest(): GraphQLResult<GraphQLRequest> {
         Buffer().writeUtf8(it).parseAsGraphQLRequest()
       }
     }
-    else -> GraphQLError(Exception("Unhandled method: ${method()}"))
+    else -> Result.failure(Exception("Unhandled method: ${method()}"))
   }
 }
 
@@ -25,7 +25,7 @@ fun CoRouterFunctionDsl.apolloGraphQLRoutes(
   executionContext: ExecutionContext = ExecutionContext.Empty
 ) {
   (POST(path) or GET(path)).invoke { serverRequest ->
-    val graphqlRequestResult = serverRequest.toGraphQLRequest()
+    val graphqlRequestResult = serverRequest.parseAsGraphQLRequest()
     if (!graphqlRequestResult.isSuccess) {
       return@invoke badRequest().buildAndAwait()
     }

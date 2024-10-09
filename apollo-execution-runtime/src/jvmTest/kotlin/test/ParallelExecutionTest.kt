@@ -27,7 +27,7 @@ class ParallelExecutionTest {
     val items = mutableListOf<Int>()
     val executableSchema = ExecutableSchema.Builder()
       .schema(schema.toGQLDocument())
-      .defaultResolver {
+      .resolver {
         val item = when (it.field.name) {
           "field1" -> 1
           "field2" -> 2
@@ -100,7 +100,7 @@ class ParallelExecutionTest {
 
     val executableSchema = ExecutableSchema.Builder()
       .schema(schema.toGQLDocument())
-      .defaultResolver {
+      .resolver {
         if (inFirstFrame) {
           if (runAfterFirstFrame == null) {
             runAfterFirstFrame = Runnable {
@@ -112,7 +112,7 @@ class ParallelExecutionTest {
         check(inFirstFrame)
 
         if (it.field.name.startsWith("field")) {
-          return@defaultResolver it.field.name.substring(5).toInt()
+          return@resolver it.field.name.substring(5).toInt()
         }
 
         check(it.field.name.startsWith("subField"))

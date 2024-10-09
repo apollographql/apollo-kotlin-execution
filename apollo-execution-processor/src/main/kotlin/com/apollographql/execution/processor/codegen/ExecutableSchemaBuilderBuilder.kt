@@ -30,13 +30,35 @@ internal class ExecutableSchemaBuilderBuilder(
               add("val schemaBuilder = %L()\n", KotlinSymbols.ExecutableSchemaBuilder)
               indent {
                 add(".schema(%M)\n", schemaDocument)
-                sirDefinitions.filterIsInstance<SirObjectDefinition>().forEach { sirObjectDefinition ->
-                  add(".addTypeChecker(%S)·{·it·is·%T·}\n", sirObjectDefinition.name, sirObjectDefinition.targetClassName.asKotlinPoet())
-                  sirObjectDefinition.fields.forEach { irTargetField ->
-                    val coordinates = "${sirObjectDefinition.name}.${irTargetField.name}"
-                    add(".addResolver(%S)·{\n%L\n}\n", coordinates, resolverBody(sirObjectDefinition, irTargetField))
+                add(".%M·{\n", MemberName("com.apollographql.execution", "compositeResolver"))
+                indent {
+                  sirDefinitions.filterIsInstance<SirObjectDefinition>().forEach { sirObjectDefinition ->
+                    add("type(%S)·{\n", sirObjectDefinition.name)
+                    indent {
+                      sirObjectDefinition.fields.forEach { irTargetField ->
+                        add("field(%S)·{\n", irTargetField.name)
+                        indent {
+                          add(resolverBody(sirObjectDefinition, irTargetField))
+                        }
+                        add("}\n")
+                      }
+                    }
+                    add("}\n")
                   }
                 }
+                add("}\n")
+                add(".typeResolver·{·obj,·_·->\n", schemaDocument)
+                indent {
+                  add("when(obj)·{\n")
+                  indent {
+                    sirDefinitions.filterIsInstance<SirObjectDefinition>().forEach { sirObjectDefinition ->
+                      add("is·%T·->·%S\n", sirObjectDefinition.targetClassName.asKotlinPoet(), sirObjectDefinition.name)
+                    }
+                    add("else·->·error(\"Cannot resolve '${'$'}obj'\")")
+                  }
+                  add("}\n")
+                }
+                add("}\n")
                 sirDefinitions.filterIsInstance<SirScalarDefinition>().forEach { sirScalarDefinition ->
                   add(".addCoercing(%S, %L)\n", sirScalarDefinition.name, sirScalarDefinition.coercing.codeBlock())
                 }

@@ -2,10 +2,11 @@
 
 package test
 
-import com.apollographql.apollo.api.Error
 import com.apollographql.apollo.api.ExecutionContext
-import com.apollographql.execution.*
-import com.apollographql.execution.internal.toGraphQLResponse
+import com.apollographql.execution.ExecutableSchema
+import com.apollographql.execution.SubscriptionError
+import com.apollographql.execution.SubscriptionResponse
+import com.apollographql.execution.toGraphQLRequest
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -31,16 +32,12 @@ class ExecutionTest {
             }
         """.trimIndent()
 
-    val simpleMainResolver = object : Resolver {
-      override suspend fun resolve(resolveInfo: ResolveInfo): Any? {
-        if (resolveInfo.parentType != "Query" || resolveInfo.fieldName != "foo") return null
-        return "42"
-      }
-    }
-
     val response = ExecutableSchema.Builder()
       .schema(schema)
-      .defaultResolver(simpleMainResolver)
+      .resolver { resolveInfo ->
+        if (resolveInfo.parentType != "Query" || resolveInfo.fieldName != "foo") return@resolver null
+        return@resolver "42"
+      }
       .build()
       .execute(document.toGraphQLRequest(), ExecutionContext.Empty)
     assertEquals(mapOf("foo" to "42"), response.data)
@@ -61,14 +58,11 @@ class ExecutionTest {
             }
         """.trimIndent()
 
-
-    val resolver = Resolver { resolveInfo ->
-      resolveInfo.getArgument<Int>("first").getOrNull()?.toString(16)
-    }
-
     val response = ExecutableSchema.Builder()
       .schema(schema)
-      .defaultResolver(resolver)
+      .resolver { resolveInfo ->
+        resolveInfo.getArgument<Int>("first").getOrNull()?.toString(16)
+      }
       .build()
       .execute(document.toGraphQLRequest(), ExecutionContext.Empty)
 
@@ -95,7 +89,7 @@ class ExecutionTest {
 
     val executableSchema = ExecutableSchema.Builder()
       .schema(schema)
-      .defaultResolver { resolveInfo ->
+      .resolver { resolveInfo ->
         val ret: Flow<Int> = when (resolveInfo.parentType) {
           "Subscription" -> flow {
             repeat(5) {
@@ -123,7 +117,7 @@ class ExecutionTest {
   }
 
   @Test
-  fun invalidDSubscription() {
+  fun invalidSubscription() {
     val schema = """
             type Query {
                 foo: String
@@ -153,5 +147,62 @@ class ExecutionTest {
       assertEquals(3, locations.orEmpty().single().line)
       assertEquals(5, locations.orEmpty().single().column)
     }
+  }
+
+  @Test
+  fun nullBubbles(): Unit = runBlocking {
+    val schema = """
+            type Query {
+                foo: String!
+            }
+        """.trimIndent()
+
+    val document = """
+            {
+                foo
+            }
+        """.trimIndent()
+
+    ExecutableSchema.Builder()
+      .schema(schema)
+      .resolver {
+        null
+      }
+      .build()
+      .execute(document.toGraphQLRequest(), ExecutionContext.Empty)
+      .apply {
+        assertEquals(null, data)
+        assertEquals("A resolver returned null in a non-nullable position", errors.orEmpty().single().message)
+        assertEquals(listOf("foo"), errors.orEmpty().single().path)
+      }
+  }
+
+  @Test
+  fun noBubblesPlz(): Unit = runBlocking {
+    val schema = """
+            type Query {
+                foo: String!
+            }
+            directive @noBubblesPlz on QUERY | MUTATION | SUBSCRIPTION 
+        """.trimIndent()
+
+    val document = """
+            query GetFoo @noBubblesPlz {
+                foo
+            }
+        """.trimIndent()
+
+    ExecutableSchema.Builder()
+      .schema(schema)
+      .resolver {
+        null
+      }
+      .build()
+      .execute(document.toGraphQLRequest(), ExecutionContext.Empty)
+      .apply {
+        assertEquals(mapOf("foo" to null), data)
+        assertEquals("A resolver returned null in a non-nullable position", errors.orEmpty().single().message)
+        assertEquals(listOf("foo"), errors.orEmpty().single().path)
+      }
   }
 }

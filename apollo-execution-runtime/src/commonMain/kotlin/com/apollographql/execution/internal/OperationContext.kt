@@ -8,37 +8,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 /**
- * Returns the GraphQL object typename of the given Kotlin `obj` or null to trigger a GraphQL error.
- *
- * This is used for polymorphic types to return the correct __typename depending on the runtime type of `obj`.
- *
- * Example:
- * ```
- * when (it) {
- *   is Product -> "Product"
- * }
- * ```
- *
- */
-typealias ResolveType = (obj: Any, resolveTypeInfo: ResolveTypeInfo) -> String?
-
-/**
- * Returns true if `obj` is a runtime instance of the GraphQL type for which this [TypeChecker] was added.
- */
-typealias TypeChecker = (obj: Any) -> Boolean
-
-internal sealed interface OperationExecutionResult
-
-/**
- * @param data the pending data for this operation. Use [finalize] to await it.
- */
-internal class OperationExecutionSuccess(val data: Deferred<ExternalValue>) : OperationExecutionResult
-/**
- * An error happened while executing this operation
- */
-internal class OperationExecutionError(val error: Error) : OperationExecutionResult
-
-/**
  * Bags of constant properties used while resolving the operation.
  *
  * 2 important methods are [resolveFieldValueOrThrow] and [completeValueOrThrow]. They are the core of field resolution,
@@ -50,22 +19,21 @@ internal class OperationExecutionError(val error: Error) : OperationExecutionRes
  * [executeField] returns a [Deferred] that must be awaited using [finalize]
  *
  */
-internal class OperationExecutor(
-  private val fragments: Map<String, GQLFragmentDefinition>,
-  private val executionContext: ExecutionContext,
+internal class OperationContext(
   private val schema: Schema,
-  private val resolvers: Map<String, Resolver>,
   private val coercings: Map<String, Coercing<*>>,
-  private val defaultResolver: Resolver,
-  private val resolveType: ResolveType,
-  private val instrumentations: List<Instrumentation>,
-  private val roots: Roots,
-  private val bubbles: Boolean,
+  private val introspectionResolver: Resolver,
+  private val queryRoot: RootResolver?,
+  private val mutationRoot: RootResolver?,
+  private val subscriptionRoot: RootResolver?,
+  private val resolver: Resolver,
+  private val typeResolver: TypeResolver,
+  private val operation: GQLOperationDefinition,
+  private val fragments: Map<String, GQLFragmentDefinition>,
   private val variableValues: Map<String, InternalValue>,
+  private val executionContext: ExecutionContext,
 ) {
-  private fun graphQLError(message: String) = Error.Builder(message).build()
-
-  private fun graphqlErrorResponse(message: String) = GraphQLResponse.Builder().errors(listOf(graphQLError(message))).build()
+  private val bubbles: Boolean = operation.bubbles()
 
   /**
    * executes the given operation and awaits its result.
@@ -73,16 +41,14 @@ internal class OperationExecutor(
    * Note: a future version may add an "executeAsync" function so we can start sending some data before the whole
    * map is computed.
    */
-  suspend fun execute(
-    operation: GQLOperationDefinition,
-  ): GraphQLResponse {
+  suspend fun execute(): GraphQLResponse {
     val rootTypename = schema.rootTypeNameOrNullFor(operation.operationType)
     if (rootTypename == null) {
       return graphqlErrorResponse("'${operation.operationType}' is not supported")
     }
     val rootObject = when (operation.operationType) {
-      "query" -> roots.query?.invoke()
-      "mutation" -> roots.mutation?.invoke()
+      "query" -> queryRoot?.resolveRoot()
+      "mutation" -> mutationRoot?.resolveRoot()
       "subscription" -> {
         return graphqlErrorResponse("Use executeSubscription() to execute subscriptions")
       }
@@ -110,11 +76,9 @@ internal class OperationExecutor(
     }
   }
 
-  fun subscribe(
-    operation: GQLOperationDefinition,
-  ): Flow<SubscriptionEvent> {
+  fun subscribe(): Flow<SubscriptionEvent> {
     val rootObject = when (operation.operationType) {
-      "subscription" -> roots.subscription?.invoke()
+      "subscription" -> subscriptionRoot?.resolveRoot()
       else -> return subscriptionError("Unknown operation type '${operation.operationType}.")
     }
 
@@ -286,7 +250,7 @@ internal class OperationExecutor(
 
   /**
    * @throws IllegalStateException if coercing fails.
-   * @throws Exception if [resolveType] fails.
+   * @throws Exception if [typeResolver] fails.
    */
   private suspend fun completeValueOrThrow(
     scope: CoroutineScope,
@@ -303,7 +267,9 @@ internal class OperationExecutor(
     if (fieldType is GQLNonNullType) {
       val completedResult = completeValue(scope, fieldType.type, fields, result, path)
       if (completedResult == null) {
-        return Error.Builder("Cannot return null for non-nullable field").build()
+        return Error.Builder("A resolver returned null in a non-nullable position")
+          .path(path)
+          .build()
       }
       return completedResult
     }
@@ -347,12 +313,7 @@ internal class OperationExecutor(
         val typename = if (typeDefinition is GQLObjectTypeDefinition) {
           typeDefinition.name
         } else {
-          resolveType(result, ResolveTypeInfo(typeDefinition.name, schema))
-        }
-        if (typename == null) {
-          return Error.Builder("Cannot resolve object __typename for instance '$result' of abstract type '${typeDefinition.name}'.\nConfigure `resolveType` or `typeCheckers`.")
-            .path(path)
-            .build()
+          typeResolver.resolveType(result, ResolveTypeInfo(typeDefinition.name, schema))
         }
 
         val selections = fields.flatMap { it.selections }
@@ -424,15 +385,11 @@ internal class OperationExecutor(
       parentType = typeDefinition.name
     )
 
-    instrumentations.forEach { it.beforeResolve(resolveInfo) }
-
-    return when {
-      resolveInfo.fieldName == "__typename" -> typeDefinition.name
-      else -> {
-        val resolver = resolvers.get(resolveInfo.coordinates()) ?: defaultResolver
-        resolver.resolve(resolveInfo)
-      }
+    val resolver = when {
+      resolveInfo.fieldName.startsWith("__") -> introspectionResolver
+      else -> resolver
     }
+    return resolver.resolve(resolveInfo)
   }
 
   private class Entry(
@@ -578,7 +535,6 @@ private fun <E> List<E>.orNullIfEmpty(): List<E>? {
   }
 }
 
-
 private val GQLSelection.directives: List<GQLDirective>
   get() = when (this) {
     is GQLField -> directives
@@ -586,3 +542,6 @@ private val GQLSelection.directives: List<GQLDirective>
     is GQLInlineFragment -> directives
   }
 
+private fun GQLOperationDefinition.bubbles(): Boolean {
+  return !directives.any { it.name == "noBubblesPlz" }
+}

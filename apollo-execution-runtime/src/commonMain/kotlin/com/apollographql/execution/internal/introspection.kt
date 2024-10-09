@@ -13,6 +13,17 @@ internal val introspectionCoercings = mapOf(
     "__DirectiveLocation" to StringCoercing,
 )
 
+internal fun introspectionResolver(schema: Schema): Resolver {
+  val resolvers = introspectionResolvers(schema)
+  return Resolver {
+    if (it.fieldName == "__typename") {
+      return@Resolver it.parentType
+    }
+    val coordinates = "${it.parentType}.${it.fieldName}"
+    resolvers.get(coordinates)?.resolve(it) ?: error("Can't resolve '$coordinates'")
+  }
+}
+
 internal fun introspectionResolvers(schema: Schema): Map<String, Resolver> {
   return mapOf(
       schema.queryTypeDefinition.name to mapOf(

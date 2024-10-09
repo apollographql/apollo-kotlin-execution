@@ -11,20 +11,14 @@ import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.joinToCode
 
 internal fun resolverBody(sirObjectDefinition: SirObjectDefinition, sirTargetField: SirFieldDefinition): CodeBlock {
-  val singleLine = sirTargetField.arguments.size < 2
-  val nl = if (singleLine) "" else "\n"
-  val sep = if (singleLine) ",·" else ",\n"
-
   return buildCode {
-    indent {
-      add("it.parentObject.cast<%T>().%L", sirObjectDefinition.targetClassName.asKotlinPoet(), sirTargetField.targetName)
-      if (sirTargetField.isFunction) {
-        add("($nl")
-        indent(!singleLine) {
-          add(sirTargetField.arguments.map { argumentCodeBlock(it) }.joinToCode(sep))
-        }
-        add(")")
+    add("it.parentObject.cast<%T>().%L", sirObjectDefinition.targetClassName.asKotlinPoet(), sirTargetField.targetName)
+    if (sirTargetField.isFunction) {
+      add("(\n")
+      indent {
+        add(sirTargetField.arguments.map { argumentCodeBlock(it) }.joinToCode(",\n", suffix = ",\n"))
       }
+      add(")\n")
     }
   }
 }
@@ -50,9 +44,9 @@ private fun argumentCodeBlock(sirArgument: SirArgumentDefinition): CodeBlock {
           "getRequiredArgument"
         }
         add(
-            "%L·=·it.$getArgument(%S)",
-            sirArgument.kotlinName,
-            sirArgument.name,
+          "%L·=·it.$getArgument(%S)",
+          sirArgument.kotlinName,
+          sirArgument.name,
         )
       }
 

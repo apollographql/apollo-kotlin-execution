@@ -12,14 +12,14 @@ import com.apollographql.apollo.ast.GQLType
 import com.apollographql.apollo.ast.GQLUnionTypeDefinition
 import com.apollographql.apollo.ast.GQLVariableDefinition
 import com.apollographql.apollo.ast.Schema
-import com.apollographql.execution.Coercing
+import com.apollographql.execution.*
 import com.apollographql.execution.scalarCoercingDeserialize
 
 internal fun coerceVariableValues(
-    schema: Schema,
-    variableDefinitions: List<GQLVariableDefinition>,
-    variables: Map<String, ExternalValue>,
-    coercings: Map<String, Coercing<*>>,
+  schema: Schema,
+  variableDefinitions: List<GQLVariableDefinition>,
+  variables: Map<String, ExternalValue>,
+  coercings: Map<String, Coercing<*>>,
 ): Map<String, InternalValue> {
   val coercedValues = mutableMapOf<String, InternalValue>()
 

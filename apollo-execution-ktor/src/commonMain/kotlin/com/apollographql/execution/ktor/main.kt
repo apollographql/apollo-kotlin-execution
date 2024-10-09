@@ -24,7 +24,7 @@ import io.ktor.utils.io.ByteReadChannel
 import okio.Buffer
 
 suspend fun ApplicationCall.respondGraphQL(executableSchema: ExecutableSchema, executionContext: ExecutionContext = ExecutionContext.Empty, configure: OutgoingContent.(GraphQLResponse?) -> Unit = {}) {
-  val request = request.toGraphQLRequest()
+  val request = request.parseAsGraphQLRequest()
   val contentType = ContentType.parse("application/graphql-response+json")
   if (request.isFailure) {
     respondText(
@@ -70,11 +70,11 @@ private fun GraphQLResponse.toByteArray(): ByteArray {
   return buffer.readByteArray()
 }
 
-suspend fun ApplicationRequest.toGraphQLRequest(): GraphQLResult<GraphQLRequest> {
+suspend fun ApplicationRequest.parseAsGraphQLRequest(): Result<GraphQLRequest> {
   return when (httpMethod) {
     HttpMethod.Post -> receiveChannel().buffer().parseAsGraphQLRequest()
     HttpMethod.Get -> queryString().parseAsGraphQLRequest()
-    else -> GraphQLError(Exception("Unhandled method: $httpMethod"))
+    else -> Result.failure(Exception("Unhandled method: $httpMethod"))
   }
 }
 

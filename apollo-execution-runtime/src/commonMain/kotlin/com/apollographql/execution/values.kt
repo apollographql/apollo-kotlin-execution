@@ -1,7 +1,6 @@
-package com.apollographql.execution.internal
+package com.apollographql.execution
 
 import com.apollographql.apollo.api.Error
-import com.apollographql.apollo.api.json.JsonNumber
 import com.apollographql.apollo.ast.GQLBooleanValue
 import com.apollographql.apollo.ast.GQLEnumValue
 import com.apollographql.apollo.ast.GQLFloatValue
@@ -12,7 +11,6 @@ import com.apollographql.apollo.ast.GQLObjectValue
 import com.apollographql.apollo.ast.GQLStringValue
 import com.apollographql.apollo.ast.GQLValue
 import com.apollographql.apollo.ast.GQLVariableValue
-import com.apollographql.execution.GraphQLResponse
 import kotlinx.coroutines.Deferred
 
 
@@ -42,6 +40,7 @@ internal typealias ResolverValue = Any?
  * Any of [ResolverValue] or [Error]
  */
 internal typealias ResolverValueOrError = Any?
+
 /**
  * A JSON value.
  * - Numbers are stored as Int, Long, Double or JsonNumber for arbitrary precision
@@ -57,7 +56,7 @@ typealias ExternalValue = Any?
 /**
  * Any of [ExternalValue] or [Deferred]<[ExternalValue]>
  */
-typealias ExternalValueOrDeferred = Any?
+internal typealias ExternalValueOrDeferred = Any?
 
 internal suspend fun ExternalValueOrDeferred.finalize(errors: MutableList<Error>): ExternalValue {
   return when (this) {
