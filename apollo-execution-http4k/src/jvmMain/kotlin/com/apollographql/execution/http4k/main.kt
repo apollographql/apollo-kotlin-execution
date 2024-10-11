@@ -30,10 +30,15 @@ import org.http4k.routing.bind
 import org.http4k.routing.routes
 import org.http4k.websocket.WsMessage
 import org.http4k.websocket.*
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 
-fun apolloHandler(executableSchema: ExecutableSchema, executionContext: (Request) -> ExecutionContext = { ExecutionContext.Empty }) : HttpHandler {
+fun apolloHandler(
+  executableSchema: ExecutableSchema,
+  coroutineContext: (Request) -> CoroutineContext = { EmptyCoroutineContext },
+  executionContext: (Request) -> ExecutionContext = { ExecutionContext.Empty }
+) : HttpHandler {
   return { request ->
-
     val graphQLRequestResult = when (request.method) {
       Method.GET -> request.uri.query.parseAsGraphQLRequest()
       Method.POST -> request.body.stream.source().buffer().use { it.parseAsGraphQLRequest() }
@@ -43,7 +48,7 @@ fun apolloHandler(executableSchema: ExecutableSchema, executionContext: (Request
     if (graphQLRequestResult.isFailure) {
       Response(BAD_REQUEST).body(graphQLRequestResult.exceptionOrNull()!!.message!!)
     } else {
-      val response = runBlocking {
+      val response = runBlocking(coroutineContext(request)) {
         executableSchema.execute(graphQLRequestResult.getOrThrow(), executionContext(request))
       }
 
@@ -129,9 +134,10 @@ private fun WebSocketMessage.toWsMessage(): WsMessage {
 fun apolloRoutingHttpHandler(
     executableSchema: ExecutableSchema,
     path: String = "/graphql",
-    executionContext: (Request) ->ExecutionContext,
+    coroutineContext: (Request) -> CoroutineContext = { EmptyCoroutineContext },
+    executionContext: (Request) -> ExecutionContext = { ExecutionContext.Empty },
 ): RoutingHttpHandler {
-  return path bind apolloHandler(executableSchema, executionContext)
+  return path bind apolloHandler(executableSchema, coroutineContext, executionContext)
 }
 
 fun apolloSandboxRoutingHttpHandler(
