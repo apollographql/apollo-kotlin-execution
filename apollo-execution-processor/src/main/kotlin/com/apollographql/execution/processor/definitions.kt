@@ -298,11 +298,11 @@ private class TypeDefinitionContext(
   private fun KSAnnotation.toSirDirective(directiveDefinition: SirDirectiveDefinition): SirDirective {
     return SirDirective(
       name = directiveDefinition.name,
-      arguments = arguments.mapNotNull { it.toSirArgument(directiveDefinition) }
+      arguments = arguments.mapNotNull { it.SirInputValueDefinition(directiveDefinition) }
     )
   }
 
-  private fun KSValueArgument.toSirArgument(directiveDefinition: SirDirectiveDefinition): SirArgument? {
+  private fun KSValueArgument.SirInputValueDefinition(directiveDefinition: SirDirectiveDefinition): SirArgument? {
     val kotlinName = name?.asString()
     if (kotlinName == null) {
       logger.error("Arguments must be named", this)

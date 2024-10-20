@@ -16,7 +16,7 @@ internal fun resolverBody(sirObjectDefinition: SirObjectDefinition, sirTargetFie
     if (sirTargetField.isFunction) {
       add("(\n")
       indent {
-        add(sirTargetField.arguments.map { argumentCodeBlock(it) }.joinToCode(",\n", suffix = ",\n"))
+        add(sirTargetField.arguments.map { argumentCodeBlock(it) }.joinToCode(",\n"))
       }
       add(")\n")
     }

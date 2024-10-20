@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 }
 
 include(":directives")
+include(":integration")

@@ -84,6 +84,9 @@ internal class SirDirective(
   val arguments: List<SirArgument>
 )
 
+/**
+ * The value of an argument in a directive
+ */
 internal class SirArgument(
   val name: String,
   val value: GQLValue
