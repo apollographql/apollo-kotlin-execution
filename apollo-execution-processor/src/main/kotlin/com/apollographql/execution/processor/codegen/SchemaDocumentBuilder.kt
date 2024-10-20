@@ -1,6 +1,7 @@
 package com.apollographql.execution.processor.codegen
 
 import com.apollographql.apollo.ast.*
+import com.apollographql.execution.processor.codegen.KotlinSymbols.AstArgument
 import com.apollographql.execution.processor.codegen.KotlinSymbols.AstBooleanValue
 import com.apollographql.execution.processor.codegen.KotlinSymbols.AstDirective
 import com.apollographql.execution.processor.codegen.KotlinSymbols.AstDirectiveDefinition
@@ -45,6 +46,7 @@ import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.MemberName
 import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.joinToCode
+import com.squareup.kotlinpoet.withIndent
 
 internal class SchemaDocumentBuilder(
   val context: KotlinExecutableSchemaContext,
@@ -185,7 +187,7 @@ private fun SirDirectiveDefinition.codeBlock(): CodeBlock {
 }
 
 private fun GQLDirectiveLocation.codeBlock(): CodeBlock {
-  return CodeBlock.of("%T", ClassName("com.apollographql.apollo.ast", name))
+  return CodeBlock.of("%T", ClassName("com.apollographql.apollo.ast", "GQLDirectiveLocation", name))
 }
 
 private fun SirObjectDefinition.codeBlock(): CodeBlock {
@@ -273,11 +275,34 @@ private fun buildCommon(
 }
 
 private fun SirDirective.codeBlock(): CodeBlock {
+  return buildCode {
+    add("%T(\n", AstDirective)
+    withIndent {
+      add("null,\n")
+      add("%S,\n", name)
+      add("listOf(\n")
+      withIndent {
+        arguments.forEach {
+          add("%L,\n", it.codeBlock())
+        }
+      }
+      add(")\n")
+    }
+    add(")\n")
+  }
   return CodeBlock.of("%T(null, %S, %L)", AstDirective, name, arguments.map { it.codeBlock() }.joinToCode(prefix = "listOf(", suffix = ")"))
 }
 
 private fun SirArgument.codeBlock(): CodeBlock {
-  return value.codeBlock()
+  return buildCode {
+    add("%T(\n", AstArgument)
+    withIndent {
+      add("null,\n")
+      add("%S,\n", name)
+      add("%L,\n", value.codeBlock())
+    }
+    add(")\n")
+  }
 }
 
 private fun GQLValue.codeBlock(): CodeBlock {
