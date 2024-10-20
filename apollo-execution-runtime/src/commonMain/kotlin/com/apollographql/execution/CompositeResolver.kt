@@ -43,5 +43,5 @@ class CompositeResolverBuilder {
 }
 
 fun ExecutableSchema.Builder.compositeResolver(builder: CompositeResolverBuilder.() -> Unit) = apply {
-  CompositeResolverBuilder().apply(builder).builder()
+  resolver(CompositeResolverBuilder().apply(builder).build())
 }
