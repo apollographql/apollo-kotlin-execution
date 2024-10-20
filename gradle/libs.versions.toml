@@ -2,7 +2,7 @@
 kotlin-plugin = "2.0.0"
 ksp = "2.0.0-1.0.21"
 apollo = "4.0.0"
-ktor = "2.3.11"
+ktor = "3.0.0"
 spring = "3.3.3"
 
 [libraries]

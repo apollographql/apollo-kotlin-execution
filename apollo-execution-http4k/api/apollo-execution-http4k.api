@@ -1,8 +1,8 @@
 public final class com/apollographql/execution/http4k/MainKt {
-	public static final fun apolloHandler (Lcom/apollographql/execution/ExecutableSchema;Lkotlin/jvm/functions/Function1;)Lkotlin/jvm/functions/Function1;
-	public static synthetic fun apolloHandler$default (Lcom/apollographql/execution/ExecutableSchema;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkotlin/jvm/functions/Function1;
-	public static final fun apolloRoutingHttpHandler (Lcom/apollographql/execution/ExecutableSchema;Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lorg/http4k/routing/RoutingHttpHandler;
-	public static synthetic fun apolloRoutingHttpHandler$default (Lcom/apollographql/execution/ExecutableSchema;Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lorg/http4k/routing/RoutingHttpHandler;
+	public static final fun apolloHandler (Lcom/apollographql/execution/ExecutableSchema;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Lkotlin/jvm/functions/Function1;
+	public static synthetic fun apolloHandler$default (Lcom/apollographql/execution/ExecutableSchema;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lkotlin/jvm/functions/Function1;
+	public static final fun apolloRoutingHttpHandler (Lcom/apollographql/execution/ExecutableSchema;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Lorg/http4k/routing/RoutingHttpHandler;
+	public static synthetic fun apolloRoutingHttpHandler$default (Lcom/apollographql/execution/ExecutableSchema;Ljava/lang/String;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lorg/http4k/routing/RoutingHttpHandler;
 	public static final fun apolloSandboxRoutingHttpHandler (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lorg/http4k/routing/RoutingHttpHandler;
 	public static synthetic fun apolloSandboxRoutingHttpHandler$default (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lorg/http4k/routing/RoutingHttpHandler;
 	public static final fun apolloWebSocketHandler (Lcom/apollographql/execution/ExecutableSchema;Lkotlin/jvm/functions/Function1;)Lkotlin/jvm/functions/Function1;

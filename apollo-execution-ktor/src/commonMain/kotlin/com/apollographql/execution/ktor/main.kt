@@ -2,25 +2,14 @@ package com.apollographql.execution.ktor
 
 import com.apollographql.apollo.api.ExecutionContext
 import com.apollographql.execution.*
-import io.ktor.http.ContentType
-import io.ktor.http.HttpMethod
-import io.ktor.http.HttpStatusCode
-import io.ktor.http.content.OutgoingContent
-import io.ktor.http.path
-import io.ktor.server.application.Application
-import io.ktor.server.application.ApplicationCall
-import io.ktor.server.application.call
-import io.ktor.server.request.ApplicationRequest
-import io.ktor.server.request.httpMethod
-import io.ktor.server.request.queryString
-import io.ktor.server.response.respondBytes
-import io.ktor.server.response.respondRedirect
-import io.ktor.server.response.respondText
-import io.ktor.server.routing.get
-import io.ktor.server.routing.post
-import io.ktor.server.routing.routing
-import io.ktor.server.util.url
-import io.ktor.utils.io.ByteReadChannel
+import io.ktor.http.*
+import io.ktor.http.content.*
+import io.ktor.server.application.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import io.ktor.server.util.*
+import io.ktor.utils.io.*
 import okio.Buffer
 
 suspend fun ApplicationCall.respondGraphQL(executableSchema: ExecutableSchema, executionContext: ExecutionContext = ExecutionContext.Empty, configure: OutgoingContent.(GraphQLResponse?) -> Unit = {}) {
