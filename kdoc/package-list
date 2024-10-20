@@ -13,7 +13,6 @@ com.apollographql.execution.processor
 module:apollo-execution-runtime
 com.apollographql.execution
 com.apollographql.execution.annotation
-com.apollographql.execution.internal
 com.apollographql.execution.websocket
 module:apollo-execution-spring
 com.apollographql.execution.spring
