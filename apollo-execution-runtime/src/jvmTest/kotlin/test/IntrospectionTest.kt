@@ -1,5 +1,3 @@
-@file:Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-
 package test
 
 import com.apollographql.apollo.api.ExecutionContext
@@ -22,7 +20,8 @@ class IntrospectionTest {
         """.trimIndent()
 
 
-    val document = javaClass.classLoader.getResourceAsStream("introspection.graphql").reader().readText()
+    val document =
+        FileSystem.SYSTEM.openReadOnly("testFixtures/introspection.graphql".toPath()).source().buffer().readUtf8()
 
     val response = ExecutableSchema.Builder()
         .schema(schema)
