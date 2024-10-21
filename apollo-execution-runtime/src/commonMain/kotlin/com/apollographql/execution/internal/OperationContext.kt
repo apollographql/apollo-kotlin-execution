@@ -97,6 +97,7 @@ internal class OperationContext(
     return flowOf(SubscriptionError(listOf(Error.Builder(message).build())))
   }
 
+  @OptIn(ExperimentalCoroutinesApi::class)
   private fun resolveFieldEventStream(
     subscriptionType: GQLObjectTypeDefinition,
     rootValue: ResolverValue,

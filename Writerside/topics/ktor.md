@@ -11,7 +11,7 @@ dependencies {
   implementation("com.apollographql.execution:apollo-execution-ktor:%latest_version%")
   // This sample uses netty as an engine.
   // See https://ktor.io/ for other choices.
-  implementation("io.ktor:ktor-server-netty:2.3.11")
+  implementation("io.ktor:ktor-server-netty:3.0.0")
 }
 ```
 

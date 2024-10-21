@@ -1,4 +1,8 @@
+@file:OptIn(ApolloExperimental::class)
+
 package com.apollographql.execution.processor
+
+import com.apollographql.apollo.annotations.ApolloExperimental
 
 import com.apollographql.apollo.ast.*
 import com.apollographql.execution.processor.sir.*

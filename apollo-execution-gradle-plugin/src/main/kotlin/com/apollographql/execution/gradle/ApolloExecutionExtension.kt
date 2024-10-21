@@ -14,6 +14,9 @@ abstract class ApolloExecutionExtension @Inject constructor(val project: Project
     if (hasService) {
       error("Apollo: there can be only one execution service. Use different Gradle module for different services.")
     }
+    if (!project.pluginManager.hasPlugin("com.google.devtools.ksp")) {
+      error("Apollo: the 'com.apollographql.execution' plugin requires the 'com.google.devtools.ksp' plugin.")
+    }
     val service = project.objects.newInstance(ApolloExecutionService::class.java)
 
     action.execute(service)
