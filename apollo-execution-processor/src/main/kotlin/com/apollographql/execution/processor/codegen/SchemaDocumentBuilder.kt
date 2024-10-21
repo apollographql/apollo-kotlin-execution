@@ -46,6 +46,7 @@ import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.MemberName
 import com.squareup.kotlinpoet.PropertySpec
+import com.squareup.kotlinpoet.buildCodeBlock
 import com.squareup.kotlinpoet.joinToCode
 import com.squareup.kotlinpoet.withIndent
 
@@ -66,12 +67,12 @@ internal class SchemaDocumentBuilder(
     return PropertySpec.builder(simpleName, AstDocument)
         .addModifiers(KModifier.INTERNAL)
         .initializer(
-            buildCode {
+            buildCodeBlock {
               add("%T(\n", AstDocument)
-              indent {
+              withIndent {
                 add("")
                 add("definitions = listOf(\n")
-                indent {
+                withIndent {
                   add("%L,\n", sirDefinitions.schemaDefinitionCodeBlock())
                   sirDefinitions.forEach {
                     when (it) {
@@ -116,17 +117,17 @@ internal class SchemaDocumentBuilder(
  * ``
  */
 private fun List<SirDefinition>.schemaDefinitionCodeBlock(): CodeBlock {
-  return buildCode {
+  return buildCodeBlock {
     add("%T(\n", AstSchemaDefinition)
-    indent {
+    withIndent {
       add("sourceLocation = null,\n")
       add("description = null,\n")
       add("directives = emptyList(),\n")
       add("rootOperationTypeDefinitions = listOf(\n")
-      indent {
+      withIndent {
         filterIsInstance<SirObjectDefinition>().filter { it.operationType != null }.forEach {
           add("%T(\n", AstOperationTypeDefinition)
-          indent {
+          withIndent {
             add("operationType = %S,\n", it.operationType)
             add("namedType = %S,\n", it.name)
           }
@@ -163,14 +164,14 @@ private fun SirUnionDefinition.codeBlock(): CodeBlock {
 
 
 private fun SirDirectiveDefinition.codeBlock(): CodeBlock {
-  return buildCode {
+  return buildCodeBlock {
     add("%T(\n", AstDirectiveDefinition)
-    indent {
+    withIndent {
       add("sourceLocation·=·null,\n")
       add("description·=·%S,\n", description)
       add("name·=·%S,\n", name)
       add("arguments·=·listOf(\n")
-      indent {
+      withIndent {
         argumentDefinitions.forEach {
           add("%L,\n", it.codeBlock())
         }
@@ -258,7 +259,7 @@ private fun buildCommon(
     directives: List<SirDirective>,
     block: CodeBlock.Builder.() -> Unit = {},
 ): CodeBlock {
-  return buildCode {
+  return buildCodeBlock {
     add("%T(\n", className)
     indent()
     add("sourceLocation·=·null,\n")
@@ -272,7 +273,7 @@ private fun buildCommon(
 }
 
 private fun SirDirective.codeBlock(): CodeBlock {
-  return buildCode {
+  return buildCodeBlock {
     add("%T(\n", AstDirective)
     withIndent {
       add("null,\n")
@@ -291,7 +292,7 @@ private fun SirDirective.codeBlock(): CodeBlock {
 }
 
 private fun SirArgument.codeBlock(): CodeBlock {
-  return buildCode {
+  return buildCodeBlock {
     add("%T(\n", AstArgument)
     withIndent {
       add("null,\n")

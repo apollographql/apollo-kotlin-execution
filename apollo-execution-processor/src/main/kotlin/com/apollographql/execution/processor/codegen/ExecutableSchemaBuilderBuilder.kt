@@ -1,5 +1,6 @@
 package com.apollographql.execution.processor.codegen
 
+import com.apollographql.apollo.annotations.ApolloExperimental
 import com.apollographql.apollo.ast.GQLObjectTypeDefinition
 import com.apollographql.execution.processor.sir.*
 import com.squareup.kotlinpoet.*
@@ -15,7 +16,13 @@ internal class ExecutableSchemaBuilderBuilder(
   override fun prepare() {}
 
   override fun build(): FileSpec {
+    @file:OptIn(ApolloExperimental::class)
     return FileSpec.builder(context.packageName, simpleName)
+      .addAnnotation(AnnotationSpec
+        .builder(ClassName("kotlin", "OptIn"))
+        .addMember(CodeBlock.of("%T::class", ClassName("com.apollographql.apollo.annotations", "ApolloExperimental")))
+        .build()
+      )
         .addFunction(funSpec())
         .build()
   }
@@ -26,21 +33,21 @@ internal class ExecutableSchemaBuilderBuilder(
         .returns(KotlinSymbols.ExecutableSchemaBuilder)
         .addModifiers(KModifier.INTERNAL)
         .addCode(
-            buildCode {
+            buildCodeBlock {
               add("@Suppress(\"UNCHECKED_CAST\")")
               add("fun <T> Any?.cast(): T = this as T\n\n")
               // Use a variable so that we don't get an expression return
               add("val schemaBuilder = %L()\n", KotlinSymbols.ExecutableSchemaBuilder)
-              indent {
+              withIndent {
                 add(".schema(%M)\n", schemaDocument)
                 add(".%M·{\n", MemberName("com.apollographql.execution", "compositeResolver"))
-                indent {
+                withIndent {
                   sirDefinitions.filterIsInstance<SirObjectDefinition>().forEach { sirObjectDefinition ->
                     add("type(%S)·{\n", sirObjectDefinition.name)
-                    indent {
+                    withIndent {
                       sirObjectDefinition.fields.forEach { irTargetField ->
                         add("field(%S)·{\n", irTargetField.name)
-                        indent {
+                        withIndent {
                           add(resolverBody(sirObjectDefinition, irTargetField))
                         }
                         add("}\n")
@@ -51,10 +58,10 @@ internal class ExecutableSchemaBuilderBuilder(
                          */
                         add("field(%S)·{}\n", "_service")
                         add("field(%S)·{\n", "_entities")
-                        indent {
+                        withIndent {
                           add("val representations·=·it.getRequiredArgument<List<Map<String,·Any>>>(\"representations\")\n")
                           add("representations.map·{·representation·->\n")
-                          indent {
+                          withIndent {
                             add("%M(it.executionContext,·representation)\n", entityResolver)
                           }
                           add("}\n")
@@ -66,9 +73,9 @@ internal class ExecutableSchemaBuilderBuilder(
                   }
                   if (entityResolver != null) {
                     add("type(%S)·{\n", "_Service")
-                    indent {
+                    withIndent {
                       add("field(%S)·{\n", "sdl")
-                      indent {
+                      withIndent {
                         add("%M.%M(\"  \")", schemaDocument, MemberName("com.apollographql.apollo.ast", "toSDL"))
                       }
                       add("}\n")
@@ -78,9 +85,9 @@ internal class ExecutableSchemaBuilderBuilder(
                 }
                 add("}\n")
                 add(".typeResolver·{·obj,·_·->\n", schemaDocument)
-                indent {
+                withIndent {
                   add("when(obj)·{\n")
-                  indent {
+                  withIndent {
                     sirDefinitions.filterIsInstance<SirObjectDefinition>().forEach { sirObjectDefinition ->
                       add("is·%T·->·%S\n", sirObjectDefinition.targetClassName.asKotlinPoet(), sirObjectDefinition.name)
                     }
@@ -116,7 +123,7 @@ internal class ExecutableSchemaBuilderBuilder(
 }
 
 private fun SirCoercing.codeBlock(): CodeBlock {
-  return buildCode {
+  return buildCodeBlock {
     add("%T", className.asKotlinPoet())
     if (instantiation == Instantiation.NO_ARG_CONSTRUCTOR) {
       add("()")
@@ -129,7 +136,7 @@ internal fun List<SirDefinition>.rootType(operationType: String): SirObjectDefin
 }
 
 private fun SirObjectDefinition.codeBlock(): CodeBlock {
-  return buildCode {
+  return buildCodeBlock {
     add("%T", targetClassName.asKotlinPoet())
     if (instantiation == Instantiation.NO_ARG_CONSTRUCTOR) {
       add("()")

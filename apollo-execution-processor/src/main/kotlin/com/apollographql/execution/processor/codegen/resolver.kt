@@ -8,16 +8,18 @@ import com.apollographql.execution.processor.sir.SirNonNullType
 import com.apollographql.execution.processor.sir.SirObjectDefinition
 import com.apollographql.execution.processor.sir.asKotlinPoet
 import com.squareup.kotlinpoet.CodeBlock
+import com.squareup.kotlinpoet.buildCodeBlock
 import com.squareup.kotlinpoet.joinToCode
+import com.squareup.kotlinpoet.withIndent
 
 internal fun resolverBody(sirObjectDefinition: SirObjectDefinition, sirTargetField: SirFieldDefinition): CodeBlock {
-  return buildCode {
+  return buildCodeBlock {
     add("it.parentObject.cast<%T>().%L", sirObjectDefinition.targetClassName.asKotlinPoet(), sirTargetField.targetName)
     if (sirTargetField.isFunction) {
       add("(")
       if (sirTargetField.arguments.isNotEmpty()) {
         add("\n")
-        indent {
+        withIndent {
           add(sirTargetField.arguments.map { argumentCodeBlock(it) }.joinToCode(",\n"))
         }
       }
@@ -37,7 +39,7 @@ internal fun CodeBlock.Builder.indent(condition: Boolean = true, block: CodeBloc
 }
 
 private fun argumentCodeBlock(sirArgument: SirArgumentDefinition): CodeBlock {
-  return buildCode {
+  return buildCodeBlock {
     when (sirArgument) {
       is SirInputValueDefinition -> {
         val getArgument = if (sirArgument.defaultValue == null && sirArgument.type !is SirNonNullType) {

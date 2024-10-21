@@ -11,6 +11,7 @@ import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.MemberName
 import com.squareup.kotlinpoet.ParameterSpec
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
+import com.squareup.kotlinpoet.buildCodeBlock
 import com.squareup.kotlinpoet.withIndent
 
 internal class EntityResolverBuilder(
@@ -44,7 +45,7 @@ internal class EntityResolverBuilder(
         ).build()
       )
       .addCode(
-        buildCode {
+        buildCodeBlock {
           add("@Suppress(\"UNCHECKED_CAST\")")
           add("fun <T> Any?.cast():·T =·this·as·T\n\n")
 

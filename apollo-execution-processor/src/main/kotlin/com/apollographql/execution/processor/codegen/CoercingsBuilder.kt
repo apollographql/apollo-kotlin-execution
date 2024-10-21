@@ -19,6 +19,8 @@ import com.squareup.kotlinpoet.ParameterSpec
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeVariableName
+import com.squareup.kotlinpoet.buildCodeBlock
+import com.squareup.kotlinpoet.withIndent
 import java.util.Locale
 
 internal fun String.capitalizeFirstLetter(): String {
@@ -84,7 +86,7 @@ internal class CoercingsBuilder(
       .addParameter(ParameterSpec("key", KotlinSymbols.String))
       .returns(TypeVariableName("T"))
       .addCode(
-        buildCode {
+        buildCodeBlock {
           add("if (this == null) return null as T\n")
           add("check(this is %T<*,*>)\n", KotlinSymbols.Map)
           block()
@@ -96,11 +98,11 @@ internal class CoercingsBuilder(
   private fun getInputFunSpec(): FunSpec {
     return inputFunSpecInternal("getInput") {
       add("return if(containsKey(key)) {\n")
-      indent {
+      withIndent {
         add("%T(get(key))\n", KotlinSymbols.Present)
       }
       add("} else {\n")
-      indent {
+      withIndent {
         add("%T\n", KotlinSymbols.Absent)
       }
       add("} as T\n")
@@ -120,21 +122,21 @@ internal class CoercingsBuilder(
     )
       .addModifiers(KModifier.INTERNAL)
       .initializer(
-        buildCode {
+        buildCodeBlock {
           add("object: %T<%T> {\n", KotlinSymbols.Coercing, targetClassName.asKotlinPoet())
-          indent {
+          withIndent {
             add("override fun serialize(internalValue: %T): Any?{\n", targetClassName.asKotlinPoet())
-            indent {
+            withIndent {
               add("return internalValue.name\n")
             }
             add("}\n")
             add("override fun deserialize(value: Any?): %T {\n", targetClassName.asKotlinPoet())
-            indent {
+            withIndent {
               add("return %T.valueOf(value.toString())\n", targetClassName.asKotlinPoet())
             }
             add("}\n")
             add("override fun parseLiteral(gqlValue: %T): %T {\n", AstValue, targetClassName.asKotlinPoet())
-            indent {
+            withIndent {
               add("return %T.valueOf((gqlValue as %T).value)\n", targetClassName.asKotlinPoet(), AstEnumValue)
             }
             add("}\n")
@@ -151,18 +153,18 @@ internal class CoercingsBuilder(
       KotlinSymbols.Coercing.parameterizedBy(targetClassName.asKotlinPoet())
     )
       .initializer(
-        buildCode {
+        buildCodeBlock {
           add("object: %T<%T> {\n", KotlinSymbols.Coercing, targetClassName.asKotlinPoet())
-          indent {
+          withIndent {
             add("override fun serialize(internalValue: %T): Any?{\n", targetClassName.asKotlinPoet())
-            indent {
+            withIndent {
               add("error(\"Input objects cannot be serialized\")")
             }
             add("}\n")
             add("override fun deserialize(value: Any?): %T {\n", targetClassName.asKotlinPoet())
-            indent {
+            withIndent {
               add("return %T(\n", targetClassName.asKotlinPoet())
-              indent {
+              withIndent {
                 inputFields.forEach {
                   val getInput = if (it.defaultValue == null && it.type !is SirNonNullType) {
                     "getInput"
@@ -176,7 +178,7 @@ internal class CoercingsBuilder(
             }
             add("}\n")
             add("override fun parseLiteral(gqlValue: %T): %T {\n", AstValue, targetClassName.asKotlinPoet())
-            indent {
+            withIndent {
               add("error(\"Input objects cannot be parsed from literals\")")
             }
             add("}\n")
