@@ -388,6 +388,7 @@ internal class OperationContext(
 
     val resolver = when {
       resolveInfo.fieldName.startsWith("__") -> introspectionResolver
+      resolveInfo.parentType.startsWith("__") -> introspectionResolver
       else -> resolver
     }
     return resolver.resolve(resolveInfo)

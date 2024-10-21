@@ -55,7 +55,7 @@ internal fun SirObjectDefinition.addEntitiesAndService(): SirObjectDefinition {
         arguments = emptyList(),
         false
       )
-    ),
+    ) + fields,
     directives,
     resolve,
   )
