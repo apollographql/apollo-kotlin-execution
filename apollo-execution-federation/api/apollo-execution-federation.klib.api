@@ -1,0 +1,16 @@
+// Klib ABI Dump
+// Targets: [macosArm64]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <com.apollographql.execution:apollo-execution-federation>
+final object com.apollographql.execution.federation/_AnyCoercing : com.apollographql.execution/Coercing<kotlin/Any?> { // com.apollographql.execution.federation/_AnyCoercing|null[0]
+    final fun deserialize(kotlin/Any?): kotlin/Any? // com.apollographql.execution.federation/_AnyCoercing.deserialize|deserialize(kotlin.Any?){}[0]
+    final fun parseLiteral(com.apollographql.apollo.ast/GQLValue): kotlin/Any? // com.apollographql.execution.federation/_AnyCoercing.parseLiteral|parseLiteral(com.apollographql.apollo.ast.GQLValue){}[0]
+    final fun serialize(kotlin/Any?): kotlin/Any? // com.apollographql.execution.federation/_AnyCoercing.serialize|serialize(kotlin.Any?){}[0]
+}
+open annotation class com.apollographql.execution.federation/GraphQLKey : kotlin/Annotation { // com.apollographql.execution.federation/GraphQLKey|null[0]
+    constructor <init>() // com.apollographql.execution.federation/GraphQLKey.<init>|<init>(){}[0]
+}

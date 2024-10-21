@@ -1,0 +1,10 @@
+public abstract interface annotation class com/apollographql/execution/federation/GraphQLKey : java/lang/annotation/Annotation {
+}
+
+public final class com/apollographql/execution/federation/_AnyCoercing : com/apollographql/execution/Coercing {
+	public static final field INSTANCE Lcom/apollographql/execution/federation/_AnyCoercing;
+	public fun deserialize (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun parseLiteral (Lcom/apollographql/apollo/ast/GQLValue;)Ljava/lang/Object;
+	public fun serialize (Ljava/lang/Object;)Ljava/lang/Object;
+}
+
