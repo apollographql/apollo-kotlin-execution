@@ -1,6 +1,6 @@
 [versions]
-kotlin-plugin = "2.0.0"
-ksp = "2.0.0-1.0.21"
+kotlin-plugin = "2.0.21"
+ksp = "2.0.21-1.0.25"
 apollo = "4.0.0"
 ktor = "3.0.0"
 spring = "3.3.3"
@@ -34,6 +34,7 @@ http4k-realtime-core = { module = "org.http4k:http4k-realtime-core" }
 http4k-server-undertow = { module = "org.http4k:http4k-server-undertow" }
 http4k-server-netty = { module = "org.http4k:http4k-server-netty" }
 apollo-execution-runtime = { module = "com.apollographql.execution:apollo-execution-runtime" }
+apollo-execution-federation = { module = "com.apollographql.execution:apollo-execution-federation" }
 spring-webflux = "org.springframework:spring-webflux:6.1.10"
 
 [plugins]

@@ -21,4 +21,7 @@
         <toc-element topic="http4k.md"/>
         <toc-element topic="spring.md"/>
     </toc-element>
+    <toc-element toc-title="Apollo Federation">
+        <toc-element topic="federation.md"/>
+    </toc-element>
 </instance-profile>

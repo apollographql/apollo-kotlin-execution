@@ -20,7 +20,6 @@ import com.apollographql.execution.processor.sir.SirType
 import com.apollographql.execution.processor.sir.SirTypeDefinition
 import com.apollographql.execution.processor.sir.SirUnionDefinition
 import com.google.devtools.ksp.getAllSuperTypes
-import com.google.devtools.ksp.getDeclaredFunctions
 import com.google.devtools.ksp.getDeclaredProperties
 import com.google.devtools.ksp.isConstructor
 import com.google.devtools.ksp.isPublic
@@ -56,6 +55,7 @@ private class TypeDefinitionContext(
    */
   val directiveDefinitions = mutableMapOf<String, SirDirectiveDefinition?>()
 
+  val entities = mutableSetOf<String>()
   val usedDirectiveNames = mutableSetOf<String>()
 
   val ksFiles = mutableListOf<KSFile?>()
@@ -139,7 +139,7 @@ private class TypeDefinitionContext(
        * Track the files
        */
       ksFiles.add(declaration.containingFile)
-      
+
       if (declaration is KSTypeAlias) {
         typeDefinitions.put(qualifiedName, declaration.toSirScalarDefinition(qualifiedName))
         continue
@@ -337,9 +337,11 @@ private class TypeDefinitionContext(
           arguments.map { GQLObjectField(null, it.name!!.asString(), it.value.toGQLValue()) }
         )
       }
+
       is KSType -> {
         GQLEnumValue(null, declaration.simpleName.asString())
       }
+
       else -> {
         logger.error("Cannot convert $this to a GQLValue")
         GQLNullValue(null) // not correct but compilation should fail anyway
@@ -366,6 +368,7 @@ private class TypeDefinitionContext(
         is KSPropertyDeclaration -> {
           it.toSirFieldDefinition(operationType)
         }
+
         is KSFunctionDeclaration -> {
           if (it.isConstructor()) {
             null
@@ -373,7 +376,8 @@ private class TypeDefinitionContext(
             it.toSirFieldDefinition(operationType)
           }
         }
-        else ->null
+
+        else -> null
       }
     }.toList()
 
@@ -387,6 +391,10 @@ private class TypeDefinitionContext(
           logger.error("Abstract classes are not supported", this)
           return null
         }
+        val federationDirectives = allFields.keyDirective()?.let { listOf(it) }.orEmpty()
+        if (federationDirectives.isNotEmpty()) {
+          entities.add(name)
+        }
         SirObjectDefinition(
           name = name,
           description = description,
@@ -396,7 +404,8 @@ private class TypeDefinitionContext(
           instantiation = instantiation(),
           operationType = operationType,
           fields = allFields,
-          directives = directives(GQLDirectiveLocation.OBJECT)
+          directives = directives(GQLDirectiveLocation.OBJECT) + federationDirectives,
+          resolve = entityResolver(logger, allFields.filter { it.isKey }.map { it.name }.toSet())
         )
       }
 
@@ -421,6 +430,9 @@ private class TypeDefinitionContext(
             directives = directives(GQLDirectiveLocation.UNION),
           )
         } else {
+          if (allFields.any { it.isKey }) {
+            logger.error("@GraphQLKey is not supported on interface fields")
+          }
           SirInterfaceDefinition(
             name = name,
             description = description,
@@ -437,6 +449,18 @@ private class TypeDefinitionContext(
         null
       }
     }
+  }
+
+  private fun List<SirFieldDefinition>.keyDirective(): SirDirective? {
+    val fields = filter { it.isKey }.map { it.name }.joinToString(" ")
+    if (fields.isBlank()) {
+      return null
+    }
+
+    return SirDirective(
+      name = "key",
+      arguments = listOf(SirArgument(name = "fields", value = GQLStringValue(null, fields)))
+    )
   }
 
   private fun KSClassDeclaration.interfaces(): List<String> {
@@ -480,7 +504,8 @@ private class TypeDefinitionContext(
       type = returnType!!.resolve().toSirType(SirDebugContext(this), VisitContext.OUTPUT, operationType, false),
       arguments = parameters.mapNotNull {
         it.toSirArgument()
-      }
+      },
+      isKey = findAnnotation("GraphQLKey") != null
     )
   }
 
@@ -530,7 +555,8 @@ private class TypeDefinitionContext(
       targetName = simpleName.asString(),
       isFunction = false,
       type = type.resolve().toSirType(SirDebugContext(this), VisitContext.OUTPUT, operationType, false),
-      arguments = emptyList()
+      arguments = emptyList(),
+      isKey = findAnnotation("GraphQLKey") != null
     )
   }
 
@@ -701,6 +727,46 @@ private class TypeDefinitionContext(
       locations = emptyList()
     )
   }
+
+  fun KSClassDeclaration.entityResolver(logger: KSPLogger, keyFields: Set<String>): SirEntityResolver? {
+    if (keyFields.isEmpty()) {
+      return null
+    }
+
+    val companionObject = declarations.firstOrNull { it is KSClassDeclaration && it.isCompanionObject }
+    if (companionObject == null) {
+      logger.error("Federated entities must have a companion object.", this)
+      return null
+    }
+
+    companionObject as KSClassDeclaration
+    val candidates = companionObject.declarations.filterIsInstance<KSFunctionDeclaration>().filter {
+      it.isPublic() && it.simpleName.asString() == "resolve"
+    }
+    if (candidates.toList().isEmpty()) {
+      logger.error("Federated entities companion object must contain a resolve() function.", companionObject)
+      return null
+    }
+
+    candidates.forEach {
+      val returnType = it.returnType?.resolve()?.declaration
+      if (returnType == null || returnType.asClassName().asString() != asClassName().asString()) {
+        return@forEach
+      }
+      val arguments = it.parameters.mapNotNull {
+        it.toSirArgument()
+      }
+      if (arguments.filterIsInstance<SirInputValueDefinition>().map { it.name }.toSet() != keyFields) {
+        return@forEach
+      }
+
+      return SirEntityResolver(arguments)
+    }
+
+    logger.error("A resolve() function was found but either the return types or parameters are unexpected")
+
+    return null
+  }
 }
 
 
@@ -755,3 +821,4 @@ internal fun KSClassDeclaration.instantiation(): Instantiation {
     else -> Instantiation.UNKNOWN
   }
 }
+

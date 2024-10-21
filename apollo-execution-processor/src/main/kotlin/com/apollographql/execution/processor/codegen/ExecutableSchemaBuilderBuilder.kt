@@ -1,5 +1,6 @@
 package com.apollographql.execution.processor.codegen
 
+import com.apollographql.apollo.ast.GQLObjectTypeDefinition
 import com.apollographql.execution.processor.sir.*
 import com.squareup.kotlinpoet.*
 
@@ -7,6 +8,7 @@ internal class ExecutableSchemaBuilderBuilder(
   private val context: KotlinExecutableSchemaContext,
   serviceName: String,
   private val schemaDocument: MemberName,
+  private val entityResolver: MemberName?,
   private val sirDefinitions: List<SirDefinition>,
 ) : CgFileBuilder {
   private val simpleName = "${serviceName}ExecutableSchemaBuilder".capitalizeFirstLetter()
@@ -19,6 +21,7 @@ internal class ExecutableSchemaBuilderBuilder(
   }
 
   private fun funSpec(): FunSpec {
+
     return FunSpec.builder(simpleName)
         .returns(KotlinSymbols.ExecutableSchemaBuilder)
         .addModifiers(KModifier.INTERNAL)
@@ -42,6 +45,33 @@ internal class ExecutableSchemaBuilderBuilder(
                         }
                         add("}\n")
                       }
+                      if (sirObjectDefinition.operationType == "query" && entityResolver != null) {
+                        /**
+                         * Federation meta fields
+                         */
+                        add("field(%S)·{}\n", "_service")
+                        add("field(%S)·{\n", "_entities")
+                        indent {
+                          add("val representations·=·it.getRequiredArgument<List<Map<String,·Any>>>(\"representations\")\n")
+                          add("representations.map·{·representation·->\n")
+                          indent {
+                            add("%M(it.executionContext,·representation)\n", entityResolver)
+                          }
+                          add("}\n")
+                        }
+                        add("}\n")
+                      }
+                    }
+                    add("}\n")
+                  }
+                  if (entityResolver != null) {
+                    add("type(%S)·{\n", "_Service")
+                    indent {
+                      add("field(%S)·{\n", "sdl")
+                      indent {
+                        add("%M.%M(\"  \")", schemaDocument, MemberName("com.apollographql.apollo.ast", "toSDL"))
+                      }
+                      add("}\n")
                     }
                     add("}\n")
                   }
@@ -67,6 +97,9 @@ internal class ExecutableSchemaBuilderBuilder(
                 }
                 sirDefinitions.filterIsInstance<SirEnumDefinition>().forEach { sirEnumDefinition ->
                   add(".addCoercing(%S, %M)\n", sirEnumDefinition.name, context.coercings.get(sirEnumDefinition.name))
+                }
+                if (entityResolver != null) {
+                  add(".addCoercing(%S, %M)\n", "_Any", MemberName("com.apollographql.execution.federation", "_AnyCoercing"))
                 }
                 listOf("query", "mutation", "subscription").forEach { operationType ->
                   val sirObjectDefinition = sirDefinitions.rootType(operationType)

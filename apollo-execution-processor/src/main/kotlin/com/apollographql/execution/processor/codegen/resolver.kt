@@ -14,9 +14,12 @@ internal fun resolverBody(sirObjectDefinition: SirObjectDefinition, sirTargetFie
   return buildCode {
     add("it.parentObject.cast<%T>().%L", sirObjectDefinition.targetClassName.asKotlinPoet(), sirTargetField.targetName)
     if (sirTargetField.isFunction) {
-      add("(\n")
-      indent {
-        add(sirTargetField.arguments.map { argumentCodeBlock(it) }.joinToCode(",\n"))
+      add("(")
+      if (sirTargetField.arguments.isNotEmpty()) {
+        add("\n")
+        indent {
+          add(sirTargetField.arguments.map { argumentCodeBlock(it) }.joinToCode(",\n"))
+        }
       }
       add(")\n")
     }
