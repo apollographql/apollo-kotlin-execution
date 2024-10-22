@@ -1,6 +1,8 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
 
+module:apollo-execution-federation
+com.apollographql.execution.federation
 module:apollo-execution-gradle-plugin
 com.apollographql.execution.gradle
 com.apollographql.execution.gradle.internal
