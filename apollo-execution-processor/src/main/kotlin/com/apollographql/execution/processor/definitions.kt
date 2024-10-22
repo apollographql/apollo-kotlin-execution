@@ -319,31 +319,42 @@ private class TypeDefinitionContext(
 
     return SirArgument(
       name = graphQLName,
-      value = value.toGQLValue()
+      value = value.toGQLValue(this)
     )
   }
 
-  private fun Any?.toGQLValue(): GQLValue {
+  private fun Any?.toGQLValue(argument: KSValueArgument): GQLValue {
     return when (this) {
       null -> GQLNullValue(null)
       is String -> GQLStringValue(null, this)
       is Boolean -> GQLBooleanValue(null, this)
       is Int -> GQLIntValue(null, this.toString())
       is Double -> GQLFloatValue(null, this.toString())
-      is Array<*> -> GQLListValue(null, this.map { it.toGQLValue() })
+      is Array<*> -> GQLListValue(null, this.map { it.toGQLValue(argument) })
       is KSAnnotation -> {
         GQLObjectValue(
           null,
-          arguments.map { GQLObjectField(null, it.name!!.asString(), it.value.toGQLValue()) }
+          arguments.map { GQLObjectField(null, it.name!!.asString(), it.value.toGQLValue(argument)) }
         )
       }
 
       is KSType -> {
+        /**
+         * Not sure this is still used. This might be a leftover of KSP1
+         */
         GQLEnumValue(null, declaration.simpleName.asString())
       }
 
+      is KSClassDeclaration -> {
+        if (this.classKind != ClassKind.ENUM_ENTRY) {
+          logger.error("Cannot convert class $this to a GQLValue", argument)
+          GQLNullValue(null) // not correct but compilation should fail anyway
+        } else {
+          GQLEnumValue(null, simpleName.asString())
+        }
+      }
       else -> {
-        logger.error("Cannot convert $this to a GQLValue")
+        logger.error("Cannot convert $this to a GQLValue", argument)
         GQLNullValue(null) // not correct but compilation should fail anyway
       }
     }
