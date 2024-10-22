@@ -22,6 +22,17 @@ internal class SirFieldDefinition(
   val targetName: String,
   val isFunction: Boolean,
   val type: SirType,
+  val arguments: List<SirArgumentDefinition>,
+  /**
+   * Whether this field is a federation key
+   */
+  val isKey: Boolean
+)
+
+/**
+ * A federation resolver for an entity
+ */
+internal class SirEntityResolver(
   val arguments: List<SirArgumentDefinition>
 )
 
@@ -85,7 +96,7 @@ internal class SirDirective(
 )
 
 /**
- * The value of an argument in a directive
+ * The actual value of an argument in a directive or field
  */
 internal class SirArgument(
   val name: String,
@@ -116,7 +127,10 @@ internal class SirObjectDefinition(
   val operationType: String?,
   val fields: List<SirFieldDefinition>,
   override val directives: List<SirDirective>,
-) : SirTypeDefinition
+  val resolve: SirEntityResolver?
+) : SirTypeDefinition {
+  val isEntity = resolve != null
+}
 
 internal class SirInterfaceDefinition(
   override val name: String,

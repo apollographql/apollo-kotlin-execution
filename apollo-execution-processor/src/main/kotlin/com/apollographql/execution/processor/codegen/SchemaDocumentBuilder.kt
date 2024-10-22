@@ -14,6 +14,7 @@ import com.apollographql.execution.processor.codegen.KotlinSymbols.AstInputValue
 import com.apollographql.execution.processor.codegen.KotlinSymbols.AstIntValue
 import com.apollographql.execution.processor.codegen.KotlinSymbols.AstInterfaceTypeDefinition
 import com.apollographql.execution.processor.codegen.KotlinSymbols.AstListValue
+import com.apollographql.execution.processor.codegen.KotlinSymbols.AstNamedType
 import com.apollographql.execution.processor.codegen.KotlinSymbols.AstNullValue
 import com.apollographql.execution.processor.codegen.KotlinSymbols.AstObjectField
 import com.apollographql.execution.processor.codegen.KotlinSymbols.AstObjectTypeDefinition
@@ -45,6 +46,7 @@ import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.MemberName
 import com.squareup.kotlinpoet.PropertySpec
+import com.squareup.kotlinpoet.buildCodeBlock
 import com.squareup.kotlinpoet.joinToCode
 import com.squareup.kotlinpoet.withIndent
 
@@ -61,15 +63,16 @@ internal class SchemaDocumentBuilder(
   override fun prepare() {}
 
   private fun propertySpec(): PropertySpec {
+
     return PropertySpec.builder(simpleName, AstDocument)
         .addModifiers(KModifier.INTERNAL)
         .initializer(
-            buildCode {
+            buildCodeBlock {
               add("%T(\n", AstDocument)
-              indent {
+              withIndent {
                 add("")
                 add("definitions = listOf(\n")
-                indent {
+                withIndent {
                   add("%L,\n", sirDefinitions.schemaDefinitionCodeBlock())
                   sirDefinitions.forEach {
                     when (it) {
@@ -114,17 +117,17 @@ internal class SchemaDocumentBuilder(
  * ``
  */
 private fun List<SirDefinition>.schemaDefinitionCodeBlock(): CodeBlock {
-  return buildCode {
+  return buildCodeBlock {
     add("%T(\n", AstSchemaDefinition)
-    indent {
+    withIndent {
       add("sourceLocation = null,\n")
       add("description = null,\n")
       add("directives = emptyList(),\n")
       add("rootOperationTypeDefinitions = listOf(\n")
-      indent {
+      withIndent {
         filterIsInstance<SirObjectDefinition>().filter { it.operationType != null }.forEach {
           add("%T(\n", AstOperationTypeDefinition)
-          indent {
+          withIndent {
             add("operationType = %S,\n", it.operationType)
             add("namedType = %S,\n", it.name)
           }
@@ -153,27 +156,22 @@ private fun SirUnionDefinition.codeBlock(): CodeBlock {
   return buildCommon(className = AstUnionTypeDefinition, name = name, description = description, directives = directives) {
     add("memberTypes = listOf(")
     memberTypes.forEach {
-      add("%S,·", it)
+      add("%T(null,·%S),·", AstNamedType, it)
     }
     add(")")
   }
 }
 
-internal fun CodeBlock.Builder.indent(block: CodeBlock.Builder.() -> Unit) {
-  indent()
-  block()
-  unindent()
-}
 
 private fun SirDirectiveDefinition.codeBlock(): CodeBlock {
-  return buildCode {
+  return buildCodeBlock {
     add("%T(\n", AstDirectiveDefinition)
-    indent {
+    withIndent {
       add("sourceLocation·=·null,\n")
       add("description·=·%S,\n", description)
       add("name·=·%S,\n", name)
       add("arguments·=·listOf(\n")
-      indent {
+      withIndent {
         argumentDefinitions.forEach {
           add("%L,\n", it.codeBlock())
         }
@@ -261,7 +259,7 @@ private fun buildCommon(
     directives: List<SirDirective>,
     block: CodeBlock.Builder.() -> Unit = {},
 ): CodeBlock {
-  return buildCode {
+  return buildCodeBlock {
     add("%T(\n", className)
     indent()
     add("sourceLocation·=·null,\n")
@@ -275,7 +273,7 @@ private fun buildCommon(
 }
 
 private fun SirDirective.codeBlock(): CodeBlock {
-  return buildCode {
+  return buildCodeBlock {
     add("%T(\n", AstDirective)
     withIndent {
       add("null,\n")
@@ -294,7 +292,7 @@ private fun SirDirective.codeBlock(): CodeBlock {
 }
 
 private fun SirArgument.codeBlock(): CodeBlock {
-  return buildCode {
+  return buildCodeBlock {
     add("%T(\n", AstArgument)
     withIndent {
       add("null,\n")
@@ -335,12 +333,6 @@ private fun SirEnumDefinition.codeBlock(): CodeBlock {
 
 internal fun SirEnumValueDefinition.codeBlock(): CodeBlock {
   return buildCommon(className = KotlinSymbols.AstEnumValueDefinition, name = name, description = description, directives = directives)
-}
-
-internal fun buildCode(block: CodeBlock.Builder.() -> Unit): CodeBlock {
-  return CodeBlock.builder()
-      .apply(block)
-      .build()
 }
 
 private fun SirScalarDefinition.codeBlock(): CodeBlock {

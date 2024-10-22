@@ -1,3 +1,5 @@
+rootProject.name = "apollo-execution-tests"
+
 includeBuild("../")
 
 pluginManagement {
@@ -16,3 +18,4 @@ dependencyResolutionManagement {
 
 include(":directives")
 include(":integration")
+include(":federation")

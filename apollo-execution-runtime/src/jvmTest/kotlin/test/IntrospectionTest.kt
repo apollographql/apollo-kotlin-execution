@@ -8,6 +8,7 @@ import okio.FileSystem
 import okio.Path.Companion.toPath
 import okio.buffer
 import kotlin.test.Test
+import kotlin.test.assertNull
 
 class IntrospectionTest {
   @Test
@@ -29,7 +30,6 @@ class IntrospectionTest {
             document.toGraphQLRequest(),
             ExecutionContext.Empty
         )
-    println(response.data)
-    println(response.errors)
+    assertNull(response.errors)
   }
 }

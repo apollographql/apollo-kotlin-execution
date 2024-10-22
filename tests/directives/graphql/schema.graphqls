@@ -6,8 +6,8 @@ directive @requiresOptIn (feature: OptInFeature!) on FIELD_DEFINITION
 
 type Query {
   experimentalField: String! @requiresOptIn(feature: {
-    level: Warning
     name: "experimental"
+    level: Warning
   }
   )
 }
