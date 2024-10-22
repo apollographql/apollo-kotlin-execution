@@ -25,7 +25,6 @@ import kotlinx.coroutines.launch
 import okio.Buffer
 import okio.Sink
 
-
 /**
  * A [WebSocketHandler] that implements https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md
  */
