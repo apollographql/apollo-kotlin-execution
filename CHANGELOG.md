@@ -1,5 +1,8 @@
 # Next version (unreleased)
 
+# Version 0.1.0
+_2024-10-23_
+
 # Version 0.0.3
 _2024-08-30_
 
