@@ -1,5 +1,8 @@
 # Getting started
 
+> This project is experimental and provided as-is. Use at your own risk.
+{style=warning}
+
 Apollo Kotlin Execution is a code-first GraphQL execution library.
 
 Apollo Kotlin Execution:
