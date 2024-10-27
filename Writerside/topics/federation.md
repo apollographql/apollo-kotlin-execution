@@ -11,9 +11,11 @@ dependencies {
 }
 ```
 
-## Defining entity keys
+The `apollo-execution-federation` artifact contains the `@GraphQLKey` annotation allowing you to define [entities](https://www.apollographql.com/docs/graphos/schema-design/federated-schemas/entities/intro).
 
-You can define [entity](https://www.apollographql.com/docs/graphos/schema-design/federated-schemas/entities/intro) key using the `GraphQLKey` annotation:
+## Defining entities
+
+You can define an [entity](https://www.apollographql.com/docs/graphos/schema-design/federated-schemas/entities/intro) key using the `@GraphQLKey` annotation:
 
 ```kotlin
 class Product(
@@ -23,7 +25,7 @@ class Product(
 ) 
 ```
 
-The `GraphQLKey` annotation is translated at build time into a matching federation `@key` directive:
+The `@GraphQLKey` annotation is translated at build time into a matching federation `@key` directive:
 
 ```graphql
 @key(fields: "id")
@@ -36,7 +38,7 @@ type Product {
 > By adding the annotation on the field definition instead of the type definition, Apollo Kotlin Execution gives you more type safety.
 {style="note"}
 
-## Federation subgraph fields
+## Auto-generated meta fields
 
 Whenever a type containing a `@GraphQLKey` field is present, Apollo Kotlin Execution adds the [federation subgraph fields](https://www.apollographql.com/docs/graphos/reference/federation/subgraph-specific-fields), `_service` and `_entities`:
 
@@ -56,9 +58,9 @@ extend type Query {
 }
 ```
 
-## Defining federated resolvers
+## Defining entity resolvers
 
-In order to support the `_entities` field, federation requires a resolver that can resolve an entity from its key field.
+In order to support the `_entities` field, federation requires a resolver that can resolve an entity from its key fields.
 
 You can add one by defining a `resolve` function on the companion object:
 

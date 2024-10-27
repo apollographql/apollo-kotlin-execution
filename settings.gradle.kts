@@ -11,5 +11,6 @@ include(
   "apollo-execution-ktor",
   "apollo-execution-http4k",
   "apollo-execution-spring",
-  "apollo-execution-federation"
+  "apollo-execution-federation",
+  "apollo-execution-tracing"
 )

@@ -1,8 +1,14 @@
 import com.gradleup.librarian.gradle.librarianRoot
 
-plugins {
-    alias(libs.plugins.kgp.jvm).apply(false)
-    alias(libs.plugins.librarian).apply(false)
+buildscript {
+    dependencies {
+        classpath(libs.kotlin.gradle.plugin)
+        classpath(libs.librarian.gradle.plugin)
+        classpath(libs.wire.gradle.plugin)
+    }
+    repositories {
+        mavenCentral()
+    }
 }
 
 librarianRoot()

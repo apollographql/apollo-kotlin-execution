@@ -2,6 +2,7 @@ import com.gradleup.librarian.gradle.librarianModule
 
 plugins {
   id("org.jetbrains.kotlin.multiplatform")
+  id("com.squareup.wire")
 }
 
 librarianModule(true)
@@ -13,9 +14,6 @@ kotlin {
   sourceSets {
     getByName("commonMain") {
       dependencies {
-        api(libs.apollo.ast)
-        api(libs.apollo.api)
-        implementation(project(":apollo-execution-tracing"))
         api(project(":apollo-execution-runtime"))
       }
     }
@@ -23,8 +21,11 @@ kotlin {
     getByName("commonTest") {
       dependencies {
         implementation(libs.kotlin.test)
-      }
-    }
+      } }
+
   }
 }
 
+wire {
+  kotlin {}
+}
