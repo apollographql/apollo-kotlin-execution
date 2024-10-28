@@ -11,9 +11,11 @@ dependencies {
 }
 ```
 
-## Defining entity keys
+The `apollo-execution-federation` artifact contains the `@GraphQLKey` annotation allowing you to define [entities](https://www.apollographql.com/docs/graphos/schema-design/federated-schemas/entities/intro).
 
-You can define [entity](https://www.apollographql.com/docs/graphos/schema-design/federated-schemas/entities/intro) key using the `GraphQLKey` annotation:
+## Defining entities
+
+You can define an [entity](https://www.apollographql.com/docs/graphos/schema-design/federated-schemas/entities/intro) key using the `@GraphQLKey` annotation:
 
 ```kotlin
 class Product(
@@ -23,7 +25,7 @@ class Product(
 ) 
 ```
 
-The `GraphQLKey` annotation is translated at build time into a matching federation `@key` directive:
+The `@GraphQLKey` annotation is translated at build time into a matching federation `@key` directive:
 
 ```graphql
 @key(fields: "id")
@@ -36,7 +38,7 @@ type Product {
 > By adding the annotation on the field definition instead of the type definition, Apollo Kotlin Execution gives you more type safety.
 {style="note"}
 
-## Federation subgraph fields
+## Auto-generated meta fields
 
 Whenever a type containing a `@GraphQLKey` field is present, Apollo Kotlin Execution adds the [federation subgraph fields](https://www.apollographql.com/docs/graphos/reference/federation/subgraph-specific-fields), `_service` and `_entities`:
 
@@ -56,9 +58,9 @@ extend type Query {
 }
 ```
 
-## Defining federated resolvers
+## Defining entity resolvers
 
-In order to support the `_entities` field, federation requires a resolver that can resolve an entity from its key field.
+In order to support the `_entities` field, federation requires a resolver that can resolve an entity from its key fields.
 
 You can add one by defining a `resolve` function on the companion object:
 
@@ -96,3 +98,46 @@ class Product(
   }
 }
 ```
+
+## Tracing (ftv1)
+
+Apollo Kotlin Execution supports [federated tracing](https://www.apollographql.com/docs/federation/v1/metrics) (ftv1).
+
+Ftv1 records timing information for each field and reports that information to the router through the `"ftv1"` extension.
+
+This is done through the `Ftv1Instrumentation` and its matching `Ftv1Context`:
+
+```kotlin
+// Install the Ftv1Instrumentation in the executable schema
+val schema = ServiceExecutableSchemaBuilder()
+    .addInstrumentation(Ftv1Instrumentation())
+    .build()
+
+// Create a new Ftv1Context() for each operation and use it through execution
+val ftv1Context = Ftv1Context()
+val response = schema.execute(request, ftv1Context)
+
+// The information is a Base64 encoded protobuf message used by the router
+val ftv1 = response.extensions.get("ftv1")
+```
+
+Sending the `"ftv1"` extension has some overhead and in real life scenarios, the router uses sampling to save network bandwidth.
+
+This is done using the `"apollo-federation-include-trace"` HTTP header:
+
+```kotlin
+val ftv1Context = if (httpHeaders.get("apollo-federation-include-trace") == "ftv1") {
+  // The router required tracing information for this request
+  Ftv1Context()
+} else {
+  // No tracing information is required, skip processing
+  ExecutionContext.Empty
+}
+val response = schema.execute(request, ftv1Context)
+
+```
+
+```kotlin
+
+```
+

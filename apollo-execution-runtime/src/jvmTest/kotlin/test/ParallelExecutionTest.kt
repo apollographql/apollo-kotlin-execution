@@ -94,7 +94,7 @@ class ParallelExecutionTest {
     """.trimIndent()
 
     var inFirstFrame = true
-    var runAfterFirstFrame: Runnable? = null
+    var dispatch = true
     val dispatcher = Dispatchers.Default.limitedParallelism(1)
     val loader = Loader(dispatcher)
 
@@ -102,8 +102,9 @@ class ParallelExecutionTest {
       .schema(schema.toGQLDocument())
       .resolver {
         if (inFirstFrame) {
-          if (runAfterFirstFrame == null) {
-            runAfterFirstFrame = Runnable {
+          if (dispatch) {
+            dispatch = false
+            dispatcher.dispatch(EmptyCoroutineContext) {
               inFirstFrame = false
             }
           }
@@ -149,6 +150,44 @@ class ParallelExecutionTest {
           ),
         ), response.data
       )
+    }
+  }
+
+  @Test
+  fun listItemsAreExecutedInParallel() {
+    val schema = """
+      type Query {
+        items: [Item!]!
+      }
+      type Item {
+        id: ID!
+      }
+    """.trimIndent()
+
+        val executableSchema = ExecutableSchema.Builder()
+      .schema(schema.toGQLDocument())
+      .resolver {
+        return@resolver when (it.fieldName) {
+          "items" -> {
+            0.until(100).toList()
+          }
+          "id" -> {
+            delay(500)
+            it.parentObject.toString()
+          }
+          else -> {
+            error("Unknown field '${it.fieldName}'")
+          }
+        }
+      }
+      .build()
+
+    runBlocking {
+      val response = withTimeout(1000) {
+        executableSchema.execute("{ items { id } }".toGraphQLRequest())
+      }
+      @Suppress("UNCHECKED_CAST")
+      assertEquals(0.until(100).map { mapOf("id" to it.toString()) }, (response.data as Map<String, Any?>).get("items"))
     }
   }
 }

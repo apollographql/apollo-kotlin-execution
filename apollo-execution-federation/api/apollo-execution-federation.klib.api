@@ -6,6 +6,19 @@
 // - Show declarations: true
 
 // Library unique name: <com.apollographql.execution:apollo-execution-federation>
+final class com.apollographql.execution.federation/Ftv1Context : com.apollographql.apollo.api/ExecutionContext.Element { // com.apollographql.execution.federation/Ftv1Context|null[0]
+    constructor <init>() // com.apollographql.execution.federation/Ftv1Context.<init>|<init>(){}[0]
+    final object Key : com.apollographql.apollo.api/ExecutionContext.Key<com.apollographql.execution.federation/Ftv1Context> // com.apollographql.execution.federation/Ftv1Context.Key|null[0]
+    final val apolloOperationTracing // com.apollographql.execution.federation/Ftv1Context.apolloOperationTracing|{}apolloOperationTracing[0]
+        final fun <get-apolloOperationTracing>(): com.apollographql.execution.tracing/ApolloOperationTracing // com.apollographql.execution.federation/Ftv1Context.apolloOperationTracing.<get-apolloOperationTracing>|<get-apolloOperationTracing>(){}[0]
+    final val key // com.apollographql.execution.federation/Ftv1Context.key|{}key[0]
+        final fun <get-key>(): com.apollographql.execution.federation/Ftv1Context.Key // com.apollographql.execution.federation/Ftv1Context.key.<get-key>|<get-key>(){}[0]
+}
+final class com.apollographql.execution.federation/Ftv1Instrumentation : com.apollographql.execution/Instrumentation { // com.apollographql.execution.federation/Ftv1Instrumentation|null[0]
+    constructor <init>() // com.apollographql.execution.federation/Ftv1Instrumentation.<init>|<init>(){}[0]
+    final fun beforeField(com.apollographql.execution/ResolveInfo): com.apollographql.execution/InstrumentationCallback? // com.apollographql.execution.federation/Ftv1Instrumentation.beforeField|beforeField(com.apollographql.execution.ResolveInfo){}[0]
+    final fun onResponse(com.apollographql.execution/GraphQLResponse, com.apollographql.apollo.api/ExecutionContext): com.apollographql.execution/GraphQLResponse // com.apollographql.execution.federation/Ftv1Instrumentation.onResponse|onResponse(com.apollographql.execution.GraphQLResponse;com.apollographql.apollo.api.ExecutionContext){}[0]
+}
 final object com.apollographql.execution.federation/_AnyCoercing : com.apollographql.execution/Coercing<kotlin/Any?> { // com.apollographql.execution.federation/_AnyCoercing|null[0]
     final fun deserialize(kotlin/Any?): kotlin/Any? // com.apollographql.execution.federation/_AnyCoercing.deserialize|deserialize(kotlin.Any?){}[0]
     final fun parseLiteral(com.apollographql.apollo.ast/GQLValue): kotlin/Any? // com.apollographql.execution.federation/_AnyCoercing.parseLiteral|parseLiteral(com.apollographql.apollo.ast.GQLValue){}[0]

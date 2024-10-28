@@ -49,7 +49,7 @@ internal typealias ResolverValueOrError = Any?
 typealias JsonValue = Any?
 
 /**
- * Any of [JsonValue] or an error
+ * Any of [JsonValue] or [Error]
  */
 typealias ExternalValue = Any?
 
@@ -73,13 +73,6 @@ internal suspend fun ExternalValueOrDeferred.finalize(errors: MutableList<Error>
   }
 }
 
-internal suspend fun ExternalValueOrDeferred.toGraphQLResponse(): GraphQLResponse {
-  val errors = mutableListOf<Error>()
-
-  val data = this.finalize(errors)
-
-  return GraphQLResponse(data, errors.ifEmpty { null }, null)
-}
 
 /**
  * This function is a bit weird and only exists because default values are not coerced.
