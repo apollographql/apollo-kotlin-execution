@@ -12,23 +12,27 @@ import io.ktor.server.util.*
 import io.ktor.utils.io.*
 import okio.Buffer
 
-suspend fun ApplicationCall.respondGraphQL(executableSchema: ExecutableSchema, executionContext: ExecutionContext = ExecutionContext.Empty, configure: OutgoingContent.(GraphQLResponse?) -> Unit = {}) {
+suspend fun ApplicationCall.respondGraphQL(
+  executableSchema: ExecutableSchema,
+  executionContext: ExecutionContext = ExecutionContext.Empty,
+  configure: OutgoingContent.(GraphQLResponse?) -> Unit = {}
+) {
   val request = request.parseAsGraphQLRequest()
   val contentType = ContentType.parse("application/graphql-response+json")
   if (request.isFailure) {
     respondText(
-        contentType = contentType,
-        status = HttpStatusCode.BadRequest,
-        text = request.exceptionOrNull()?.message ?: "",
-        configure = { configure(null) }
+      contentType = contentType,
+      status = HttpStatusCode.BadRequest,
+      text = request.exceptionOrNull()?.message ?: "",
+      configure = { configure(null) }
     )
   } else {
     val response = executableSchema.execute(request.getOrThrow(), executionContext)
     respondBytes(
-        contentType = contentType,
-        status = HttpStatusCode.OK,
-        bytes = response.toByteArray(),
-        configure = { configure(response) }
+      contentType = contentType,
+      status = HttpStatusCode.OK,
+      bytes = response.toByteArray(),
+      configure = { configure(response) }
     )
   }
 }
@@ -68,16 +72,16 @@ suspend fun ApplicationRequest.parseAsGraphQLRequest(): Result<GraphQLRequest> {
 }
 
 fun Application.apolloModule(
-    executableSchema: ExecutableSchema,
-    path: String = "/graphql",
-    executionContext: ExecutionContext = ExecutionContext.Empty
+  executableSchema: ExecutableSchema,
+  path: String = "/graphql",
+  executionContext: (RoutingRequest) -> ExecutionContext = { ExecutionContext.Empty }
 ) {
   routing {
     post(path) {
-      call.respondGraphQL(executableSchema, executionContext)
+      call.respondGraphQL(executableSchema, executionContext(call.request))
     }
     get(path) {
-      call.respondGraphQL(executableSchema, executionContext)
+      call.respondGraphQL(executableSchema, executionContext(call.request))
     }
   }
 }
@@ -92,7 +96,17 @@ fun Application.apolloSandboxModule(
       call.respondRedirect(call.url { path("/sandbox/index.html") }, permanent = true)
     }
     get("$sandboxPath/index.html") {
-      val initialEndpoint = call.url { path(graphqlPath) }
+      val initialEndpoint = call.url {
+        /**
+         * Trying to guess if the client connected through HTTPS
+         */
+        val proto = call.request.header("x-forwarded-proto")
+        when (proto) {
+          "http" -> protocol = URLProtocol.HTTP
+          "https" -> protocol = URLProtocol.HTTPS
+        }
+        path(graphqlPath)
+      }
       call.respondText(sandboxHtml(title, initialEndpoint), ContentType.parse("text/html"))
     }
   }

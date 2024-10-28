@@ -15,6 +15,7 @@ kotlin {
     getByName("commonMain") {
       dependencies {
         api(project(":apollo-execution-runtime"))
+        implementation(libs.kotlinx.datetime)
       }
     }
 
@@ -27,5 +28,7 @@ kotlin {
 }
 
 wire {
-  kotlin {}
+  kotlin {
+
+  }
 }

@@ -1,3 +1,20 @@
+public final class com/apollographql/execution/federation/Ftv1Context : com/apollographql/apollo/api/ExecutionContext$Element {
+	public static final field Key Lcom/apollographql/execution/federation/Ftv1Context$Key;
+	public fun <init> ()V
+	public final fun getApolloOperationTracing ()Lcom/apollographql/execution/tracing/ApolloOperationTracing;
+	public synthetic fun getKey ()Lcom/apollographql/apollo/api/ExecutionContext$Key;
+	public fun getKey ()Lcom/apollographql/execution/federation/Ftv1Context$Key;
+}
+
+public final class com/apollographql/execution/federation/Ftv1Context$Key : com/apollographql/apollo/api/ExecutionContext$Key {
+}
+
+public final class com/apollographql/execution/federation/Ftv1Instrumentation : com/apollographql/execution/Instrumentation {
+	public fun <init> ()V
+	public fun beforeField (Lcom/apollographql/execution/ResolveInfo;)Lcom/apollographql/execution/InstrumentationCallback;
+	public fun onResponse (Lcom/apollographql/execution/GraphQLResponse;Lcom/apollographql/apollo/api/ExecutionContext;)Lcom/apollographql/execution/GraphQLResponse;
+}
+
 public abstract interface annotation class com/apollographql/execution/federation/GraphQLKey : java/lang/annotation/Annotation {
 }
 

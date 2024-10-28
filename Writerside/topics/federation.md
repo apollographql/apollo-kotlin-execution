@@ -98,3 +98,46 @@ class Product(
   }
 }
 ```
+
+## Tracing (ftv1)
+
+Apollo Kotlin Execution supports [federated tracing](https://www.apollographql.com/docs/federation/v1/metrics) (ftv1).
+
+Ftv1 records timing information for each field and reports that information to the router through the `"ftv1"` extension.
+
+This is done through the `Ftv1Instrumentation` and its matching `Ftv1Context`:
+
+```kotlin
+// Install the Ftv1Instrumentation in the executable schema
+val schema = ServiceExecutableSchemaBuilder()
+    .addInstrumentation(Ftv1Instrumentation())
+    .build()
+
+// Create a new Ftv1Context() for each operation and use it through execution
+val ftv1Context = Ftv1Context()
+val response = schema.execute(request, ftv1Context)
+
+// The information is a Base64 encoded protobuf message used by the router
+val ftv1 = response.extensions.get("ftv1")
+```
+
+Sending the `"ftv1"` extension has some overhead and in real life scenarios, the router uses sampling to save network bandwidth.
+
+This is done using the `"apollo-federation-include-trace"` HTTP header:
+
+```kotlin
+val ftv1Context = if (httpHeaders.get("apollo-federation-include-trace") == "ftv1") {
+  // The router required tracing information for this request
+  Ftv1Context()
+} else {
+  // No tracing information is required, skip processing
+  ExecutionContext.Empty
+}
+val response = schema.execute(request, ftv1Context)
+
+```
+
+```kotlin
+
+```
+

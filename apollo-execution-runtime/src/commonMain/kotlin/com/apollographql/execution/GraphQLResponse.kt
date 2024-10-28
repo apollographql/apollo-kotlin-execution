@@ -24,6 +24,11 @@ class GraphQLResponse internal constructor(
     }
   }
 
+  fun newBuilder(): Builder {
+    @Suppress("UNCHECKED_CAST")
+    return Builder().data(data as Map<String, Any?>?).errors(errors).extensions(extensions)
+  }
+
   class Builder {
     var data: Map<String, Any?>? = null
     var errors: List<Error>? = null

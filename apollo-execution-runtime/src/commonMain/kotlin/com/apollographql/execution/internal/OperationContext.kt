@@ -93,6 +93,17 @@ internal class OperationContext(
     }
   }
 
+  internal suspend fun ExternalValueOrDeferred.toGraphQLResponse(): GraphQLResponse {
+    val errors = mutableListOf<Error>()
+
+    val data = this.finalize(errors)
+
+    val response = GraphQLResponse(data, errors.ifEmpty { null }, null)
+
+    return instrumentations.fold(response) { acc, instrumentation ->
+      instrumentation.onResponse(acc, executionContext)
+    }
+  }
 
   private fun subscriptionError(message: String): Flow<SubscriptionError> {
     return flowOf(SubscriptionError(listOf(Error.Builder(message).build())))
@@ -193,7 +204,6 @@ internal class OperationContext(
       is FieldEventError -> GraphQLResponse.Builder().errors(listOf(Error.Builder(event.message).build())).build()
       is FieldEventItem -> {
         coroutineScope {
-          val errors = mutableListOf<Error>()
           val fieldData = completeValue(
             scope = this,
             fieldType = event.fields.first().definitionFromScope(schema, event.parentType)!!.type,
@@ -202,7 +212,7 @@ internal class OperationContext(
             path = listOf(event.responseName)
           )
 
-          GraphQLResponse(mapOf(event.responseName to fieldData?.finalize(errors)), errors.orNullIfEmpty(), null)
+          mapOf(event.responseName to fieldData).toGraphQLResponse()
         }
       }
     }
@@ -241,21 +251,40 @@ internal class OperationContext(
         path = path,
       )
 
-      val instrumentationCompletions = instrumentations.map {
-        it.beforeResolve(resolveInfo)
-      }
-      val resolvedValue = resolveFieldValue(resolveInfo)
-      completeValue(
-        scope = scope,
-        fieldType = fieldType,
-        fields = fields,
-        result = resolvedValue,
-        path = path
-      ).also { value ->
-        instrumentationCompletions.forEach {
-          it?.invoke(value)
+      val instrumentationCallbacks = mutableListOf<InstrumentationCallback>()
+      var instrumentationError: Error? = null
+      instrumentations.map {
+        try {
+          val callback = it.beforeField(resolveInfo)
+          if (callback != null) {
+            instrumentationCallbacks.add(callback)
+          }
+        } catch (e: Exception) {
+          if (e is CancellationException) {
+            throw e
+          }
+          instrumentationError = Error.Builder("Cannot instrument '${path.lastOrNull()}': ${e.message}")
+            .path(path)
+            .build()
         }
       }
+
+      val completedValue = if (instrumentationError == null) {
+        val resolvedValue = resolveFieldValue(resolveInfo)
+        completeValue(
+          scope = scope,
+          fieldType = fieldType,
+          fields = fields,
+          result = resolvedValue,
+          path = path
+        )
+      } else {
+        instrumentationError
+      }
+      instrumentationCallbacks.forEach {
+        it.afterComplete(completedValue)
+      }
+      completedValue
     }
   }
 

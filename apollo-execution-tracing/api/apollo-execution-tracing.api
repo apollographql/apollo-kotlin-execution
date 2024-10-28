@@ -1,0 +1,746 @@
+public final class com/apollographql/execution/tracing/ApolloOperationTracing {
+	public fun <init> ()V
+	public final fun beforeField (Lcom/apollographql/execution/ResolveInfo;)Lcom/apollographql/execution/InstrumentationCallback;
+	public final fun toProtoTrace ()Lcom/apollographql/execution/tracing/Trace;
+}
+
+public final class com/apollographql/execution/tracing/ApolloTracingInstrumentation : com/apollographql/execution/Instrumentation {
+	public fun <init> ()V
+	public fun beforeField (Lcom/apollographql/execution/ResolveInfo;)Lcom/apollographql/execution/InstrumentationCallback;
+}
+
+public final class com/apollographql/execution/tracing/ApolloTracingOperationContext : com/apollographql/apollo/api/ExecutionContext$Element {
+	public static final field Key Lcom/apollographql/execution/tracing/ApolloTracingOperationContext$Key;
+	public fun <init> ()V
+	public final fun getApolloOperationTracing ()Lcom/apollographql/execution/tracing/ApolloOperationTracing;
+	public synthetic fun getKey ()Lcom/apollographql/apollo/api/ExecutionContext$Key;
+	public fun getKey ()Lcom/apollographql/execution/tracing/ApolloTracingOperationContext$Key;
+}
+
+public final class com/apollographql/execution/tracing/ApolloTracingOperationContext$Key : com/apollographql/apollo/api/ExecutionContext$Key {
+}
+
+public final class com/apollographql/execution/tracing/ContextualizedQueryLatencyStats : com/squareup/wire/Message {
+	public static final field ADAPTER Lcom/squareup/wire/ProtoAdapter;
+	public static final field Companion Lcom/apollographql/execution/tracing/ContextualizedQueryLatencyStats$Companion;
+	public fun <init> ()V
+	public fun <init> (Lcom/apollographql/execution/tracing/QueryLatencyStats;Lcom/apollographql/execution/tracing/StatsContext;Lokio/ByteString;)V
+	public synthetic fun <init> (Lcom/apollographql/execution/tracing/QueryLatencyStats;Lcom/apollographql/execution/tracing/StatsContext;Lokio/ByteString;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy (Lcom/apollographql/execution/tracing/QueryLatencyStats;Lcom/apollographql/execution/tracing/StatsContext;Lokio/ByteString;)Lcom/apollographql/execution/tracing/ContextualizedQueryLatencyStats;
+	public static synthetic fun copy$default (Lcom/apollographql/execution/tracing/ContextualizedQueryLatencyStats;Lcom/apollographql/execution/tracing/QueryLatencyStats;Lcom/apollographql/execution/tracing/StatsContext;Lokio/ByteString;ILjava/lang/Object;)Lcom/apollographql/execution/tracing/ContextualizedQueryLatencyStats;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContext ()Lcom/apollographql/execution/tracing/StatsContext;
+	public final fun getQuery_latency_stats ()Lcom/apollographql/execution/tracing/QueryLatencyStats;
+	public fun hashCode ()I
+	public synthetic fun newBuilder ()Lcom/squareup/wire/Message$Builder;
+	public synthetic fun newBuilder ()Ljava/lang/Void;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/tracing/ContextualizedQueryLatencyStats$Companion {
+}
+
+public final class com/apollographql/execution/tracing/ContextualizedStats : com/squareup/wire/Message {
+	public static final field ADAPTER Lcom/squareup/wire/ProtoAdapter;
+	public static final field Companion Lcom/apollographql/execution/tracing/ContextualizedStats$Companion;
+	public fun <init> ()V
+	public fun <init> (Lcom/apollographql/execution/tracing/StatsContext;Lcom/apollographql/execution/tracing/QueryLatencyStats;Ljava/util/Map;Lokio/ByteString;)V
+	public synthetic fun <init> (Lcom/apollographql/execution/tracing/StatsContext;Lcom/apollographql/execution/tracing/QueryLatencyStats;Ljava/util/Map;Lokio/ByteString;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy (Lcom/apollographql/execution/tracing/StatsContext;Lcom/apollographql/execution/tracing/QueryLatencyStats;Ljava/util/Map;Lokio/ByteString;)Lcom/apollographql/execution/tracing/ContextualizedStats;
+	public static synthetic fun copy$default (Lcom/apollographql/execution/tracing/ContextualizedStats;Lcom/apollographql/execution/tracing/StatsContext;Lcom/apollographql/execution/tracing/QueryLatencyStats;Ljava/util/Map;Lokio/ByteString;ILjava/lang/Object;)Lcom/apollographql/execution/tracing/ContextualizedStats;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContext ()Lcom/apollographql/execution/tracing/StatsContext;
+	public final fun getPer_type_stat ()Ljava/util/Map;
+	public final fun getQuery_latency_stats ()Lcom/apollographql/execution/tracing/QueryLatencyStats;
+	public fun hashCode ()I
+	public synthetic fun newBuilder ()Lcom/squareup/wire/Message$Builder;
+	public synthetic fun newBuilder ()Ljava/lang/Void;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/tracing/ContextualizedStats$Companion {
+}
+
+public final class com/apollographql/execution/tracing/ContextualizedTypeStats : com/squareup/wire/Message {
+	public static final field ADAPTER Lcom/squareup/wire/ProtoAdapter;
+	public static final field Companion Lcom/apollographql/execution/tracing/ContextualizedTypeStats$Companion;
+	public fun <init> ()V
+	public fun <init> (Lcom/apollographql/execution/tracing/StatsContext;Ljava/util/Map;Lokio/ByteString;)V
+	public synthetic fun <init> (Lcom/apollographql/execution/tracing/StatsContext;Ljava/util/Map;Lokio/ByteString;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy (Lcom/apollographql/execution/tracing/StatsContext;Ljava/util/Map;Lokio/ByteString;)Lcom/apollographql/execution/tracing/ContextualizedTypeStats;
+	public static synthetic fun copy$default (Lcom/apollographql/execution/tracing/ContextualizedTypeStats;Lcom/apollographql/execution/tracing/StatsContext;Ljava/util/Map;Lokio/ByteString;ILjava/lang/Object;)Lcom/apollographql/execution/tracing/ContextualizedTypeStats;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContext ()Lcom/apollographql/execution/tracing/StatsContext;
+	public final fun getPer_type_stat ()Ljava/util/Map;
+	public fun hashCode ()I
+	public synthetic fun newBuilder ()Lcom/squareup/wire/Message$Builder;
+	public synthetic fun newBuilder ()Ljava/lang/Void;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/tracing/ContextualizedTypeStats$Companion {
+}
+
+public final class com/apollographql/execution/tracing/FieldStat : com/squareup/wire/Message {
+	public static final field ADAPTER Lcom/squareup/wire/ProtoAdapter;
+	public static final field Companion Lcom/apollographql/execution/tracing/FieldStat$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;JJJJLjava/util/List;Lokio/ByteString;)V
+	public synthetic fun <init> (Ljava/lang/String;JJJJLjava/util/List;Lokio/ByteString;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy (Ljava/lang/String;JJJJLjava/util/List;Lokio/ByteString;)Lcom/apollographql/execution/tracing/FieldStat;
+	public static synthetic fun copy$default (Lcom/apollographql/execution/tracing/FieldStat;Ljava/lang/String;JJJJLjava/util/List;Lokio/ByteString;ILjava/lang/Object;)Lcom/apollographql/execution/tracing/FieldStat;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getErrors_count ()J
+	public final fun getEstimated_execution_count ()J
+	public final fun getLatency_count ()Ljava/util/List;
+	public final fun getObserved_execution_count ()J
+	public final fun getRequests_with_errors_count ()J
+	public final fun getReturn_type ()Ljava/lang/String;
+	public fun hashCode ()I
+	public synthetic fun newBuilder ()Lcom/squareup/wire/Message$Builder;
+	public synthetic fun newBuilder ()Ljava/lang/Void;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/tracing/FieldStat$Companion {
+}
+
+public final class com/apollographql/execution/tracing/PathErrorStats : com/squareup/wire/Message {
+	public static final field ADAPTER Lcom/squareup/wire/ProtoAdapter;
+	public static final field Companion Lcom/apollographql/execution/tracing/PathErrorStats$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/util/Map;JJLokio/ByteString;)V
+	public synthetic fun <init> (Ljava/util/Map;JJLokio/ByteString;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy (Ljava/util/Map;JJLokio/ByteString;)Lcom/apollographql/execution/tracing/PathErrorStats;
+	public static synthetic fun copy$default (Lcom/apollographql/execution/tracing/PathErrorStats;Ljava/util/Map;JJLokio/ByteString;ILjava/lang/Object;)Lcom/apollographql/execution/tracing/PathErrorStats;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getChildren ()Ljava/util/Map;
+	public final fun getErrors_count ()J
+	public final fun getRequests_with_errors_count ()J
+	public fun hashCode ()I
+	public synthetic fun newBuilder ()Lcom/squareup/wire/Message$Builder;
+	public synthetic fun newBuilder ()Ljava/lang/Void;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/tracing/PathErrorStats$Companion {
+}
+
+public final class com/apollographql/execution/tracing/QueryLatencyStats : com/squareup/wire/Message {
+	public static final field ADAPTER Lcom/squareup/wire/ProtoAdapter;
+	public static final field Companion Lcom/apollographql/execution/tracing/QueryLatencyStats$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/util/List;JJJJLjava/util/List;Lcom/apollographql/execution/tracing/PathErrorStats;JLjava/util/List;Ljava/util/List;JJJLokio/ByteString;)V
+	public synthetic fun <init> (Ljava/util/List;JJJJLjava/util/List;Lcom/apollographql/execution/tracing/PathErrorStats;JLjava/util/List;Ljava/util/List;JJJLokio/ByteString;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy (Ljava/util/List;JJJJLjava/util/List;Lcom/apollographql/execution/tracing/PathErrorStats;JLjava/util/List;Ljava/util/List;JJJLokio/ByteString;)Lcom/apollographql/execution/tracing/QueryLatencyStats;
+	public static synthetic fun copy$default (Lcom/apollographql/execution/tracing/QueryLatencyStats;Ljava/util/List;JJJJLjava/util/List;Lcom/apollographql/execution/tracing/PathErrorStats;JLjava/util/List;Ljava/util/List;JJJLokio/ByteString;ILjava/lang/Object;)Lcom/apollographql/execution/tracing/QueryLatencyStats;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCache_hits ()J
+	public final fun getCache_latency_count ()Ljava/util/List;
+	public final fun getForbidden_operation_count ()J
+	public final fun getLatency_count ()Ljava/util/List;
+	public final fun getPersisted_query_hits ()J
+	public final fun getPersisted_query_misses ()J
+	public final fun getPrivate_cache_ttl_count ()Ljava/util/List;
+	public final fun getPublic_cache_ttl_count ()Ljava/util/List;
+	public final fun getRegistered_operation_count ()J
+	public final fun getRequest_count ()J
+	public final fun getRequests_with_errors_count ()J
+	public final fun getRequests_without_field_instrumentation ()J
+	public final fun getRoot_error_stats ()Lcom/apollographql/execution/tracing/PathErrorStats;
+	public fun hashCode ()I
+	public synthetic fun newBuilder ()Lcom/squareup/wire/Message$Builder;
+	public synthetic fun newBuilder ()Ljava/lang/Void;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/tracing/QueryLatencyStats$Companion {
+}
+
+public final class com/apollographql/execution/tracing/ReferencedFieldsForType : com/squareup/wire/Message {
+	public static final field ADAPTER Lcom/squareup/wire/ProtoAdapter;
+	public static final field Companion Lcom/apollographql/execution/tracing/ReferencedFieldsForType$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/util/List;ZLokio/ByteString;)V
+	public synthetic fun <init> (Ljava/util/List;ZLokio/ByteString;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy (Ljava/util/List;ZLokio/ByteString;)Lcom/apollographql/execution/tracing/ReferencedFieldsForType;
+	public static synthetic fun copy$default (Lcom/apollographql/execution/tracing/ReferencedFieldsForType;Ljava/util/List;ZLokio/ByteString;ILjava/lang/Object;)Lcom/apollographql/execution/tracing/ReferencedFieldsForType;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getField_names ()Ljava/util/List;
+	public fun hashCode ()I
+	public final fun is_interface ()Z
+	public synthetic fun newBuilder ()Lcom/squareup/wire/Message$Builder;
+	public synthetic fun newBuilder ()Ljava/lang/Void;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/tracing/ReferencedFieldsForType$Companion {
+}
+
+public final class com/apollographql/execution/tracing/Report : com/squareup/wire/Message {
+	public static final field ADAPTER Lcom/squareup/wire/ProtoAdapter;
+	public static final field Companion Lcom/apollographql/execution/tracing/Report$Companion;
+	public fun <init> ()V
+	public fun <init> (Lcom/apollographql/execution/tracing/ReportHeader;Ljava/util/Map;Ljava/time/Instant;JZLokio/ByteString;)V
+	public synthetic fun <init> (Lcom/apollographql/execution/tracing/ReportHeader;Ljava/util/Map;Ljava/time/Instant;JZLokio/ByteString;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy (Lcom/apollographql/execution/tracing/ReportHeader;Ljava/util/Map;Ljava/time/Instant;JZLokio/ByteString;)Lcom/apollographql/execution/tracing/Report;
+	public static synthetic fun copy$default (Lcom/apollographql/execution/tracing/Report;Lcom/apollographql/execution/tracing/ReportHeader;Ljava/util/Map;Ljava/time/Instant;JZLokio/ByteString;ILjava/lang/Object;)Lcom/apollographql/execution/tracing/Report;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getEnd_time ()Ljava/time/Instant;
+	public final fun getHeader_ ()Lcom/apollographql/execution/tracing/ReportHeader;
+	public final fun getOperation_count ()J
+	public final fun getTraces_per_query ()Ljava/util/Map;
+	public final fun getTraces_pre_aggregated ()Z
+	public fun hashCode ()I
+	public synthetic fun newBuilder ()Lcom/squareup/wire/Message$Builder;
+	public synthetic fun newBuilder ()Ljava/lang/Void;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/tracing/Report$Companion {
+}
+
+public final class com/apollographql/execution/tracing/ReportHeader : com/squareup/wire/Message {
+	public static final field ADAPTER Lcom/squareup/wire/ProtoAdapter;
+	public static final field Companion Lcom/apollographql/execution/tracing/ReportHeader$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lokio/ByteString;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lokio/ByteString;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lokio/ByteString;)Lcom/apollographql/execution/tracing/ReportHeader;
+	public static synthetic fun copy$default (Lcom/apollographql/execution/tracing/ReportHeader;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lokio/ByteString;ILjava/lang/Object;)Lcom/apollographql/execution/tracing/ReportHeader;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAgent_version ()Ljava/lang/String;
+	public final fun getExecutable_schema_id ()Ljava/lang/String;
+	public final fun getGraph_ref ()Ljava/lang/String;
+	public final fun getHostname ()Ljava/lang/String;
+	public final fun getRuntime_version ()Ljava/lang/String;
+	public final fun getService_version ()Ljava/lang/String;
+	public final fun getUname ()Ljava/lang/String;
+	public fun hashCode ()I
+	public synthetic fun newBuilder ()Lcom/squareup/wire/Message$Builder;
+	public synthetic fun newBuilder ()Ljava/lang/Void;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/tracing/ReportHeader$Companion {
+}
+
+public final class com/apollographql/execution/tracing/StatsContext : com/squareup/wire/Message {
+	public static final field ADAPTER Lcom/squareup/wire/ProtoAdapter;
+	public static final field Companion Lcom/apollographql/execution/tracing/StatsContext$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lokio/ByteString;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lokio/ByteString;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Lokio/ByteString;)Lcom/apollographql/execution/tracing/StatsContext;
+	public static synthetic fun copy$default (Lcom/apollographql/execution/tracing/StatsContext;Ljava/lang/String;Ljava/lang/String;Lokio/ByteString;ILjava/lang/Object;)Lcom/apollographql/execution/tracing/StatsContext;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getClient_name ()Ljava/lang/String;
+	public final fun getClient_version ()Ljava/lang/String;
+	public fun hashCode ()I
+	public synthetic fun newBuilder ()Lcom/squareup/wire/Message$Builder;
+	public synthetic fun newBuilder ()Ljava/lang/Void;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/tracing/StatsContext$Companion {
+}
+
+public final class com/apollographql/execution/tracing/Trace : com/squareup/wire/Message {
+	public static final field ADAPTER Lcom/squareup/wire/ProtoAdapter;
+	public static final field Companion Lcom/apollographql/execution/tracing/Trace$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/time/Instant;Ljava/time/Instant;JLcom/apollographql/execution/tracing/Trace$Node;ZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/apollographql/execution/tracing/Trace$Details;Ljava/lang/String;Ljava/lang/String;Lcom/apollographql/execution/tracing/Trace$HTTP;Lcom/apollographql/execution/tracing/Trace$CachePolicy;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode;ZZZZZDLokio/ByteString;)V
+	public synthetic fun <init> (Ljava/time/Instant;Ljava/time/Instant;JLcom/apollographql/execution/tracing/Trace$Node;ZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/apollographql/execution/tracing/Trace$Details;Ljava/lang/String;Ljava/lang/String;Lcom/apollographql/execution/tracing/Trace$HTTP;Lcom/apollographql/execution/tracing/Trace$CachePolicy;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode;ZZZZZDLokio/ByteString;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy (Ljava/time/Instant;Ljava/time/Instant;JLcom/apollographql/execution/tracing/Trace$Node;ZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/apollographql/execution/tracing/Trace$Details;Ljava/lang/String;Ljava/lang/String;Lcom/apollographql/execution/tracing/Trace$HTTP;Lcom/apollographql/execution/tracing/Trace$CachePolicy;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode;ZZZZZDLokio/ByteString;)Lcom/apollographql/execution/tracing/Trace;
+	public static synthetic fun copy$default (Lcom/apollographql/execution/tracing/Trace;Ljava/time/Instant;Ljava/time/Instant;JLcom/apollographql/execution/tracing/Trace$Node;ZLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/apollographql/execution/tracing/Trace$Details;Ljava/lang/String;Ljava/lang/String;Lcom/apollographql/execution/tracing/Trace$HTTP;Lcom/apollographql/execution/tracing/Trace$CachePolicy;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode;ZZZZZDLokio/ByteString;ILjava/lang/Object;)Lcom/apollographql/execution/tracing/Trace;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCache_policy ()Lcom/apollographql/execution/tracing/Trace$CachePolicy;
+	public final fun getClient_name ()Ljava/lang/String;
+	public final fun getClient_version ()Ljava/lang/String;
+	public final fun getDetails ()Lcom/apollographql/execution/tracing/Trace$Details;
+	public final fun getDuration_ns ()J
+	public final fun getEnd_time ()Ljava/time/Instant;
+	public final fun getField_execution_weight ()D
+	public final fun getForbidden_operation ()Z
+	public final fun getFull_query_cache_hit ()Z
+	public final fun getHttp ()Lcom/apollographql/execution/tracing/Trace$HTTP;
+	public final fun getPersisted_query_hit ()Z
+	public final fun getPersisted_query_register ()Z
+	public final fun getQuery_plan ()Lcom/apollographql/execution/tracing/Trace$QueryPlanNode;
+	public final fun getRegistered_operation ()Z
+	public final fun getRoot ()Lcom/apollographql/execution/tracing/Trace$Node;
+	public final fun getSignature ()Ljava/lang/String;
+	public final fun getStart_time ()Ljava/time/Instant;
+	public final fun getUnexecutedOperationBody ()Ljava/lang/String;
+	public final fun getUnexecutedOperationName ()Ljava/lang/String;
+	public fun hashCode ()I
+	public final fun is_incomplete ()Z
+	public synthetic fun newBuilder ()Lcom/squareup/wire/Message$Builder;
+	public synthetic fun newBuilder ()Ljava/lang/Void;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/tracing/Trace$CachePolicy : com/squareup/wire/Message {
+	public static final field ADAPTER Lcom/squareup/wire/ProtoAdapter;
+	public static final field Companion Lcom/apollographql/execution/tracing/Trace$CachePolicy$Companion;
+	public fun <init> ()V
+	public fun <init> (Lcom/apollographql/execution/tracing/Trace$CachePolicy$Scope;JLokio/ByteString;)V
+	public synthetic fun <init> (Lcom/apollographql/execution/tracing/Trace$CachePolicy$Scope;JLokio/ByteString;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy (Lcom/apollographql/execution/tracing/Trace$CachePolicy$Scope;JLokio/ByteString;)Lcom/apollographql/execution/tracing/Trace$CachePolicy;
+	public static synthetic fun copy$default (Lcom/apollographql/execution/tracing/Trace$CachePolicy;Lcom/apollographql/execution/tracing/Trace$CachePolicy$Scope;JLokio/ByteString;ILjava/lang/Object;)Lcom/apollographql/execution/tracing/Trace$CachePolicy;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMax_age_ns ()J
+	public final fun getScope ()Lcom/apollographql/execution/tracing/Trace$CachePolicy$Scope;
+	public fun hashCode ()I
+	public synthetic fun newBuilder ()Lcom/squareup/wire/Message$Builder;
+	public synthetic fun newBuilder ()Ljava/lang/Void;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/tracing/Trace$CachePolicy$Companion {
+}
+
+public final class com/apollographql/execution/tracing/Trace$CachePolicy$Scope : java/lang/Enum, com/squareup/wire/WireEnum {
+	public static final field ADAPTER Lcom/squareup/wire/ProtoAdapter;
+	public static final field Companion Lcom/apollographql/execution/tracing/Trace$CachePolicy$Scope$Companion;
+	public static final field PRIVATE Lcom/apollographql/execution/tracing/Trace$CachePolicy$Scope;
+	public static final field PUBLIC Lcom/apollographql/execution/tracing/Trace$CachePolicy$Scope;
+	public static final field UNKNOWN Lcom/apollographql/execution/tracing/Trace$CachePolicy$Scope;
+	public static final fun fromValue (I)Lcom/apollographql/execution/tracing/Trace$CachePolicy$Scope;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getValue ()I
+	public static fun valueOf (Ljava/lang/String;)Lcom/apollographql/execution/tracing/Trace$CachePolicy$Scope;
+	public static fun values ()[Lcom/apollographql/execution/tracing/Trace$CachePolicy$Scope;
+}
+
+public final class com/apollographql/execution/tracing/Trace$CachePolicy$Scope$Companion {
+	public final fun fromValue (I)Lcom/apollographql/execution/tracing/Trace$CachePolicy$Scope;
+}
+
+public final class com/apollographql/execution/tracing/Trace$Companion {
+}
+
+public final class com/apollographql/execution/tracing/Trace$Details : com/squareup/wire/Message {
+	public static final field ADAPTER Lcom/squareup/wire/ProtoAdapter;
+	public static final field Companion Lcom/apollographql/execution/tracing/Trace$Details$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/util/Map;Ljava/lang/String;Lokio/ByteString;)V
+	public synthetic fun <init> (Ljava/util/Map;Ljava/lang/String;Lokio/ByteString;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy (Ljava/util/Map;Ljava/lang/String;Lokio/ByteString;)Lcom/apollographql/execution/tracing/Trace$Details;
+	public static synthetic fun copy$default (Lcom/apollographql/execution/tracing/Trace$Details;Ljava/util/Map;Ljava/lang/String;Lokio/ByteString;ILjava/lang/Object;)Lcom/apollographql/execution/tracing/Trace$Details;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getOperation_name ()Ljava/lang/String;
+	public final fun getVariables_json ()Ljava/util/Map;
+	public fun hashCode ()I
+	public synthetic fun newBuilder ()Lcom/squareup/wire/Message$Builder;
+	public synthetic fun newBuilder ()Ljava/lang/Void;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/tracing/Trace$Details$Companion {
+}
+
+public final class com/apollographql/execution/tracing/Trace$Error : com/squareup/wire/Message {
+	public static final field ADAPTER Lcom/squareup/wire/ProtoAdapter;
+	public static final field Companion Lcom/apollographql/execution/tracing/Trace$Error$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Ljava/util/List;JLjava/lang/String;Lokio/ByteString;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;JLjava/lang/String;Lokio/ByteString;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy (Ljava/lang/String;Ljava/util/List;JLjava/lang/String;Lokio/ByteString;)Lcom/apollographql/execution/tracing/Trace$Error;
+	public static synthetic fun copy$default (Lcom/apollographql/execution/tracing/Trace$Error;Ljava/lang/String;Ljava/util/List;JLjava/lang/String;Lokio/ByteString;ILjava/lang/Object;)Lcom/apollographql/execution/tracing/Trace$Error;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getJson ()Ljava/lang/String;
+	public final fun getLocation ()Ljava/util/List;
+	public final fun getMessage ()Ljava/lang/String;
+	public final fun getTime_ns ()J
+	public fun hashCode ()I
+	public synthetic fun newBuilder ()Lcom/squareup/wire/Message$Builder;
+	public synthetic fun newBuilder ()Ljava/lang/Void;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/tracing/Trace$Error$Companion {
+}
+
+public final class com/apollographql/execution/tracing/Trace$HTTP : com/squareup/wire/Message {
+	public static final field ADAPTER Lcom/squareup/wire/ProtoAdapter;
+	public static final field Companion Lcom/apollographql/execution/tracing/Trace$HTTP$Companion;
+	public fun <init> ()V
+	public fun <init> (Lcom/apollographql/execution/tracing/Trace$HTTP$Method;Ljava/util/Map;Ljava/util/Map;ILokio/ByteString;)V
+	public synthetic fun <init> (Lcom/apollographql/execution/tracing/Trace$HTTP$Method;Ljava/util/Map;Ljava/util/Map;ILokio/ByteString;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy (Lcom/apollographql/execution/tracing/Trace$HTTP$Method;Ljava/util/Map;Ljava/util/Map;ILokio/ByteString;)Lcom/apollographql/execution/tracing/Trace$HTTP;
+	public static synthetic fun copy$default (Lcom/apollographql/execution/tracing/Trace$HTTP;Lcom/apollographql/execution/tracing/Trace$HTTP$Method;Ljava/util/Map;Ljava/util/Map;ILokio/ByteString;ILjava/lang/Object;)Lcom/apollographql/execution/tracing/Trace$HTTP;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMethod ()Lcom/apollographql/execution/tracing/Trace$HTTP$Method;
+	public final fun getRequest_headers ()Ljava/util/Map;
+	public final fun getResponse_headers ()Ljava/util/Map;
+	public final fun getStatus_code ()I
+	public fun hashCode ()I
+	public synthetic fun newBuilder ()Lcom/squareup/wire/Message$Builder;
+	public synthetic fun newBuilder ()Ljava/lang/Void;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/tracing/Trace$HTTP$Companion {
+}
+
+public final class com/apollographql/execution/tracing/Trace$HTTP$Method : java/lang/Enum, com/squareup/wire/WireEnum {
+	public static final field ADAPTER Lcom/squareup/wire/ProtoAdapter;
+	public static final field CONNECT Lcom/apollographql/execution/tracing/Trace$HTTP$Method;
+	public static final field Companion Lcom/apollographql/execution/tracing/Trace$HTTP$Method$Companion;
+	public static final field DELETE Lcom/apollographql/execution/tracing/Trace$HTTP$Method;
+	public static final field GET Lcom/apollographql/execution/tracing/Trace$HTTP$Method;
+	public static final field HEAD Lcom/apollographql/execution/tracing/Trace$HTTP$Method;
+	public static final field OPTIONS Lcom/apollographql/execution/tracing/Trace$HTTP$Method;
+	public static final field PATCH Lcom/apollographql/execution/tracing/Trace$HTTP$Method;
+	public static final field POST Lcom/apollographql/execution/tracing/Trace$HTTP$Method;
+	public static final field PUT Lcom/apollographql/execution/tracing/Trace$HTTP$Method;
+	public static final field TRACE Lcom/apollographql/execution/tracing/Trace$HTTP$Method;
+	public static final field UNKNOWN Lcom/apollographql/execution/tracing/Trace$HTTP$Method;
+	public static final fun fromValue (I)Lcom/apollographql/execution/tracing/Trace$HTTP$Method;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public fun getValue ()I
+	public static fun valueOf (Ljava/lang/String;)Lcom/apollographql/execution/tracing/Trace$HTTP$Method;
+	public static fun values ()[Lcom/apollographql/execution/tracing/Trace$HTTP$Method;
+}
+
+public final class com/apollographql/execution/tracing/Trace$HTTP$Method$Companion {
+	public final fun fromValue (I)Lcom/apollographql/execution/tracing/Trace$HTTP$Method;
+}
+
+public final class com/apollographql/execution/tracing/Trace$HTTP$Values : com/squareup/wire/Message {
+	public static final field ADAPTER Lcom/squareup/wire/ProtoAdapter;
+	public static final field Companion Lcom/apollographql/execution/tracing/Trace$HTTP$Values$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/util/List;Lokio/ByteString;)V
+	public synthetic fun <init> (Ljava/util/List;Lokio/ByteString;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy (Ljava/util/List;Lokio/ByteString;)Lcom/apollographql/execution/tracing/Trace$HTTP$Values;
+	public static synthetic fun copy$default (Lcom/apollographql/execution/tracing/Trace$HTTP$Values;Ljava/util/List;Lokio/ByteString;ILjava/lang/Object;)Lcom/apollographql/execution/tracing/Trace$HTTP$Values;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue_ ()Ljava/util/List;
+	public fun hashCode ()I
+	public synthetic fun newBuilder ()Lcom/squareup/wire/Message$Builder;
+	public synthetic fun newBuilder ()Ljava/lang/Void;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/tracing/Trace$HTTP$Values$Companion {
+}
+
+public final class com/apollographql/execution/tracing/Trace$Location : com/squareup/wire/Message {
+	public static final field ADAPTER Lcom/squareup/wire/ProtoAdapter;
+	public static final field Companion Lcom/apollographql/execution/tracing/Trace$Location$Companion;
+	public fun <init> ()V
+	public fun <init> (IILokio/ByteString;)V
+	public synthetic fun <init> (IILokio/ByteString;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy (IILokio/ByteString;)Lcom/apollographql/execution/tracing/Trace$Location;
+	public static synthetic fun copy$default (Lcom/apollographql/execution/tracing/Trace$Location;IILokio/ByteString;ILjava/lang/Object;)Lcom/apollographql/execution/tracing/Trace$Location;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getColumn ()I
+	public final fun getLine ()I
+	public fun hashCode ()I
+	public synthetic fun newBuilder ()Lcom/squareup/wire/Message$Builder;
+	public synthetic fun newBuilder ()Ljava/lang/Void;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/tracing/Trace$Location$Companion {
+}
+
+public final class com/apollographql/execution/tracing/Trace$Node : com/squareup/wire/Message {
+	public static final field ADAPTER Lcom/squareup/wire/ProtoAdapter;
+	public static final field Companion Lcom/apollographql/execution/tracing/Trace$Node$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/apollographql/execution/tracing/Trace$CachePolicy;JJLjava/util/List;Ljava/util/List;Lokio/ByteString;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/apollographql/execution/tracing/Trace$CachePolicy;JJLjava/util/List;Ljava/util/List;Lokio/ByteString;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy (Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/apollographql/execution/tracing/Trace$CachePolicy;JJLjava/util/List;Ljava/util/List;Lokio/ByteString;)Lcom/apollographql/execution/tracing/Trace$Node;
+	public static synthetic fun copy$default (Lcom/apollographql/execution/tracing/Trace$Node;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/apollographql/execution/tracing/Trace$CachePolicy;JJLjava/util/List;Ljava/util/List;Lokio/ByteString;ILjava/lang/Object;)Lcom/apollographql/execution/tracing/Trace$Node;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCache_policy ()Lcom/apollographql/execution/tracing/Trace$CachePolicy;
+	public final fun getChild ()Ljava/util/List;
+	public final fun getEnd_time ()J
+	public final fun getError ()Ljava/util/List;
+	public final fun getIndex ()Ljava/lang/Integer;
+	public final fun getOriginal_field_name ()Ljava/lang/String;
+	public final fun getParent_type ()Ljava/lang/String;
+	public final fun getResponse_name ()Ljava/lang/String;
+	public final fun getStart_time ()J
+	public final fun getType ()Ljava/lang/String;
+	public fun hashCode ()I
+	public synthetic fun newBuilder ()Lcom/squareup/wire/Message$Builder;
+	public synthetic fun newBuilder ()Ljava/lang/Void;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/tracing/Trace$Node$Companion {
+}
+
+public final class com/apollographql/execution/tracing/Trace$QueryPlanNode : com/squareup/wire/Message {
+	public static final field ADAPTER Lcom/squareup/wire/ProtoAdapter;
+	public static final field Companion Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$Companion;
+	public fun <init> ()V
+	public fun <init> (Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$SequenceNode;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$ParallelNode;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$FetchNode;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$FlattenNode;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$DeferNode;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$ConditionNode;Lokio/ByteString;)V
+	public synthetic fun <init> (Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$SequenceNode;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$ParallelNode;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$FetchNode;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$FlattenNode;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$DeferNode;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$ConditionNode;Lokio/ByteString;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy (Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$SequenceNode;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$ParallelNode;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$FetchNode;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$FlattenNode;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$DeferNode;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$ConditionNode;Lokio/ByteString;)Lcom/apollographql/execution/tracing/Trace$QueryPlanNode;
+	public static synthetic fun copy$default (Lcom/apollographql/execution/tracing/Trace$QueryPlanNode;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$SequenceNode;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$ParallelNode;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$FetchNode;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$FlattenNode;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$DeferNode;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$ConditionNode;Lokio/ByteString;ILjava/lang/Object;)Lcom/apollographql/execution/tracing/Trace$QueryPlanNode;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCondition ()Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$ConditionNode;
+	public final fun getDefer ()Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$DeferNode;
+	public final fun getFetch ()Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$FetchNode;
+	public final fun getFlatten ()Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$FlattenNode;
+	public final fun getParallel ()Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$ParallelNode;
+	public final fun getSequence ()Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$SequenceNode;
+	public fun hashCode ()I
+	public synthetic fun newBuilder ()Lcom/squareup/wire/Message$Builder;
+	public synthetic fun newBuilder ()Ljava/lang/Void;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/tracing/Trace$QueryPlanNode$Companion {
+}
+
+public final class com/apollographql/execution/tracing/Trace$QueryPlanNode$ConditionNode : com/squareup/wire/Message {
+	public static final field ADAPTER Lcom/squareup/wire/ProtoAdapter;
+	public static final field Companion Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$ConditionNode$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode;Lokio/ByteString;)V
+	public synthetic fun <init> (Ljava/lang/String;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode;Lokio/ByteString;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy (Ljava/lang/String;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode;Lokio/ByteString;)Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$ConditionNode;
+	public static synthetic fun copy$default (Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$ConditionNode;Ljava/lang/String;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode;Lokio/ByteString;ILjava/lang/Object;)Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$ConditionNode;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCondition ()Ljava/lang/String;
+	public final fun getElse_clause ()Lcom/apollographql/execution/tracing/Trace$QueryPlanNode;
+	public final fun getIf_clause ()Lcom/apollographql/execution/tracing/Trace$QueryPlanNode;
+	public fun hashCode ()I
+	public synthetic fun newBuilder ()Lcom/squareup/wire/Message$Builder;
+	public synthetic fun newBuilder ()Ljava/lang/Void;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/tracing/Trace$QueryPlanNode$ConditionNode$Companion {
+}
+
+public final class com/apollographql/execution/tracing/Trace$QueryPlanNode$DeferNode : com/squareup/wire/Message {
+	public static final field ADAPTER Lcom/squareup/wire/ProtoAdapter;
+	public static final field Companion Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$DeferNode$Companion;
+	public fun <init> ()V
+	public fun <init> (Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$DeferNodePrimary;Ljava/util/List;Lokio/ByteString;)V
+	public synthetic fun <init> (Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$DeferNodePrimary;Ljava/util/List;Lokio/ByteString;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy (Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$DeferNodePrimary;Ljava/util/List;Lokio/ByteString;)Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$DeferNode;
+	public static synthetic fun copy$default (Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$DeferNode;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$DeferNodePrimary;Ljava/util/List;Lokio/ByteString;ILjava/lang/Object;)Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$DeferNode;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDeferred ()Ljava/util/List;
+	public final fun getPrimary ()Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$DeferNodePrimary;
+	public fun hashCode ()I
+	public synthetic fun newBuilder ()Lcom/squareup/wire/Message$Builder;
+	public synthetic fun newBuilder ()Ljava/lang/Void;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/tracing/Trace$QueryPlanNode$DeferNode$Companion {
+}
+
+public final class com/apollographql/execution/tracing/Trace$QueryPlanNode$DeferNodePrimary : com/squareup/wire/Message {
+	public static final field ADAPTER Lcom/squareup/wire/ProtoAdapter;
+	public static final field Companion Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$DeferNodePrimary$Companion;
+	public fun <init> ()V
+	public fun <init> (Lcom/apollographql/execution/tracing/Trace$QueryPlanNode;Lokio/ByteString;)V
+	public synthetic fun <init> (Lcom/apollographql/execution/tracing/Trace$QueryPlanNode;Lokio/ByteString;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy (Lcom/apollographql/execution/tracing/Trace$QueryPlanNode;Lokio/ByteString;)Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$DeferNodePrimary;
+	public static synthetic fun copy$default (Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$DeferNodePrimary;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode;Lokio/ByteString;ILjava/lang/Object;)Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$DeferNodePrimary;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getNode ()Lcom/apollographql/execution/tracing/Trace$QueryPlanNode;
+	public fun hashCode ()I
+	public synthetic fun newBuilder ()Lcom/squareup/wire/Message$Builder;
+	public synthetic fun newBuilder ()Ljava/lang/Void;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/tracing/Trace$QueryPlanNode$DeferNodePrimary$Companion {
+}
+
+public final class com/apollographql/execution/tracing/Trace$QueryPlanNode$DeferredNode : com/squareup/wire/Message {
+	public static final field ADAPTER Lcom/squareup/wire/ProtoAdapter;
+	public static final field Companion Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$DeferredNode$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/util/List;Ljava/lang/String;Ljava/util/List;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode;Lokio/ByteString;)V
+	public synthetic fun <init> (Ljava/util/List;Ljava/lang/String;Ljava/util/List;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode;Lokio/ByteString;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy (Ljava/util/List;Ljava/lang/String;Ljava/util/List;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode;Lokio/ByteString;)Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$DeferredNode;
+	public static synthetic fun copy$default (Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$DeferredNode;Ljava/util/List;Ljava/lang/String;Ljava/util/List;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode;Lokio/ByteString;ILjava/lang/Object;)Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$DeferredNode;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDepends ()Ljava/util/List;
+	public final fun getLabel ()Ljava/lang/String;
+	public final fun getNode ()Lcom/apollographql/execution/tracing/Trace$QueryPlanNode;
+	public final fun getPath ()Ljava/util/List;
+	public fun hashCode ()I
+	public synthetic fun newBuilder ()Lcom/squareup/wire/Message$Builder;
+	public synthetic fun newBuilder ()Ljava/lang/Void;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/tracing/Trace$QueryPlanNode$DeferredNode$Companion {
+}
+
+public final class com/apollographql/execution/tracing/Trace$QueryPlanNode$DeferredNodeDepends : com/squareup/wire/Message {
+	public static final field ADAPTER Lcom/squareup/wire/ProtoAdapter;
+	public static final field Companion Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$DeferredNodeDepends$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lokio/ByteString;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lokio/ByteString;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Lokio/ByteString;)Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$DeferredNodeDepends;
+	public static synthetic fun copy$default (Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$DeferredNodeDepends;Ljava/lang/String;Ljava/lang/String;Lokio/ByteString;ILjava/lang/Object;)Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$DeferredNodeDepends;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDefer_label ()Ljava/lang/String;
+	public final fun getId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public synthetic fun newBuilder ()Lcom/squareup/wire/Message$Builder;
+	public synthetic fun newBuilder ()Ljava/lang/Void;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/tracing/Trace$QueryPlanNode$DeferredNodeDepends$Companion {
+}
+
+public final class com/apollographql/execution/tracing/Trace$QueryPlanNode$FetchNode : com/squareup/wire/Message {
+	public static final field ADAPTER Lcom/squareup/wire/ProtoAdapter;
+	public static final field Companion Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$FetchNode$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;ZLcom/apollographql/execution/tracing/Trace;JLjava/time/Instant;Ljava/time/Instant;Lokio/ByteString;)V
+	public synthetic fun <init> (Ljava/lang/String;ZLcom/apollographql/execution/tracing/Trace;JLjava/time/Instant;Ljava/time/Instant;Lokio/ByteString;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy (Ljava/lang/String;ZLcom/apollographql/execution/tracing/Trace;JLjava/time/Instant;Ljava/time/Instant;Lokio/ByteString;)Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$FetchNode;
+	public static synthetic fun copy$default (Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$FetchNode;Ljava/lang/String;ZLcom/apollographql/execution/tracing/Trace;JLjava/time/Instant;Ljava/time/Instant;Lokio/ByteString;ILjava/lang/Object;)Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$FetchNode;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getReceived_time ()Ljava/time/Instant;
+	public final fun getSent_time ()Ljava/time/Instant;
+	public final fun getSent_time_offset ()J
+	public final fun getService_name ()Ljava/lang/String;
+	public final fun getTrace ()Lcom/apollographql/execution/tracing/Trace;
+	public final fun getTrace_parsing_failed ()Z
+	public fun hashCode ()I
+	public synthetic fun newBuilder ()Lcom/squareup/wire/Message$Builder;
+	public synthetic fun newBuilder ()Ljava/lang/Void;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/tracing/Trace$QueryPlanNode$FetchNode$Companion {
+}
+
+public final class com/apollographql/execution/tracing/Trace$QueryPlanNode$FlattenNode : com/squareup/wire/Message {
+	public static final field ADAPTER Lcom/squareup/wire/ProtoAdapter;
+	public static final field Companion Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$FlattenNode$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/util/List;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode;Lokio/ByteString;)V
+	public synthetic fun <init> (Ljava/util/List;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode;Lokio/ByteString;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy (Ljava/util/List;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode;Lokio/ByteString;)Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$FlattenNode;
+	public static synthetic fun copy$default (Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$FlattenNode;Ljava/util/List;Lcom/apollographql/execution/tracing/Trace$QueryPlanNode;Lokio/ByteString;ILjava/lang/Object;)Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$FlattenNode;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getNode ()Lcom/apollographql/execution/tracing/Trace$QueryPlanNode;
+	public final fun getResponse_path ()Ljava/util/List;
+	public fun hashCode ()I
+	public synthetic fun newBuilder ()Lcom/squareup/wire/Message$Builder;
+	public synthetic fun newBuilder ()Ljava/lang/Void;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/tracing/Trace$QueryPlanNode$FlattenNode$Companion {
+}
+
+public final class com/apollographql/execution/tracing/Trace$QueryPlanNode$ParallelNode : com/squareup/wire/Message {
+	public static final field ADAPTER Lcom/squareup/wire/ProtoAdapter;
+	public static final field Companion Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$ParallelNode$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/util/List;Lokio/ByteString;)V
+	public synthetic fun <init> (Ljava/util/List;Lokio/ByteString;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy (Ljava/util/List;Lokio/ByteString;)Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$ParallelNode;
+	public static synthetic fun copy$default (Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$ParallelNode;Ljava/util/List;Lokio/ByteString;ILjava/lang/Object;)Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$ParallelNode;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getNodes ()Ljava/util/List;
+	public fun hashCode ()I
+	public synthetic fun newBuilder ()Lcom/squareup/wire/Message$Builder;
+	public synthetic fun newBuilder ()Ljava/lang/Void;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/tracing/Trace$QueryPlanNode$ParallelNode$Companion {
+}
+
+public final class com/apollographql/execution/tracing/Trace$QueryPlanNode$ResponsePathElement : com/squareup/wire/Message {
+	public static final field ADAPTER Lcom/squareup/wire/ProtoAdapter;
+	public static final field Companion Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$ResponsePathElement$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/String;Ljava/lang/Integer;Lokio/ByteString;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Integer;Lokio/ByteString;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy (Ljava/lang/String;Ljava/lang/Integer;Lokio/ByteString;)Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$ResponsePathElement;
+	public static synthetic fun copy$default (Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$ResponsePathElement;Ljava/lang/String;Ljava/lang/Integer;Lokio/ByteString;ILjava/lang/Object;)Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$ResponsePathElement;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getField_name ()Ljava/lang/String;
+	public final fun getIndex ()Ljava/lang/Integer;
+	public fun hashCode ()I
+	public synthetic fun newBuilder ()Lcom/squareup/wire/Message$Builder;
+	public synthetic fun newBuilder ()Ljava/lang/Void;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/tracing/Trace$QueryPlanNode$ResponsePathElement$Companion {
+}
+
+public final class com/apollographql/execution/tracing/Trace$QueryPlanNode$SequenceNode : com/squareup/wire/Message {
+	public static final field ADAPTER Lcom/squareup/wire/ProtoAdapter;
+	public static final field Companion Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$SequenceNode$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/util/List;Lokio/ByteString;)V
+	public synthetic fun <init> (Ljava/util/List;Lokio/ByteString;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy (Ljava/util/List;Lokio/ByteString;)Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$SequenceNode;
+	public static synthetic fun copy$default (Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$SequenceNode;Ljava/util/List;Lokio/ByteString;ILjava/lang/Object;)Lcom/apollographql/execution/tracing/Trace$QueryPlanNode$SequenceNode;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getNodes ()Ljava/util/List;
+	public fun hashCode ()I
+	public synthetic fun newBuilder ()Lcom/squareup/wire/Message$Builder;
+	public synthetic fun newBuilder ()Ljava/lang/Void;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/tracing/Trace$QueryPlanNode$SequenceNode$Companion {
+}
+
+public final class com/apollographql/execution/tracing/TracesAndStats : com/squareup/wire/Message {
+	public static final field ADAPTER Lcom/squareup/wire/ProtoAdapter;
+	public static final field Companion Lcom/apollographql/execution/tracing/TracesAndStats$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/util/List;Ljava/util/List;Ljava/util/Map;Ljava/util/List;Lokio/ByteString;)V
+	public synthetic fun <init> (Ljava/util/List;Ljava/util/List;Ljava/util/Map;Ljava/util/List;Lokio/ByteString;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy (Ljava/util/List;Ljava/util/List;Ljava/util/Map;Ljava/util/List;Lokio/ByteString;)Lcom/apollographql/execution/tracing/TracesAndStats;
+	public static synthetic fun copy$default (Lcom/apollographql/execution/tracing/TracesAndStats;Ljava/util/List;Ljava/util/List;Ljava/util/Map;Ljava/util/List;Lokio/ByteString;ILjava/lang/Object;)Lcom/apollographql/execution/tracing/TracesAndStats;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getInternal_traces_contributing_to_stats ()Ljava/util/List;
+	public final fun getReferenced_fields_by_type ()Ljava/util/Map;
+	public final fun getStats_with_context ()Ljava/util/List;
+	public final fun getTrace ()Ljava/util/List;
+	public fun hashCode ()I
+	public synthetic fun newBuilder ()Lcom/squareup/wire/Message$Builder;
+	public synthetic fun newBuilder ()Ljava/lang/Void;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/tracing/TracesAndStats$Companion {
+}
+
+public final class com/apollographql/execution/tracing/TypeStat : com/squareup/wire/Message {
+	public static final field ADAPTER Lcom/squareup/wire/ProtoAdapter;
+	public static final field Companion Lcom/apollographql/execution/tracing/TypeStat$Companion;
+	public fun <init> ()V
+	public fun <init> (Ljava/util/Map;Lokio/ByteString;)V
+	public synthetic fun <init> (Ljava/util/Map;Lokio/ByteString;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun copy (Ljava/util/Map;Lokio/ByteString;)Lcom/apollographql/execution/tracing/TypeStat;
+	public static synthetic fun copy$default (Lcom/apollographql/execution/tracing/TypeStat;Ljava/util/Map;Lokio/ByteString;ILjava/lang/Object;)Lcom/apollographql/execution/tracing/TypeStat;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getPer_field_stat ()Ljava/util/Map;
+	public fun hashCode ()I
+	public synthetic fun newBuilder ()Lcom/squareup/wire/Message$Builder;
+	public synthetic fun newBuilder ()Ljava/lang/Void;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/tracing/TypeStat$Companion {
+}
+
