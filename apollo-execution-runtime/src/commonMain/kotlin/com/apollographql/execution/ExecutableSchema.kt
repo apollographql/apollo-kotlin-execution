@@ -19,6 +19,7 @@ class ExecutableSchema(
   private val subscriptionRoot: RootResolver?,
   private val resolver: Resolver,
   private val typeResolver: TypeResolver,
+  private val instrumentations: List<Instrumentation>,
   private val persistedDocumentCache: PersistedDocumentCache?,
 ) {
   private val introspectionResolver: Resolver = introspectionResolver(schema)
@@ -61,6 +62,7 @@ class ExecutableSchema(
       subscriptionRoot,
       resolver,
       typeResolver,
+      instrumentations,
       preparedRequest.operation,
       preparedRequest.fragments,
       preparedRequest.variables,
@@ -76,6 +78,7 @@ class ExecutableSchema(
     private var mutationRoot: RootResolver? = null
     private var subscriptionRoot: RootResolver? = null
     private var typeResolver: TypeResolver? = null
+    private val instrumentations = mutableListOf<Instrumentation>()
     private var persistedDocumentCache: PersistedDocumentCache? = null
 
     fun schema(schema: GQLDocument): Builder = apply {
@@ -110,6 +113,10 @@ class ExecutableSchema(
       this.typeResolver = typeResolver
     }
 
+    fun addInstrumentation(instrumentation: Instrumentation): Builder = apply {
+      this.instrumentations.add(instrumentation)
+    }
+
     fun persistedDocumentCache(persistedDocumentCache: PersistedDocumentCache?): Builder = apply {
       this.persistedDocumentCache = persistedDocumentCache
     }
@@ -127,6 +134,7 @@ class ExecutableSchema(
         subscriptionRoot,
         resolver ?: ThrowingResolver,
         typeResolver ?: ThrowingTypeResolver,
+        instrumentations,
         persistedDocumentCache
       )
     }

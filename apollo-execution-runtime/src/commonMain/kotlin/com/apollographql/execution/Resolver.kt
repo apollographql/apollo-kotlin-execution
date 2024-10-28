@@ -60,6 +60,7 @@ class ResolveInfo internal constructor(
   val fields: List<GQLField>,
   val schema: Schema,
   private val arguments: Map<String, InternalValue>,
+  val path: List<Any>
 ) {
   val field: GQLField
     get() = fields.first()

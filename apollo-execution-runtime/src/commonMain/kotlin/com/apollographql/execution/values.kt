@@ -49,7 +49,7 @@ internal typealias ResolverValueOrError = Any?
 typealias JsonValue = Any?
 
 /**
- * Any of [JsonValue] or an error
+ * Any of [JsonValue] or [Error]
  */
 typealias ExternalValue = Any?
 
