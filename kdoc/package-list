@@ -18,3 +18,5 @@ com.apollographql.execution.annotation
 com.apollographql.execution.websocket
 module:apollo-execution-spring
 com.apollographql.execution.spring
+module:apollo-execution-tracing
+com.apollographql.execution.tracing
