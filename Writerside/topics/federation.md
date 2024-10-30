@@ -2,16 +2,16 @@
 
 Apollo Kotlin Execution supports [Apollo Federation](https://www.apollographql.com/federation).
 
-To use federation, add the `apollo-execution-federation` artifact to your project:
+To use federation, add the `apollo-execution-subgraph` artifact to your project:
 
 ```kotlin
 dependencies {
   // Add the federation dependency
-  implementation("com.apollographql.execution:apollo-execution-federation:%latest_version%")
+  implementation("com.apollographql.execution:apollo-execution-subgraph:%latest_version%")
 }
 ```
 
-The `apollo-execution-federation` artifact contains the `@GraphQLKey` annotation allowing you to define [entities](https://www.apollographql.com/docs/graphos/schema-design/federated-schemas/entities/intro).
+The `apollo-execution-subgraph` artifact contains the `@GraphQLKey` annotation allowing you to define [entities](https://www.apollographql.com/docs/graphos/schema-design/federated-schemas/entities/intro).
 
 ## Defining entities
 
@@ -105,7 +105,10 @@ Apollo Kotlin Execution supports [federated tracing](https://www.apollographql.c
 
 Ftv1 records timing information for each field and reports that information to the router through the `"ftv1"` extension.
 
-This is done through the `Ftv1Instrumentation` and its matching `Ftv1Context`:
+> If you have a monograph, see [usage reporting](usage-reporting.md) instead for how to send tracing information to the Apollo usage reporting endpoint.
+{style=note}
+
+To enable federated tracing, configure your `ExecutableSchema` with a `Ftv1Instrumentation` and matching `Ftv1Context`:
 
 ```kotlin
 // Install the Ftv1Instrumentation in the executable schema

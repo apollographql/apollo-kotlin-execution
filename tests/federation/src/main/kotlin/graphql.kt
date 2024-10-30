@@ -1,5 +1,5 @@
 import com.apollographql.execution.annotation.GraphQLQuery
-import com.apollographql.execution.federation.GraphQLKey
+import com.apollographql.execution.subgraph.GraphQLKey
 
 @GraphQLQuery
 class Query {

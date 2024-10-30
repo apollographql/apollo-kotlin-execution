@@ -106,7 +106,7 @@ internal class ExecutableSchemaBuilderBuilder(
                   add(".addCoercing(%S, %M)\n", sirEnumDefinition.name, context.coercings.get(sirEnumDefinition.name))
                 }
                 if (entityResolver != null) {
-                  add(".addCoercing(%S, %M)\n", "_Any", MemberName("com.apollographql.execution.federation", "_AnyCoercing"))
+                  add(".addCoercing(%S, %M)\n", "_Any", MemberName("com.apollographql.execution.subgraph", "_AnyCoercing"))
                 }
                 listOf("query", "mutation", "subscription").forEach { operationType ->
                   val sirObjectDefinition = sirDefinitions.rootType(operationType)

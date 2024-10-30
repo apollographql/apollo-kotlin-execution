@@ -3,7 +3,7 @@
 # Version 0.1.0
 _2024-10-23_
 
-* Add `apollo-execution-federation` with minimal `@key` support
+* Add `apollo-execution-subgraph` with minimal `@key` support
 * Add support for suspending resolvers and parallel execution (#18)
 * Update Ktor to version 3
 

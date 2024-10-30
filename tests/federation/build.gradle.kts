@@ -12,6 +12,6 @@ apolloExecution {
 
 dependencies {
   implementation(libs.apollo.execution.runtime)
-  implementation(libs.apollo.execution.federation)
+  implementation(libs.apollo.execution.subgraph)
   testImplementation(kotlin("test"))
 }

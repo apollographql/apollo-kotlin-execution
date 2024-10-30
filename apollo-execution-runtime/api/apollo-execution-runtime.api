@@ -61,6 +61,10 @@ public final class com/apollographql/execution/ExecutableSchema$Builder {
 	public final fun typeResolver (Lcom/apollographql/execution/TypeResolver;)Lcom/apollographql/execution/ExecutableSchema$Builder;
 }
 
+public abstract interface class com/apollographql/execution/FieldCallback {
+	public abstract fun onFieldCompleted (Ljava/lang/Object;)V
+}
+
 public final class com/apollographql/execution/FloatCoercing : com/apollographql/execution/Coercing {
 	public static final field INSTANCE Lcom/apollographql/execution/FloatCoercing;
 	public fun deserialize (Ljava/lang/Object;)Ljava/lang/Double;
@@ -134,12 +138,8 @@ public final class com/apollographql/execution/InMemoryPersistedDocumentCache : 
 
 public abstract class com/apollographql/execution/Instrumentation {
 	public fun <init> ()V
-	public fun beforeField (Lcom/apollographql/execution/ResolveInfo;)Lcom/apollographql/execution/InstrumentationCallback;
-	public fun onResponse (Lcom/apollographql/execution/GraphQLResponse;Lcom/apollographql/apollo/api/ExecutionContext;)Lcom/apollographql/execution/GraphQLResponse;
-}
-
-public abstract interface class com/apollographql/execution/InstrumentationCallback {
-	public abstract fun afterComplete (Ljava/lang/Object;)V
+	public fun onField (Lcom/apollographql/execution/ResolveInfo;)Lcom/apollographql/execution/FieldCallback;
+	public fun onOperation (Lcom/apollographql/execution/OperationInfo;)Lcom/apollographql/execution/OperationCallback;
 }
 
 public final class com/apollographql/execution/IntCoercing : com/apollographql/execution/Coercing {
@@ -150,6 +150,18 @@ public final class com/apollographql/execution/IntCoercing : com/apollographql/e
 	public synthetic fun parseLiteral (Lcom/apollographql/apollo/ast/GQLValue;)Ljava/lang/Object;
 	public fun serialize (I)Ljava/lang/Object;
 	public synthetic fun serialize (Ljava/lang/Object;)Ljava/lang/Object;
+}
+
+public abstract interface class com/apollographql/execution/OperationCallback {
+	public abstract fun onOperationCompleted (Lcom/apollographql/execution/GraphQLResponse;)Lcom/apollographql/execution/GraphQLResponse;
+}
+
+public final class com/apollographql/execution/OperationInfo {
+	public fun <init> (Lcom/apollographql/apollo/ast/GQLOperationDefinition;Ljava/util/Map;Lcom/apollographql/apollo/ast/Schema;Lcom/apollographql/apollo/api/ExecutionContext;)V
+	public final fun getExecutionContext ()Lcom/apollographql/apollo/api/ExecutionContext;
+	public final fun getFragments ()Ljava/util/Map;
+	public final fun getOperation ()Lcom/apollographql/apollo/ast/GQLOperationDefinition;
+	public final fun getSchema ()Lcom/apollographql/apollo/ast/Schema;
 }
 
 public abstract interface class com/apollographql/execution/PersistedDocument {

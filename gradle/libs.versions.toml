@@ -22,6 +22,7 @@ coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1"
 ktor-server-netty = { group = "io.ktor", name = "ktor-server-netty", version.ref ="ktor" }
 ktor-server-core = { group = "io.ktor", name = "ktor-server-core", version.ref ="ktor" }
 ktor-server-cors = { group = "io.ktor", name = "ktor-server-cors", version.ref ="ktor" }
+ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 slf4j-simple = "org.slf4j:slf4j-simple:2.0.13"
 slf4j-nop = "org.slf4j:slf4j-nop:2.0.13"
 ksp-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
@@ -36,7 +37,7 @@ http4k-server-undertow = { module = "org.http4k:http4k-server-undertow" }
 http4k-server-netty = { module = "org.http4k:http4k-server-netty" }
 librarian-gradle-plugin = "com.gradleup.librarian:librarian-gradle-plugin:0.0.6"
 apollo-execution-runtime = { module = "com.apollographql.execution:apollo-execution-runtime" }
-apollo-execution-federation = { module = "com.apollographql.execution:apollo-execution-federation" }
+apollo-execution-subgraph = { module = "com.apollographql.execution:apollo-execution-subgraph" }
 spring-webflux = "org.springframework:spring-webflux:6.1.10"
 wire-gradle-plugin = "com.squareup.wire:wire-gradle-plugin:5.1.0"
 kotlinx-serialization-core = "org.jetbrains.kotlinx:kotlinx-serialization-core:1.7.3"

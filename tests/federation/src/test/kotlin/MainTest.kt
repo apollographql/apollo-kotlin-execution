@@ -1,3 +1,6 @@
+@file:OptIn(ApolloExperimental::class)
+
+import com.apollographql.apollo.annotations.ApolloExperimental
 import com.apollographql.apollo.ast.GQLDirectiveDefinition
 import com.apollographql.apollo.ast.GQLObjectTypeDefinition
 import com.apollographql.apollo.ast.parseAsGQLDocument

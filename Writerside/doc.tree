@@ -24,4 +24,7 @@
     <toc-element toc-title="Apollo Federation">
         <toc-element topic="federation.md"/>
     </toc-element>
+    <toc-element toc-title="Apollo Usage Reporting">
+        <toc-element topic="usage-reporting.md"/>
+    </toc-element>
 </instance-profile>

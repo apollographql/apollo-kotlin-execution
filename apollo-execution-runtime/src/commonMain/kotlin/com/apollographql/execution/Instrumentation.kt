@@ -1,6 +1,10 @@
 package com.apollographql.execution
 
 import com.apollographql.apollo.api.ExecutionContext
+import com.apollographql.apollo.ast.GQLDocument
+import com.apollographql.apollo.ast.GQLFragmentDefinition
+import com.apollographql.apollo.ast.GQLOperationDefinition
+import com.apollographql.apollo.ast.Schema
 
 
 /**
@@ -11,23 +15,43 @@ import com.apollographql.apollo.api.ExecutionContext
 abstract class Instrumentation {
   /**
    * Called before the [Resolver] is called.
-   * @return an [InstrumentationCallback] called after the field is executed
+   * @return an [FieldCallback] called after the field is executed
    * @throws Exception if something goes wrong. If an instrumentation fails, the whole field
    * fails and an error is returned.
    */
-  open fun beforeField(resolveInfo: ResolveInfo): InstrumentationCallback? {
+  open fun onOperation(operationInfo: OperationInfo): OperationCallback? {
     return null
   }
 
   /**
-   * Allows modifying [onResponse]
+   * Called before the [Resolver] is called.
+   * @return an [FieldCallback] called after the field is executed
+   * @throws Exception if something goes wrong. If an instrumentation fails, the whole field
+   * fails and an error is returned.
    */
-  open fun onResponse(response: GraphQLResponse, executionContext: ExecutionContext): GraphQLResponse {
-    return response
+  open fun onField(resolveInfo: ResolveInfo): FieldCallback? {
+    return null
   }
 }
 
-fun interface InstrumentationCallback {
+class OperationInfo(
+  val operation: GQLOperationDefinition,
+  val fragments: Map<String, GQLFragmentDefinition>,
+  val schema: Schema,
+  val executionContext: ExecutionContext
+)
+
+fun interface OperationCallback {
+  /**
+   * Called when an operation is executed.
+   *
+   * @param response the response
+   * @return a possibly modified response
+   */
+  fun onOperationCompleted(response: GraphQLResponse): GraphQLResponse
+}
+
+fun interface FieldCallback {
   /**
    * Called when a field value is completed.
    *
@@ -35,5 +59,5 @@ fun interface InstrumentationCallback {
    * @throws Exception if something goes wrong. If an instrumentation fails, the whole field
    * fails and an error is returned.
    */
-  fun afterComplete(value: ExternalValue)
+  fun onFieldCompleted(value: ExternalValue)
 }

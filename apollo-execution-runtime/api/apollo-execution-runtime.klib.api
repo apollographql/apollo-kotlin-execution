@@ -8,11 +8,14 @@
 // Library unique name: <com.apollographql.execution:apollo-execution-runtime>
 abstract class com.apollographql.execution/Instrumentation { // com.apollographql.execution/Instrumentation|null[0]
     constructor <init>() // com.apollographql.execution/Instrumentation.<init>|<init>(){}[0]
-    open fun beforeField(com.apollographql.execution/ResolveInfo): com.apollographql.execution/InstrumentationCallback? // com.apollographql.execution/Instrumentation.beforeField|beforeField(com.apollographql.execution.ResolveInfo){}[0]
-    open fun onResponse(com.apollographql.execution/GraphQLResponse, com.apollographql.apollo.api/ExecutionContext): com.apollographql.execution/GraphQLResponse // com.apollographql.execution/Instrumentation.onResponse|onResponse(com.apollographql.execution.GraphQLResponse;com.apollographql.apollo.api.ExecutionContext){}[0]
+    open fun onField(com.apollographql.execution/ResolveInfo): com.apollographql.execution/FieldCallback? // com.apollographql.execution/Instrumentation.onField|onField(com.apollographql.execution.ResolveInfo){}[0]
+    open fun onOperation(com.apollographql.execution/OperationInfo): com.apollographql.execution/OperationCallback? // com.apollographql.execution/Instrumentation.onOperation|onOperation(com.apollographql.execution.OperationInfo){}[0]
 }
-abstract fun interface com.apollographql.execution/InstrumentationCallback { // com.apollographql.execution/InstrumentationCallback|null[0]
-    abstract fun afterComplete(kotlin/Any?) // com.apollographql.execution/InstrumentationCallback.afterComplete|afterComplete(kotlin.Any?){}[0]
+abstract fun interface com.apollographql.execution/FieldCallback { // com.apollographql.execution/FieldCallback|null[0]
+    abstract fun onFieldCompleted(kotlin/Any?) // com.apollographql.execution/FieldCallback.onFieldCompleted|onFieldCompleted(kotlin.Any?){}[0]
+}
+abstract fun interface com.apollographql.execution/OperationCallback { // com.apollographql.execution/OperationCallback|null[0]
+    abstract fun onOperationCompleted(com.apollographql.execution/GraphQLResponse): com.apollographql.execution/GraphQLResponse // com.apollographql.execution/OperationCallback.onOperationCompleted|onOperationCompleted(com.apollographql.execution.GraphQLResponse){}[0]
 }
 abstract fun interface com.apollographql.execution/Resolver { // com.apollographql.execution/Resolver|null[0]
     abstract suspend fun resolve(com.apollographql.execution/ResolveInfo): kotlin/Any? // com.apollographql.execution/Resolver.resolve|resolve(com.apollographql.execution.ResolveInfo){}[0]
@@ -150,6 +153,17 @@ final class com.apollographql.execution/InMemoryPersistedDocumentCache : com.apo
     constructor <init>() // com.apollographql.execution/InMemoryPersistedDocumentCache.<init>|<init>(){}[0]
     final fun get(kotlin/String): com.apollographql.execution/PersistedDocument? // com.apollographql.execution/InMemoryPersistedDocumentCache.get|get(kotlin.String){}[0]
     final fun put(kotlin/String, com.apollographql.execution/PersistedDocument) // com.apollographql.execution/InMemoryPersistedDocumentCache.put|put(kotlin.String;com.apollographql.execution.PersistedDocument){}[0]
+}
+final class com.apollographql.execution/OperationInfo { // com.apollographql.execution/OperationInfo|null[0]
+    constructor <init>(com.apollographql.apollo.ast/GQLOperationDefinition, kotlin.collections/Map<kotlin/String, com.apollographql.apollo.ast/GQLFragmentDefinition>, com.apollographql.apollo.ast/Schema, com.apollographql.apollo.api/ExecutionContext) // com.apollographql.execution/OperationInfo.<init>|<init>(com.apollographql.apollo.ast.GQLOperationDefinition;kotlin.collections.Map<kotlin.String,com.apollographql.apollo.ast.GQLFragmentDefinition>;com.apollographql.apollo.ast.Schema;com.apollographql.apollo.api.ExecutionContext){}[0]
+    final val executionContext // com.apollographql.execution/OperationInfo.executionContext|{}executionContext[0]
+        final fun <get-executionContext>(): com.apollographql.apollo.api/ExecutionContext // com.apollographql.execution/OperationInfo.executionContext.<get-executionContext>|<get-executionContext>(){}[0]
+    final val fragments // com.apollographql.execution/OperationInfo.fragments|{}fragments[0]
+        final fun <get-fragments>(): kotlin.collections/Map<kotlin/String, com.apollographql.apollo.ast/GQLFragmentDefinition> // com.apollographql.execution/OperationInfo.fragments.<get-fragments>|<get-fragments>(){}[0]
+    final val operation // com.apollographql.execution/OperationInfo.operation|{}operation[0]
+        final fun <get-operation>(): com.apollographql.apollo.ast/GQLOperationDefinition // com.apollographql.execution/OperationInfo.operation.<get-operation>|<get-operation>(){}[0]
+    final val schema // com.apollographql.execution/OperationInfo.schema|{}schema[0]
+        final fun <get-schema>(): com.apollographql.apollo.ast/Schema // com.apollographql.execution/OperationInfo.schema.<get-schema>|<get-schema>(){}[0]
 }
 final class com.apollographql.execution/ResolveInfo { // com.apollographql.execution/ResolveInfo|null[0]
     final fun <#A1: kotlin/Any?> getArgument(kotlin/String): com.apollographql.apollo.api/Optional<#A1> // com.apollographql.execution/ResolveInfo.getArgument|getArgument(kotlin.String){0§<kotlin.Any?>}[0]

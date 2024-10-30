@@ -43,6 +43,31 @@ internal class OperationContext(
    * map is computed.
    */
   suspend fun execute(): GraphQLResponse {
+    var instrumentationException: Exception? = null
+    val operationCallbacks = mutableListOf<OperationCallback>()
+    val operationInfo = OperationInfo(
+      operation,
+      fragments,
+      schema,
+      executionContext
+    )
+    instrumentations.forEach {
+      val callback = try {
+        it.onOperation(operationInfo)
+      } catch (e: Exception) {
+        if (e is CancellationException) {
+          throw e
+        }
+        instrumentationException = e
+        return@forEach
+      }
+      if (callback != null) {
+        operationCallbacks.add(callback)
+      }
+    }
+    if (instrumentationException != null) {
+      return graphqlErrorResponse("An error happened while instrumenting '${operation.name}': ${instrumentationException.message}")
+    }
     val rootTypename = schema.rootTypeNameOrNullFor(operation.operationType)
     if (rootTypename == null) {
       return graphqlErrorResponse("'${operation.operationType}' is not supported")
@@ -73,7 +98,7 @@ internal class OperationContext(
           emptyList(),
           operation.operationType == "mutation"
         )
-      }.toGraphQLResponse()
+      }.toGraphQLResponse(callbacks = operationCallbacks)
     }
   }
 
@@ -93,15 +118,15 @@ internal class OperationContext(
     }
   }
 
-  internal suspend fun ExternalValueOrDeferred.toGraphQLResponse(): GraphQLResponse {
+  internal suspend fun ExternalValueOrDeferred.toGraphQLResponse(callbacks: List<OperationCallback>): GraphQLResponse {
     val errors = mutableListOf<Error>()
 
     val data = this.finalize(errors)
 
     val response = GraphQLResponse(data, errors.ifEmpty { null }, null)
 
-    return instrumentations.fold(response) { acc, instrumentation ->
-      instrumentation.onResponse(acc, executionContext)
+    return callbacks.fold(response) { acc, instrumentation ->
+      instrumentation.onOperationCompleted(acc)
     }
   }
 
@@ -212,7 +237,7 @@ internal class OperationContext(
             path = listOf(event.responseName)
           )
 
-          mapOf(event.responseName to fieldData).toGraphQLResponse()
+          mapOf(event.responseName to fieldData).toGraphQLResponse(emptyList())
         }
       }
     }
@@ -251,13 +276,13 @@ internal class OperationContext(
         path = path,
       )
 
-      val instrumentationCallbacks = mutableListOf<InstrumentationCallback>()
+      val fieldCallbacks = mutableListOf<FieldCallback>()
       var instrumentationError: Error? = null
       instrumentations.map {
         try {
-          val callback = it.beforeField(resolveInfo)
+          val callback = it.onField(resolveInfo)
           if (callback != null) {
-            instrumentationCallbacks.add(callback)
+            fieldCallbacks.add(callback)
           }
         } catch (e: Exception) {
           if (e is CancellationException) {
@@ -281,8 +306,8 @@ internal class OperationContext(
       } else {
         instrumentationError
       }
-      instrumentationCallbacks.forEach {
-        it.afterComplete(completedValue)
+      fieldCallbacks.forEach {
+        it.onFieldCompleted(completedValue)
       }
       completedValue
     }
