@@ -1,8 +1,6 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
 
-module:apollo-execution-federation
-com.apollographql.execution.federation
 module:apollo-execution-gradle-plugin
 com.apollographql.execution.gradle
 com.apollographql.execution.gradle.internal
@@ -10,6 +8,8 @@ module:apollo-execution-http4k
 com.apollographql.execution.http4k
 module:apollo-execution-ktor
 com.apollographql.execution.ktor
+module:apollo-execution-monograph
+com.apollographql.execution.monograph
 module:apollo-execution-processor
 com.apollographql.execution.processor
 module:apollo-execution-runtime
@@ -18,5 +18,5 @@ com.apollographql.execution.annotation
 com.apollographql.execution.websocket
 module:apollo-execution-spring
 com.apollographql.execution.spring
-module:apollo-execution-tracing
-com.apollographql.execution.tracing
+module:apollo-execution-subgraph
+com.apollographql.execution.subgraph
