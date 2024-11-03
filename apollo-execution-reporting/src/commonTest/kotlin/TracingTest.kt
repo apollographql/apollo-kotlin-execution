@@ -3,8 +3,8 @@
 import com.apollographql.apollo.ast.toGQLDocument
 import com.apollographql.execution.ExecutableSchema
 import com.apollographql.execution.toGraphQLRequest
-import com.apollographql.execution.reporting.ApolloReportsInstrumentation
-import com.apollographql.execution.reporting.ApolloReportsOperationContext
+import com.apollographql.execution.reporting.ApolloReportingInstrumentation
+import com.apollographql.execution.reporting.ApolloReportingOperationContext
 import com.apollographql.execution.reporting.Trace
 import kotlinx.coroutines.runBlocking
 import kotlin.io.encoding.Base64
@@ -41,13 +41,13 @@ class TracingTest {
           else -> Unit
         }
       }
-      .addInstrumentation(ApolloReportsInstrumentation())
+      .addInstrumentation(ApolloReportingInstrumentation())
       .build()
   }
 
   @Test
   fun testTracing() {
-    val context = ApolloReportsOperationContext()
+    val context = ApolloReportingOperationContext()
     runBlocking {
       schema().execute("{ widgets { foo, baz: bar }, listOfLists { foo }, listOfScalars }".toGraphQLRequest(), context)
     }

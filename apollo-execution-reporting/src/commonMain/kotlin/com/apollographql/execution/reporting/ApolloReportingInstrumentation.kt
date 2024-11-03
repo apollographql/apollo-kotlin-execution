@@ -28,7 +28,7 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class ApolloReportsInstrumentation(val apolloKey: String? = null) : Instrumentation() {
+class ApolloReportingInstrumentation(val apolloKey: String? = null) : Instrumentation() {
   val client = HttpClient(CIO)
 
   private val operations = mutableMapOf<String, OperationData>()
@@ -64,7 +64,7 @@ class ApolloReportsInstrumentation(val apolloKey: String? = null) : Instrumentat
         val operationData = getOperationData(operationInfo)
         if (operationData != null) {
           val trace =
-            operationInfo.executionContext[ApolloReportsOperationContext]!!.apolloOperationTracing.toProtoTrace()
+            operationInfo.executionContext[ApolloReportingOperationContext]!!.apolloOperationTracing.toProtoTrace()
 
           val operation = operations.getOrPut(operationData.statsReportKey) { operationData }
           operation.traces.add(trace)
@@ -80,7 +80,7 @@ class ApolloReportsInstrumentation(val apolloKey: String? = null) : Instrumentat
   }
 
   override fun onField(resolveInfo: ResolveInfo): FieldCallback? {
-    val atc = resolveInfo.executionContext[ApolloReportsOperationContext]
+    val atc = resolveInfo.executionContext[ApolloReportingOperationContext]
     require(atc != null) {
       "ApolloTracingInstrumentation requires an ApolloTracingContext"
     }

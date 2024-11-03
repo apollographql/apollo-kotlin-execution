@@ -4,7 +4,7 @@ public final class com/apollographql/execution/reporting/ApolloOperationTracing 
 	public final fun toProtoTrace ()Lcom/apollographql/execution/reporting/Trace;
 }
 
-public final class com/apollographql/execution/reporting/ApolloReportsInstrumentation : com/apollographql/execution/Instrumentation {
+public final class com/apollographql/execution/reporting/ApolloReportingInstrumentation : com/apollographql/execution/Instrumentation {
 	public fun <init> ()V
 	public fun <init> (Ljava/lang/String;)V
 	public synthetic fun <init> (Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -14,15 +14,15 @@ public final class com/apollographql/execution/reporting/ApolloReportsInstrument
 	public fun onOperation (Lcom/apollographql/execution/OperationInfo;)Lcom/apollographql/execution/OperationCallback;
 }
 
-public final class com/apollographql/execution/reporting/ApolloReportsOperationContext : com/apollographql/apollo/api/ExecutionContext$Element {
-	public static final field Key Lcom/apollographql/execution/reporting/ApolloReportsOperationContext$Key;
+public final class com/apollographql/execution/reporting/ApolloReportingOperationContext : com/apollographql/apollo/api/ExecutionContext$Element {
+	public static final field Key Lcom/apollographql/execution/reporting/ApolloReportingOperationContext$Key;
 	public fun <init> ()V
 	public final fun getApolloOperationTracing ()Lcom/apollographql/execution/reporting/ApolloOperationTracing;
 	public synthetic fun getKey ()Lcom/apollographql/apollo/api/ExecutionContext$Key;
-	public fun getKey ()Lcom/apollographql/execution/reporting/ApolloReportsOperationContext$Key;
+	public fun getKey ()Lcom/apollographql/execution/reporting/ApolloReportingOperationContext$Key;
 }
 
-public final class com/apollographql/execution/reporting/ApolloReportsOperationContext$Key : com/apollographql/apollo/api/ExecutionContext$Key {
+public final class com/apollographql/execution/reporting/ApolloReportingOperationContext$Key : com/apollographql/apollo/api/ExecutionContext$Key {
 }
 
 public final class com/apollographql/execution/reporting/ContextualizedQueryLatencyStats : com/squareup/wire/Message {

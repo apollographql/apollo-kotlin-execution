@@ -5,11 +5,11 @@ package com.apollographql.execution.reporting
 import com.apollographql.apollo.api.ExecutionContext
 import kotlin.io.encoding.ExperimentalEncodingApi
 
-class ApolloReportsOperationContext() : ExecutionContext.Element {
+class ApolloReportingOperationContext() : ExecutionContext.Element {
   val apolloOperationTracing = ApolloOperationTracing()
 
   override val key = Key
 
-  companion object Key : ExecutionContext.Key<ApolloReportsOperationContext>
+  companion object Key : ExecutionContext.Key<ApolloReportingOperationContext>
 }
 
