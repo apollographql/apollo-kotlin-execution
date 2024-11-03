@@ -1,5 +1,8 @@
-import com.gradleup.librarian.gradle.librarianRoot
+import com.gradleup.librarian.gradle.Librarian
 
+plugins {
+    id("base")
+}
 buildscript {
     dependencies {
         classpath(libs.kotlin.gradle.plugin)
@@ -8,9 +11,6 @@ buildscript {
         // workaround for https://github.com/Kotlin/kotlinx.serialization/issues/2803
         classpath(libs.kotlinx.serialization.core)
     }
-    repositories {
-        mavenCentral()
-    }
 }
 
-librarianRoot()
+Librarian.root(project)

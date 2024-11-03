@@ -1,6 +1,12 @@
 pluginManagement {
   listOf(repositories, dependencyResolutionManagement.repositories).forEach {
     it.mavenCentral()
+    it.exclusiveContent {
+      forRepository { it.maven("https://storage.googleapis.com/gradleup/m2") }
+      filter {
+        includeGroup("com.gradleup.librarian")
+      }
+    }
   }
 }
 
@@ -14,3 +20,4 @@ include(
   "apollo-execution-subgraph",
   "apollo-execution-reporting"
 )
+

@@ -1,10 +1,10 @@
-import com.gradleup.librarian.gradle.librarianModule
+import com.gradleup.librarian.gradle.Librarian
 
 plugins {
   id("org.jetbrains.kotlin.multiplatform")
 }
 
-librarianModule(true)
+Librarian.module(project)
 
 kotlin {
   jvm()
