@@ -1,5 +1,8 @@
 # Next version (unreleased)
 
+* Add `Ftv1Instrumentation` and `ApolloReportingInstrumentation` for respectively federated and monograph operation and fields insights.
+* Publish to GCS
+
 # Version 0.1.0
 _2024-10-23_
 
