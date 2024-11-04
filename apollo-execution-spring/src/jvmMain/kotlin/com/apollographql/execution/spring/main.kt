@@ -9,7 +9,10 @@ import org.springframework.web.reactive.function.server.*
 
 suspend fun ServerRequest.parseAsGraphQLRequest(): Result<GraphQLRequest> {
   return when (this.method()) {
-    HttpMethod.GET -> this.queryParams().parseAsGraphQLRequest()
+    HttpMethod.GET -> this.queryParams().toExternalValueMap().fold(
+      onSuccess = { it.parseAsGraphQLRequest() },
+      onFailure = { Result.failure(it) }
+    )
     HttpMethod.POST -> {
       awaitBody<String>().let {
         Buffer().writeUtf8(it).parseAsGraphQLRequest()
