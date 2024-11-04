@@ -64,7 +64,7 @@ class ApolloReportingInstrumentation(val apolloKey: String? = null) : Instrument
         val operationData = getOperationData(operationInfo)
         if (operationData != null) {
           val trace =
-            operationInfo.executionContext[ApolloReportingOperationContext]!!.apolloOperationTracing.toProtoTrace()
+            operationInfo.executionContext[ApolloReportingOperationContext]!!.toProtoTrace()
 
           val operation = operations.getOrPut(operationData.statsReportKey) { operationData }
           operation.traces.add(trace)
@@ -84,7 +84,7 @@ class ApolloReportingInstrumentation(val apolloKey: String? = null) : Instrument
     require(atc != null) {
       "ApolloTracingInstrumentation requires an ApolloTracingContext"
     }
-    return atc.apolloOperationTracing.beforeField(resolveInfo)
+    return atc.beforeField(resolveInfo)
   }
 }
 

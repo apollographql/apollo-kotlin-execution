@@ -27,7 +27,7 @@ class Ftv1Instrumentation : Instrumentation() {
       response
     } else {
       response.newBuilder()
-        .extensions(mapOf("ftv1" to Base64.encode(ftv1Context.apolloOperationTracing.toProtoTrace().encode())))
+        .extensions(mapOf("ftv1" to Base64.encode(ftv1Context.apolloOperationTracing.toProtoTrace(null, null).encode())))
         .build()
     }
   }

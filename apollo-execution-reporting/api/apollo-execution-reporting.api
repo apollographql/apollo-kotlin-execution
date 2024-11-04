@@ -1,7 +1,7 @@
 public final class com/apollographql/execution/reporting/ApolloOperationTracing {
 	public fun <init> ()V
 	public final fun beforeField (Lcom/apollographql/execution/ResolveInfo;)Lcom/apollographql/execution/FieldCallback;
-	public final fun toProtoTrace ()Lcom/apollographql/execution/reporting/Trace;
+	public final fun toProtoTrace (Ljava/lang/String;Ljava/lang/String;)Lcom/apollographql/execution/reporting/Trace;
 }
 
 public final class com/apollographql/execution/reporting/ApolloReportingInstrumentation : com/apollographql/execution/Instrumentation {
@@ -17,9 +17,12 @@ public final class com/apollographql/execution/reporting/ApolloReportingInstrume
 public final class com/apollographql/execution/reporting/ApolloReportingOperationContext : com/apollographql/apollo/api/ExecutionContext$Element {
 	public static final field Key Lcom/apollographql/execution/reporting/ApolloReportingOperationContext$Key;
 	public fun <init> ()V
-	public final fun getApolloOperationTracing ()Lcom/apollographql/execution/reporting/ApolloOperationTracing;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun beforeField (Lcom/apollographql/execution/ResolveInfo;)Lcom/apollographql/execution/FieldCallback;
 	public synthetic fun getKey ()Lcom/apollographql/apollo/api/ExecutionContext$Key;
 	public fun getKey ()Lcom/apollographql/execution/reporting/ApolloReportingOperationContext$Key;
+	public final fun toProtoTrace ()Lcom/apollographql/execution/reporting/Trace;
 }
 
 public final class com/apollographql/execution/reporting/ApolloReportingOperationContext$Key : com/apollographql/apollo/api/ExecutionContext$Key {

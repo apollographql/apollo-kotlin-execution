@@ -52,7 +52,7 @@ class TracingTest {
       schema().execute("{ widgets { foo, baz: bar }, listOfLists { foo }, listOfScalars }".toGraphQLRequest(), context)
     }
 
-    val trace = context.apolloOperationTracing.toProtoTrace()
+    val trace = context.toProtoTrace()
 
     assertTrue(trace.start_time!!.getEpochSecond() > 0, "Start time has seconds")
     assertTrue(trace.start_time.getNano() > 0, "Start time has nanoseconds")

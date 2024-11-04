@@ -37,13 +37,15 @@ class ApolloOperationTracing {
     return newNode(parentPath)
   }
 
-  fun toProtoTrace(): Trace {
+  fun toProtoTrace(clientName: String?, clientVersion: String?): Trace {
     val endInstant = Clock.System.now()
     return Trace(
       start_time = ofEpochSecond(startInstant.epochSeconds, startInstant.nanosecondsOfSecond.toLong()),
       end_time = ofEpochSecond(endInstant.epochSeconds, endInstant.nanosecondsOfSecond.toLong()),
       duration_ns = (markNow() - operationStartMark).inWholeNanoseconds,
-      root = rootNode.toProtoNode()
+      root = rootNode.toProtoNode(),
+      client_name = clientName ?: "",
+      client_version = clientVersion ?: ""
     )
   }
 
