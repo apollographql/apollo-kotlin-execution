@@ -96,7 +96,7 @@ private class TypeDefinitionContext(
     while (declarationsToVisit.isNotEmpty()) {
       val declarationToVisit = declarationsToVisit.removeFirst()
       getOrResolve(declarationToVisit)
-    }
+   }
 
     val finalizedDirectiveDefinitions = directiveDefinitions.mapNotNull {
       if (it.value == null) {
@@ -171,11 +171,6 @@ private class TypeDefinitionContext(
       return null
     }
     usedTypeNames.add(name)
-
-    if (declaration.typeParameters.isNotEmpty()) {
-      logger.error("Generic classes are not supported")
-      return null
-    }
 
     if (declaration is KSTypeAlias) {
       return declaration.toSirScalarDefinition(qualifiedName)
@@ -503,10 +498,7 @@ private class TypeDefinitionContext(
   private fun KSClassDeclaration.interfaces(objectName: String?): List<String> {
     return getAllSuperTypes().mapNotNull {
       val declaration = it.declaration
-      if (it.arguments.isNotEmpty()) {
-        logger.error("Generic interfaces are not supported", this)
-        null
-      } else if (declaration is KSClassDeclaration) {
+      if (declaration is KSClassDeclaration) {
         if (declaration.asClassName().asString() == "kotlin.Any") {
           // kotlin.Any is a super type of everything, just ignore it
           null
