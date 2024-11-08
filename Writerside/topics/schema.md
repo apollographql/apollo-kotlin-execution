@@ -386,6 +386,7 @@ Nullable fields and input fields are also nullable in GraphQL:
 <code-block lang="kotlin">
 class User {
     fun email(): String?
+    fun id(): String
 }
 </code-block>
 </td>
@@ -393,6 +394,7 @@ class User {
 <code-block lang="graphql">
 type User {
     email: String
+    id: String!
 }
 </code-block>
 </td>
