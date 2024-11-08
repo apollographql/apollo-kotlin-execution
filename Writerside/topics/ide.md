@@ -1,4 +1,4 @@
-# GraphQL IDE
+# IDE
 
 One of GraphQL strong points is tooling. 
 
