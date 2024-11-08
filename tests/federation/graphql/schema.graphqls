@@ -16,6 +16,8 @@ type Query {
   products: [Product!]!
 }
 
+union SomeGenericInterface = Query
+
 union _Entity = Product
 
 type _Service {
