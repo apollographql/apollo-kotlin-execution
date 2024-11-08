@@ -2,7 +2,13 @@ schema {
   query: Query
 }
 
-directive @requiresOptIn (feature: OptInFeature!) on FIELD_DEFINITION
+enum OptInLevel {
+  Ignore
+
+  Warning
+
+  Error
+}
 
 type Query {
   experimentalField: String! @requiresOptIn(feature: {
@@ -18,13 +24,7 @@ input OptInFeature {
   level: OptInLevel!
 }
 
-enum OptInLevel {
-  Ignore
-
-  Warning
-
-  Error
-}
+directive @requiresOptIn (feature: OptInFeature!) on FIELD_DEFINITION
 
 type __Schema {
   description: String

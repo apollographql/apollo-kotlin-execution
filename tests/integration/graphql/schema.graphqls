@@ -2,9 +2,29 @@ schema {
   query: Query
 }
 
+type Cat {
+  meow: String!
+}
+
+type Dog {
+  barf: String!
+}
+
 type Query {
   field: String!
+
+  animal: Cat!
+
+  a(arg: Int!): Int!
+
+  c(arg: Int): Int!
+
+  e(arg: Int! = 10): Int!
+
+  f(arg: Int = 10): Int!
 }
+
+union Animal = Cat|Dog
 
 type __Schema {
   description: String

@@ -12,4 +12,5 @@ apolloExecution {
 
 dependencies {
   implementation(libs.apollo.execution.runtime)
+  testImplementation(libs.kotlin.test)
 }
