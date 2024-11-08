@@ -1,8 +1,6 @@
 # IDE
 
-One of GraphQL strong points is tooling. 
-
-Apollo Kotlin Execution comes with a built-in IDE that makes it easy to explore your schema and debug your operations.
+Apollo Kotlin Execution comes with a built-in IDE that makes it easy to explore your schema, write your operation with autocomplete and execute them.
 
 You can get a ready-to-serve version of [Apollo Sandbox](https://studio.apollographql.com/sandbox/explorer/) using the `sandboxHtml()` function:
 
@@ -10,12 +8,17 @@ You can get a ready-to-serve version of [Apollo Sandbox](https://studio.apollogr
 val pageTitle = "Welcome to my API"
 val initialEndpoint = "http://localhost:8080/graphql"
 
-sandboxHtml(title = pageTitle, initialEndpoint = initialEndpoint)
+val html = sandboxHtml(title = pageTitle, initialEndpoint = initialEndpoint)
+
+// Expose this graphql to your route of choice, /sandbox for an example
+get("/sandbox") {
+  respondHtml(html) 
+}
 ```
 
 [![Apollo Sandbox](sandbox.png)](http://localhost:8080/sandbox/index.html)
 
-You can then serve it using your favorite server or use any of the existing integrations: 
+The builtin integrations provide helper functions for this:
 
 * [Spring](spring.md)
 * [Ktor](ktor.md)
