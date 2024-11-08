@@ -140,6 +140,9 @@ type Organisation {
 </tr>
 </table>
 
+> All interfaces, empty or not must be sealed for KSP to be able to traverse the possible implementations.
+{style="note"}
+
 ## Enums
 
 Kotlin enums are mapped to GraphQL enums:
@@ -245,6 +248,38 @@ type Organisation {
 </td>
 </tr>
 </table>
+
+Use `Optional<>` anf `@GraphQLDefault` to further control your input values. 
+
+Note that because nullability vs optionality are so closely related in GraphQL, not all combination are allowed:
+
+```
+type Query { 
+  // A non-null argument
+  fun fieldA(arg: Int) = 0
+  
+  // Disallowed: argument type is nullable and doesn't have a default value: it must also be optional.
+  //fun fieldB(arg: Int?) = 0 
+  
+  // An nullable argument, the client may omit it in which case the function body must handle `Absent`.
+  fun fieldC(arg: Optional<Int?>) = 0
+  
+  // Disallowed: argument type is not nullable and cannot be optional
+  //fun fieldD(arg: Optional<Int>) = 0
+  
+  // An non-null argument, if the client omits it, the default value will be used.
+  fun fieldE(@GraphQLDefault("10") arg: Int) = 0
+
+  // An nullable argument, if the client omits it, the default value will be used.
+  fun fieldF(@GraphQLDefault("10") arg: Int?) = 0
+
+  // Disallowed: there is a default value and the argument type cannot be optional
+  //fun fieldG(@GraphQLDefault("10") arg: Optional<Int?>) = 0 
+
+  // Disallowed: there is a default value and the argument type cannot be optional
+  //fun fieldH(@GraphQLDefault("10") arg: Optional<Int>) = 0
+}
+```
 
 Kotlin parameters may be of class type in which case the class is generated as a GraphQL input object:
 
