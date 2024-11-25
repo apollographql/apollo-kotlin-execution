@@ -53,6 +53,12 @@ apolloExecution {
 > Apollo Kotlin Execution requires Java 17
 {style=note}
 
+Disable KSP for tests ([doc](https://kotlinlang.org/docs/ksp-multiplatform.html#avoid-the-ksp-configuration-on-ksp-1-0-1)):
+
+```
+ksp.allow.all.target.configuration=false
+```
+
 ## Define your root query
 
 Write your root query class in a `Query.kt` file:
