@@ -32,7 +32,7 @@ class SubscriptionWebSocketHandler(
     private val executableSchema: ExecutableSchema,
     private val scope: CoroutineScope,
     private val executionContext: ExecutionContext,
-    private val sendMessage: (WebSocketMessage) -> Unit,
+    private val sendMessage: suspend (WebSocketMessage) -> Unit,
     private val connectionInitHandler: ConnectionInitHandler = { ConnectionInitAck },
 ) : WebSocketHandler {
   private val lock = reentrantLock()
@@ -67,7 +67,9 @@ class SubscriptionWebSocketHandler(
           activeSubscriptions.containsKey(clientMessage.id)
         }
         if (isActive) {
-          sendMessage(SubscriptionWebsocketError(id = clientMessage.id, error = Error.Builder("Subscription ${clientMessage.id} is already active").build()).toWsMessage())
+          scope.launch {
+            sendMessage(SubscriptionWebsocketError(id = clientMessage.id, error = Error.Builder("Subscription ${clientMessage.id} is already active").build()).toWsMessage())
+          }
           return
         }
 
@@ -107,7 +109,9 @@ class SubscriptionWebSocketHandler(
       }
 
       is SubscriptionWebsocketClientMessageParseError -> {
-        sendMessage(SubscriptionWebsocketError(null, Error.Builder("Cannot handle message (${clientMessage.message})").build()).toWsMessage())
+        scope.launch {
+          sendMessage(SubscriptionWebsocketError(null, Error.Builder("Cannot handle message (${clientMessage.message})").build()).toWsMessage())
+        }
       }
     }
   }

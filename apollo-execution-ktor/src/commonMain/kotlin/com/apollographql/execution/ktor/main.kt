@@ -2,6 +2,11 @@ package com.apollographql.execution.ktor
 
 import com.apollographql.apollo.api.ExecutionContext
 import com.apollographql.execution.*
+import com.apollographql.execution.websocket.ConnectionInitAck
+import com.apollographql.execution.websocket.SubscriptionWebSocketHandler
+import com.apollographql.execution.websocket.WebSocketBinaryMessage
+import com.apollographql.execution.websocket.WebSocketHandler
+import com.apollographql.execution.websocket.WebSocketTextMessage
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.server.application.*
@@ -9,7 +14,12 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.util.*
+import io.ktor.server.websocket.WebSockets
+import io.ktor.server.websocket.webSocket
 import io.ktor.utils.io.*
+import io.ktor.websocket.Frame
+import io.ktor.websocket.readText
+import kotlinx.coroutines.coroutineScope
 import okio.Buffer
 
 suspend fun ApplicationCall.respondGraphQL(
@@ -82,6 +92,42 @@ fun Application.apolloModule(
     }
     get(path) {
       call.respondGraphQL(executableSchema, executionContext(call.request))
+    }
+  }
+}
+
+fun Application.apolloSubscriptionModule(
+  executableSchema: ExecutableSchema,
+  path: String = "/subscription",
+  executionContext: (ApplicationRequest) -> ExecutionContext = { ExecutionContext.Empty }
+) {
+  install(WebSockets)
+
+  routing {
+    webSocket(path) {
+      coroutineScope {
+        val handler = SubscriptionWebSocketHandler(
+          executableSchema = executableSchema,
+          scope = this,
+          executionContext = executionContext(call.request),
+          sendMessage = {
+            when (it) {
+              is WebSocketBinaryMessage -> send(Frame.Binary(true, it.data))
+              is WebSocketTextMessage -> send(Frame.Text(it.data))
+            }
+          },
+          connectionInitHandler = {
+            ConnectionInitAck
+          }
+        )
+
+        for (frame in incoming) {
+          if (frame !is Frame.Text) {
+            continue
+          }
+          handler.handleMessage(WebSocketTextMessage(frame.readText()))
+        }
+      }
     }
   }
 }

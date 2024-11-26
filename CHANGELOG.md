@@ -2,6 +2,7 @@
 
 * Add `Ftv1Instrumentation` and `ApolloReportingInstrumentation` for respectively federated and monograph operation and fields insights.
 * Publish to GCS
+* Add `apolloSubscriptionModule` for subscription support with Ktor.
 
 # Version 0.1.0
 _2024-10-23_

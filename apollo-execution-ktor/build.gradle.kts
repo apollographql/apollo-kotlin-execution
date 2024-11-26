@@ -16,6 +16,7 @@ kotlin {
         implementation(libs.atomicfu)
         api(libs.coroutines)
         api(libs.ktor.server.core)
+        implementation(libs.ktor.server.websockets)
       }
     }
     getByName("jvmTest") {

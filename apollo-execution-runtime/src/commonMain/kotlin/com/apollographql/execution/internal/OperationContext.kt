@@ -76,7 +76,7 @@ internal class OperationContext(
       "query" -> queryRoot?.resolveRoot()
       "mutation" -> mutationRoot?.resolveRoot()
       "subscription" -> {
-        return graphqlErrorResponse("Use executeSubscription() to execute subscriptions")
+        return graphqlErrorResponse("Use subscribe() to execute subscriptions")
       }
 
       else -> {

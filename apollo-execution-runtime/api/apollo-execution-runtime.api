@@ -279,8 +279,8 @@ public abstract interface class com/apollographql/execution/websocket/Connection
 }
 
 public final class com/apollographql/execution/websocket/SubscriptionWebSocketHandler : com/apollographql/execution/websocket/WebSocketHandler {
-	public fun <init> (Lcom/apollographql/execution/ExecutableSchema;Lkotlinx/coroutines/CoroutineScope;Lcom/apollographql/apollo/api/ExecutionContext;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function2;)V
-	public synthetic fun <init> (Lcom/apollographql/execution/ExecutableSchema;Lkotlinx/coroutines/CoroutineScope;Lcom/apollographql/apollo/api/ExecutionContext;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function2;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lcom/apollographql/execution/ExecutableSchema;Lkotlinx/coroutines/CoroutineScope;Lcom/apollographql/apollo/api/ExecutionContext;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;)V
+	public synthetic fun <init> (Lcom/apollographql/execution/ExecutableSchema;Lkotlinx/coroutines/CoroutineScope;Lcom/apollographql/apollo/api/ExecutionContext;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun close ()V
 	public fun handleMessage (Lcom/apollographql/execution/websocket/WebSocketMessage;)V
 }
