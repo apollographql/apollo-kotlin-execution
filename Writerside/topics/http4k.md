@@ -2,6 +2,10 @@
 
 > See [sample-http4k](https://github.com/apollographql/apollo-kotlin-execution/tree/main/sample-http4k) for a project using the http4k integration.
 
+## Add apollo-execution-http4k to your project
+
+> Make sure to follow the steps in ["Getting started"](getting-started.md) first to generate your `ServiceExecutableSchemaBuilder`.
+
 To use the http4k integration, add `apollo-execution-http4k` to your dependencies and the http4k bom:
 
 ```kotlin
