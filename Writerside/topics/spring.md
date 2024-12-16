@@ -2,6 +2,10 @@
 
 Apollo Kotlin Execution comes with [Spring Webflux](https://docs.spring.io/spring-framework/reference/web/webflux.html) integration.
 
+## Add apollo-execution-spring to your project
+
+> Make sure to follow the steps in ["Getting started"](getting-started.md) first to generate your `ServiceExecutableSchemaBuilder`.
+
 To use the Spring Webflux integration, add `apollo-execution-spring` to your dependencies:
 
 ```kotlin
