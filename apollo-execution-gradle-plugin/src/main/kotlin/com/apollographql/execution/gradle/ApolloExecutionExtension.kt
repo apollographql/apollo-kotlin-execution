@@ -7,7 +7,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import javax.inject.Inject
 
-abstract class ApolloExecutionExtension @Inject constructor(val project: Project) {
+abstract class ApolloExecutionExtension @Inject constructor(private val project: Project) {
   var hasService = false
 
   fun service(serviceName: String, action: Action<ApolloExecutionService>) {
