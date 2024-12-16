@@ -44,7 +44,7 @@ class ExecutableSchema(
   ): Flow<SubscriptionEvent> {
     return prepareRequest(schema, coercings, persistedDocumentCache, request).fold(
       ifLeft = {
-        flowOf(SubscriptionError(it))
+        flowOf(SubscriptionResponse(GraphQLResponse.Builder().errors(it).build()))
       },
       ifRight = {
         operationContext(it, executionContext).subscribe()

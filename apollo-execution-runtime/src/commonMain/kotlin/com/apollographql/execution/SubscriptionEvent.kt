@@ -18,5 +18,7 @@ class SubscriptionResponse(val response: GraphQLResponse) : SubscriptionEvent
  * This event is terminal and the client can decide whether to retry or give up.
  * For convenience, [SubscriptionError] uses the same error type as the GraphQL errors but these are not in the same domain. Another server
  * implementation could decide to use something else.
+ *
+ * Example: validation error
  */
 class SubscriptionError(val errors: List<Error>) : SubscriptionEvent
