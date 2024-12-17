@@ -10,7 +10,7 @@ kgp = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.r
 kgp-min = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version = "1.9.0" }
 java-diff-utils = { module = "io.github.java-diff-utils:java-diff-utils", version = "4.12" }
 librarian = "com.gradleup.librarian:librarian-gradle-plugin:0.0.4"
-gradle-api-min = { group = "dev.gradleplugins", name = "gradle-api", version = "8.0" }
+gradle-api-min = { group = "dev.gradleplugins", name = "gradle-api", version = "8.11.1" }
 apollo-ast = { group = "com.apollographql.apollo", name = "apollo-ast", version.ref = "apollo" }
 apollo-compiler = { group = "com.apollographql.apollo", name = "apollo-compiler", version.ref = "apollo" }
 apollo-api = { group = "com.apollographql.apollo", name = "apollo-api", version.ref = "apollo" }
