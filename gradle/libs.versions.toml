@@ -14,7 +14,7 @@ gradle-api-min = { group = "dev.gradleplugins", name = "gradle-api", version = "
 apollo-ast = { group = "com.apollographql.apollo", name = "apollo-ast", version.ref = "apollo" }
 apollo-compiler = { group = "com.apollographql.apollo", name = "apollo-compiler", version.ref = "apollo" }
 apollo-api = { group = "com.apollographql.apollo", name = "apollo-api", version.ref = "apollo" }
-atomicfu = "org.jetbrains.kotlinx:atomicfu:0.24.0"
+atomicfu = "org.jetbrains.kotlinx:atomicfu:0.27.0"
 kotlinpoet = "com.squareup:kotlinpoet:1.18.0"
 kotlinx-datetime = "org.jetbrains.kotlinx:kotlinx-datetime:0.6.1"
 arrowCore = "io.arrow-kt:arrow-core:1.2.4"
