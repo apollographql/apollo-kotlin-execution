@@ -3,12 +3,6 @@
 
 package com.apollographql.apollo.execution.internal
 
-import arrow.core.Either
-import arrow.core.left
-import arrow.core.raise.Raise
-import arrow.core.raise.either
-import arrow.core.raise.withError
-import arrow.core.right
 import com.apollographql.apollo.annotations.ApolloExperimental
 import com.apollographql.apollo.api.Error
 import com.apollographql.apollo.ast.*
