@@ -4,26 +4,28 @@ import com.apollographql.apollo.annotations.ApolloInternal
 import com.apollographql.apollo.api.Error
 import com.apollographql.apollo.api.ExecutionContext
 import com.apollographql.apollo.api.Optional
+import com.apollographql.apollo.api.json.BufferedSinkJsonWriter
 import com.apollographql.apollo.api.json.JsonWriter
 import com.apollographql.apollo.api.json.jsonReader
 import com.apollographql.apollo.api.json.readAny
 import com.apollographql.apollo.api.json.writeAny
+import com.apollographql.apollo.api.json.writeArray
 import com.apollographql.apollo.api.json.writeObject
 import com.apollographql.apollo.execution.ExecutableSchema
 import com.apollographql.apollo.execution.GraphQLRequest
 import com.apollographql.apollo.execution.GraphQLResponse
 import com.apollographql.apollo.execution.SubscriptionError
 import com.apollographql.apollo.execution.SubscriptionResponse
-import com.apollographql.apollo.execution.jsonWriter
 import com.apollographql.apollo.execution.parseAsGraphQLRequest
-import com.apollographql.apollo.execution.writeError
 import kotlinx.atomicfu.locks.reentrantLock
 import kotlinx.atomicfu.locks.withLock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import okio.Buffer
+import okio.BufferedSink
 import okio.Sink
+import okio.buffer
 
 /**
  * A [WebSocketHandler] that implements https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md
@@ -162,6 +164,8 @@ internal object SubscriptionWebsocketTerminate : SubscriptionWebsocketClientMess
 internal sealed interface SubscriptionWebsocketServerMessage {
   fun serialize(sink: Sink)
 }
+
+internal fun Sink.jsonWriter(): JsonWriter = BufferedSinkJsonWriter(if (this is BufferedSink) this else this.buffer())
 
 private fun Sink.writeMessage(type: String, block: (JsonWriter.() -> Unit)? = null) {
   jsonWriter().apply {
@@ -311,3 +315,44 @@ private class CurrentSubscription(val id: String) : ExecutionContext.Element {
 }
 
 fun ExecutionContext.subscriptionId(): String = get(CurrentSubscription)?.id ?: error("Apollo: not executing a subscription")
+
+internal fun JsonWriter.writeError(error: Error) {
+  writeObject {
+    name("message")
+    value(error.message)
+    if (error.locations != null) {
+      name("locations")
+      writeArray {
+        error.locations!!.forEach {
+          writeObject {
+            name("line")
+            value(it.line)
+            name("column")
+            value(it.column)
+          }
+        }
+      }
+    }
+    if (error.path != null) {
+      name("path")
+      writeArray {
+        error.path!!.forEach {
+          when (it) {
+            is Int -> value(it)
+            is String -> value(it)
+            else -> error("path can only contain Int and Double (found '${it::class.simpleName}')")
+          }
+        }
+      }
+    }
+    if (error.extensions != null) {
+      name("extensions")
+      writeObject {
+        error.extensions!!.entries.forEach {
+          name(it.key)
+          writeAny(it.value)
+        }
+      }
+    }
+  }
+}

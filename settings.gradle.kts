@@ -7,6 +7,7 @@ pluginManagement {
         includeGroup("com.gradleup.librarian")
       }
     }
+    it.maven("https://storage.googleapis.com/apollo-previews/m2/")
   }
 }
 

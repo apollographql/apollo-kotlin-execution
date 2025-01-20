@@ -1,7 +1,7 @@
 [versions]
 kotlin-plugin = "2.0.21"
 ksp = "2.0.21-1.0.25"
-apollo = "4.0.0"
+apollo = "4.1.2-2025.02.09"
 ktor = "3.0.0"
 spring = "3.3.3"
 
@@ -14,6 +14,7 @@ gradle-api-min = { group = "dev.gradleplugins", name = "gradle-api", version = "
 apollo-ast = { group = "com.apollographql.apollo", name = "apollo-ast", version.ref = "apollo" }
 apollo-compiler = { group = "com.apollographql.apollo", name = "apollo-compiler", version.ref = "apollo" }
 apollo-api = { group = "com.apollographql.apollo", name = "apollo-api", version.ref = "apollo" }
+apollo-execution = { group = "com.apollographql.apollo", name = "apollo-execution", version.ref = "apollo" }
 atomicfu = "org.jetbrains.kotlinx:atomicfu:0.24.0"
 kotlinpoet = "com.squareup:kotlinpoet:1.18.0"
 kotlinx-datetime = "org.jetbrains.kotlinx:kotlinx-datetime:0.6.1"

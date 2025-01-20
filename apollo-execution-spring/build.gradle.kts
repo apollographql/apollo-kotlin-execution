@@ -12,6 +12,7 @@ kotlin {
   sourceSets {
     getByName("commonMain") {
       dependencies {
+        api(libs.apollo.execution)
       }
     }
     getByName("jvmMain") {

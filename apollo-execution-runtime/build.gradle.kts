@@ -17,6 +17,7 @@ kotlin {
         api(libs.apollo.api)
         implementation(libs.atomicfu)
         api(libs.coroutines)
+        api(libs.apollo.execution)
       }
     }
 

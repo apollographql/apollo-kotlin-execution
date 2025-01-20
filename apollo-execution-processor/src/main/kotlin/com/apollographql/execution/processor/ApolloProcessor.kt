@@ -10,6 +10,7 @@ import com.google.devtools.ksp.getConstructors
 import com.google.devtools.ksp.isAbstract
 import com.google.devtools.ksp.processing.*
 import com.google.devtools.ksp.symbol.*
+import com.squareup.kotlinpoet.AnnotationSpec
 
 class ApolloProcessor(
   private val codeGenerator: CodeGenerator,
@@ -117,6 +118,7 @@ class ApolloProcessor(
     builders.map {
       it.build()
         .toBuilder()
+        .addAnnotation(AnnotationSpec.builder(KotlinSymbols.Suppress).addMember("\"DEPRECATION\"").build())
         .addFileComment(
           """
                 
