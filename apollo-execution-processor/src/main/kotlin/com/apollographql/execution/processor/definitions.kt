@@ -575,7 +575,7 @@ private class TypeDefinitionContext(
     val name = this.graphqlNameOrNull() ?: targetName
 
     if (this.hasDefault) {
-      logger.error("Default arguments are not supported, use '@GraphQLDefault' instead.", this)
+      logger.error("Default parameter values are not supported, annotate your parameter with '@GraphQLDefault' instead.", this)
       return null
     }
     val defaultValue = defaultValue()
