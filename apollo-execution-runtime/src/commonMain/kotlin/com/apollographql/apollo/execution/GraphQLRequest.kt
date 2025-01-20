@@ -2,11 +2,11 @@
 
 package com.apollographql.apollo.execution
 
-import arrow.core.flatMap
 import com.apollographql.apollo.annotations.ApolloInternal
 import com.apollographql.apollo.api.http.internal.urlDecode
 import com.apollographql.apollo.api.json.jsonReader
 import com.apollographql.apollo.api.json.readAny
+import com.apollographql.apollo.execution.internal.flatMap
 import okio.Buffer
 import okio.BufferedSource
 import okio.use
