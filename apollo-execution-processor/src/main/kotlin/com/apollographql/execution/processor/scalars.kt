@@ -1,5 +1,6 @@
 package com.apollographql.execution.processor
 
+import com.apollographql.execution.processor.codegen.KotlinSymbols
 import com.apollographql.execution.processor.sir.Instantiation
 import com.apollographql.execution.processor.sir.SirClassName
 import com.apollographql.execution.processor.sir.SirCoercing
@@ -28,7 +29,7 @@ internal fun KSAnnotated.getCoercing(logger: KSPLogger): SirCoercing? {
   }
 
   val isCoercing = declaration.superTypes.any {
-    it.resolve().declaration.asClassName().asString() == "com.apollographql.execution.Coercing"
+    it.resolve().declaration.asClassName().asString() == KotlinSymbols.Coercing.canonicalName
   }
   if (!isCoercing) {
     logger.error("Coercing must implement 'com.apollographql.execution.Coercing'", declaration)
@@ -62,7 +63,7 @@ internal fun builtinScalarDefinition(qualifiedName: String): SirScalarDefinition
     description = null,
     coercing = SirCoercing(
       className = SirClassName(
-        "com.apollographql.execution",
+        KotlinSymbols.apolloExecutionPackageName,
         listOf("${name}Coercing")
       ),
       instantiation = Instantiation.OBJECT,

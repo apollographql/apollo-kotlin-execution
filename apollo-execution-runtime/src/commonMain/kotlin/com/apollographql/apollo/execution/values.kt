@@ -1,4 +1,4 @@
-package com.apollographql.execution
+package com.apollographql.apollo.execution
 
 import com.apollographql.apollo.api.Error
 import com.apollographql.apollo.ast.GQLBooleanValue
@@ -32,7 +32,7 @@ typealias InternalValue = Any?
  *
  * - an [InternalValue] for leaf types
  * - an opaque value for composite types
- * - a [kotlin.collections.List] for list types
+ * - a [List] for list types
  */
 internal typealias ResolverValue = Any?
 

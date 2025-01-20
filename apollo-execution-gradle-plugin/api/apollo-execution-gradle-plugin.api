@@ -1,7 +1,6 @@
 public abstract class com/apollographql/execution/gradle/ApolloExecutionExtension {
 	public fun <init> (Lorg/gradle/api/Project;)V
 	public final fun getHasService ()Z
-	public final fun getProject ()Lorg/gradle/api/Project;
 	public final fun service (Ljava/lang/String;Lorg/gradle/api/Action;)V
 	public final fun setHasService (Z)V
 }

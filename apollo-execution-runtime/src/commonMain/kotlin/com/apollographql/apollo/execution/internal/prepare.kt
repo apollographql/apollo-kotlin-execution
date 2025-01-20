@@ -1,7 +1,7 @@
 @file:Suppress("UNCHECKED_CAST")
 @file:OptIn(ApolloExperimental::class)
 
-package com.apollographql.execution.internal
+package com.apollographql.apollo.execution.internal
 
 import arrow.core.Either
 import arrow.core.left
@@ -12,7 +12,14 @@ import arrow.core.right
 import com.apollographql.apollo.annotations.ApolloExperimental
 import com.apollographql.apollo.api.Error
 import com.apollographql.apollo.ast.*
-import com.apollographql.execution.*
+import com.apollographql.apollo.execution.Coercing
+import com.apollographql.apollo.execution.ErrorPersistedDocument
+import com.apollographql.apollo.execution.ExternalValue
+import com.apollographql.apollo.execution.GraphQLRequest
+import com.apollographql.apollo.execution.InternalValue
+import com.apollographql.apollo.execution.PersistedDocument
+import com.apollographql.apollo.execution.PersistedDocumentCache
+import com.apollographql.apollo.execution.ValidPersistedDocument
 
 internal class PreparedRequest(
   val operation: GQLOperationDefinition,
@@ -89,9 +96,9 @@ internal fun Raise<String>.prepareRequest(
 }
 
 /**
- * Returns a [PersistedDocument]. If no cache is configured, a new [PersistedDocument] is computed for each request.
+ * Returns a [com.apollographql.apollo.execution.PersistedDocument]. If no cache is configured, a new [com.apollographql.apollo.execution.PersistedDocument] is computed for each request.
  */
-internal fun Raise<String>.getPersistedDocument(schema: Schema, persistedDocumentCache: PersistedDocumentCache?, request: GraphQLRequest): PersistedDocument  {
+internal fun Raise<String>.getPersistedDocument(schema: Schema, persistedDocumentCache: PersistedDocumentCache?, request: GraphQLRequest): PersistedDocument {
   val persistedQuery = request.extensions.get("persistedQuery")
   var persistedDocument: PersistedDocument?
   if (persistedQuery != null) {

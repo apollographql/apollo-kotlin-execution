@@ -1,4 +1,4 @@
-package com.apollographql.execution
+package com.apollographql.apollo.execution
 
 /**
  * A [TypeResolver] resolves concrete object types for abstract types.

@@ -1,4 +1,4 @@
-package com.apollographql.execution.internal
+package com.apollographql.apollo.execution.internal
 
 import com.apollographql.apollo.ast.GQLEnumTypeDefinition
 import com.apollographql.apollo.ast.GQLEnumValue
@@ -19,10 +19,10 @@ import com.apollographql.apollo.ast.GQLValue
 import com.apollographql.apollo.ast.GQLVariableValue
 import com.apollographql.apollo.ast.Schema
 import com.apollographql.apollo.ast.definitionFromScope
-import com.apollographql.execution.Coercing
-import com.apollographql.execution.InternalValue
-import com.apollographql.execution.scalarCoercingParseLiteral
-import com.apollographql.execution.toInternalValue
+import com.apollographql.apollo.execution.Coercing
+import com.apollographql.apollo.execution.InternalValue
+import com.apollographql.apollo.execution.scalarCoercingParseLiteral
+import com.apollographql.apollo.execution.toInternalValue
 
 internal fun coerceArgumentValues(
   schema: Schema,

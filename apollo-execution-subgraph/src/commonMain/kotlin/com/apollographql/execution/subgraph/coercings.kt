@@ -10,8 +10,8 @@ import com.apollographql.apollo.ast.GQLObjectValue
 import com.apollographql.apollo.ast.GQLStringValue
 import com.apollographql.apollo.ast.GQLValue
 import com.apollographql.apollo.ast.GQLVariableValue
-import com.apollographql.execution.Coercing
-import com.apollographql.execution.JsonValue
+import com.apollographql.apollo.execution.Coercing
+import com.apollographql.apollo.execution.JsonValue
 
 object _AnyCoercing: Coercing<Any?> {
   override fun serialize(internalValue: Any?): JsonValue {

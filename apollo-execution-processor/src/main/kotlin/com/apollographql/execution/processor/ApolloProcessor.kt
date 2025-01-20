@@ -51,7 +51,7 @@ class ApolloProcessor(
 
     done = true
 
-    val query = getRootSymbol(resolver, "com.apollographql.execution.annotation.GraphQLQuery")
+    val query = getRootSymbol(resolver, KotlinSymbols.GraphQLQuery.canonicalName)
     if (query == null) {
       logger.error("No '@GraphQLQuery' class found")
       return emptyList()
@@ -60,8 +60,8 @@ class ApolloProcessor(
     val result = doTraversal(
       logger,
       query,
-      getRootSymbol(resolver, "com.apollographql.execution.annotation.GraphQLMutation"),
-      getRootSymbol(resolver, "com.apollographql.execution.annotation.GraphQLSubscription"),
+      getRootSymbol(resolver, KotlinSymbols.GraphQLMutation.canonicalName),
+      getRootSymbol(resolver, KotlinSymbols.GraphQLSubscription.canonicalName),
     )
     val definitions = result.definitions
 

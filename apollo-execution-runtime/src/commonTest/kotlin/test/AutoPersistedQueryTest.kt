@@ -1,9 +1,9 @@
 package test
 
 import com.apollographql.apollo.api.ExecutionContext
-import com.apollographql.execution.ExecutableSchema
-import com.apollographql.execution.GraphQLRequest
-import com.apollographql.execution.InMemoryPersistedDocumentCache
+import com.apollographql.apollo.execution.ExecutableSchema
+import com.apollographql.apollo.execution.GraphQLRequest
+import com.apollographql.apollo.execution.InMemoryPersistedDocumentCache
 import kotlinx.coroutines.runBlocking
 import okio.Buffer
 import kotlin.test.Test

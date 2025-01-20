@@ -1,4 +1,4 @@
-package com.apollographql.execution
+package com.apollographql.apollo.execution
 
 /**
  * A [RootResolver] is called at the very beginning of the execution to seed execution.

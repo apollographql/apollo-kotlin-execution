@@ -1,6 +1,11 @@
 package com.apollographql.execution.spring
 
 import com.apollographql.apollo.api.ExecutionContext
+import com.apollographql.apollo.execution.ExecutableSchema
+import com.apollographql.apollo.execution.GraphQLRequest
+import com.apollographql.apollo.execution.GraphQLResponse
+import com.apollographql.apollo.execution.parseAsGraphQLRequest
+import com.apollographql.apollo.execution.toExternalValueMap
 import com.apollographql.execution.*
 import okio.Buffer
 import org.springframework.http.HttpMethod

@@ -9,16 +9,16 @@ public final class com/apollographql/execution/subgraph/Ftv1Context : com/apollo
 public final class com/apollographql/execution/subgraph/Ftv1Context$Key : com/apollographql/apollo/api/ExecutionContext$Key {
 }
 
-public final class com/apollographql/execution/subgraph/Ftv1Instrumentation : com/apollographql/execution/Instrumentation {
+public final class com/apollographql/execution/subgraph/Ftv1Instrumentation : com/apollographql/apollo/execution/Instrumentation {
 	public fun <init> ()V
-	public fun onField (Lcom/apollographql/execution/ResolveInfo;)Lcom/apollographql/execution/FieldCallback;
-	public fun onOperation (Lcom/apollographql/execution/OperationInfo;)Lcom/apollographql/execution/OperationCallback;
+	public fun onField (Lcom/apollographql/apollo/execution/ResolveInfo;)Lcom/apollographql/apollo/execution/FieldCallback;
+	public fun onOperation (Lcom/apollographql/apollo/execution/OperationInfo;)Lcom/apollographql/apollo/execution/OperationCallback;
 }
 
 public abstract interface annotation class com/apollographql/execution/subgraph/GraphQLKey : java/lang/annotation/Annotation {
 }
 
-public final class com/apollographql/execution/subgraph/_AnyCoercing : com/apollographql/execution/Coercing {
+public final class com/apollographql/execution/subgraph/_AnyCoercing : com/apollographql/apollo/execution/Coercing {
 	public static final field INSTANCE Lcom/apollographql/execution/subgraph/_AnyCoercing;
 	public fun deserialize (Ljava/lang/Object;)Ljava/lang/Object;
 	public fun parseLiteral (Lcom/apollographql/apollo/ast/GQLValue;)Ljava/lang/Object;

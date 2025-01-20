@@ -1,6 +1,6 @@
 package test
 
-import com.apollographql.execution.ExecutableSchema
+import com.apollographql.apollo.execution.ExecutableSchema
 import com.apollographql.execution.http4k.apolloHandler
 import org.http4k.core.Method
 import org.http4k.core.Request

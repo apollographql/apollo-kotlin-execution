@@ -40,7 +40,7 @@ internal class ExecutableSchemaBuilderBuilder(
               add("val schemaBuilder = %L()\n", KotlinSymbols.ExecutableSchemaBuilder)
               withIndent {
                 add(".schema(%M)\n", schemaDocument)
-                add(".%M·{\n", MemberName("com.apollographql.execution", "compositeResolver"))
+                add(".%M·{\n", MemberName(KotlinSymbols.executionPackageName, "compositeResolver"))
                 withIndent {
                   sirDefinitions.filterIsInstance<SirObjectDefinition>().forEach { sirObjectDefinition ->
                     add("type(%S)·{\n", sirObjectDefinition.name)
@@ -106,7 +106,7 @@ internal class ExecutableSchemaBuilderBuilder(
                   add(".addCoercing(%S, %M)\n", sirEnumDefinition.name, context.coercings.get(sirEnumDefinition.name))
                 }
                 if (entityResolver != null) {
-                  add(".addCoercing(%S, %M)\n", "_Any", MemberName("com.apollographql.execution.subgraph", "_AnyCoercing"))
+                  add(".addCoercing(%S, %M)\n", "_Any", MemberName(KotlinSymbols.subgraphPackageName, "_AnyCoercing"))
                 }
                 listOf("query", "mutation", "subscription").forEach { operationType ->
                   val sirObjectDefinition = sirDefinitions.rootType(operationType)

@@ -1,17 +1,17 @@
 public final class com/apollographql/execution/reporting/ApolloOperationTracing {
 	public fun <init> ()V
-	public final fun beforeField (Lcom/apollographql/execution/ResolveInfo;)Lcom/apollographql/execution/FieldCallback;
+	public final fun beforeField (Lcom/apollographql/apollo/execution/ResolveInfo;)Lcom/apollographql/apollo/execution/FieldCallback;
 	public final fun toProtoTrace (Ljava/lang/String;Ljava/lang/String;)Lcom/apollographql/execution/reporting/Trace;
 }
 
-public final class com/apollographql/execution/reporting/ApolloReportingInstrumentation : com/apollographql/execution/Instrumentation {
+public final class com/apollographql/execution/reporting/ApolloReportingInstrumentation : com/apollographql/apollo/execution/Instrumentation {
 	public fun <init> ()V
 	public fun <init> (Ljava/lang/String;)V
 	public synthetic fun <init> (Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getApolloKey ()Ljava/lang/String;
 	public final fun getClient ()Lio/ktor/client/HttpClient;
-	public fun onField (Lcom/apollographql/execution/ResolveInfo;)Lcom/apollographql/execution/FieldCallback;
-	public fun onOperation (Lcom/apollographql/execution/OperationInfo;)Lcom/apollographql/execution/OperationCallback;
+	public fun onField (Lcom/apollographql/apollo/execution/ResolveInfo;)Lcom/apollographql/apollo/execution/FieldCallback;
+	public fun onOperation (Lcom/apollographql/apollo/execution/OperationInfo;)Lcom/apollographql/apollo/execution/OperationCallback;
 }
 
 public final class com/apollographql/execution/reporting/ApolloReportingOperationContext : com/apollographql/apollo/api/ExecutionContext$Element {
@@ -19,7 +19,7 @@ public final class com/apollographql/execution/reporting/ApolloReportingOperatio
 	public fun <init> ()V
 	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun beforeField (Lcom/apollographql/execution/ResolveInfo;)Lcom/apollographql/execution/FieldCallback;
+	public final fun beforeField (Lcom/apollographql/apollo/execution/ResolveInfo;)Lcom/apollographql/apollo/execution/FieldCallback;
 	public synthetic fun getKey ()Lcom/apollographql/apollo/api/ExecutionContext$Key;
 	public fun getKey ()Lcom/apollographql/execution/reporting/ApolloReportingOperationContext$Key;
 	public final fun toProtoTrace ()Lcom/apollographql/execution/reporting/Trace;

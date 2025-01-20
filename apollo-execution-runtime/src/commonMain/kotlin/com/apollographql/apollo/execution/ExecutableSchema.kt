@@ -1,16 +1,23 @@
-package com.apollographql.execution
+package com.apollographql.apollo.execution
 
 import com.apollographql.apollo.api.ExecutionContext
 import com.apollographql.apollo.ast.*
-import com.apollographql.execution.ExecutableSchema.Builder
-import com.apollographql.execution.internal.*
-import com.apollographql.execution.internal.OperationContext
-import com.apollographql.execution.internal.PreparedRequest
-import com.apollographql.execution.internal.introspectionResolver
-import com.apollographql.execution.internal.prepareRequest
+import com.apollographql.apollo.execution.internal.OperationContext
+import com.apollographql.apollo.execution.internal.PreparedRequest
+import com.apollographql.apollo.execution.internal.introspectionCoercings
+import com.apollographql.apollo.execution.internal.introspectionResolver
+import com.apollographql.apollo.execution.internal.prepareRequest
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
+/**
+ * A GraphQL schema with execution information:
+ * - root values
+ * - coercings
+ * - resolver
+ *
+ * [ExecutableSchema] also includes handling for persisted documents. This part is not technically part of the main GraphQL spec but is popular that we add first party support to it.
+ */
 class ExecutableSchema(
   private val schema: Schema,
   private val coercings: Map<String, Coercing<*>>,

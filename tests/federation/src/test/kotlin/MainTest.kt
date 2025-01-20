@@ -5,7 +5,7 @@ import com.apollographql.apollo.ast.GQLDirectiveDefinition
 import com.apollographql.apollo.ast.GQLObjectTypeDefinition
 import com.apollographql.apollo.ast.parseAsGQLDocument
 import com.apollographql.apollo.ast.validateAsSchema
-import com.apollographql.execution.toGraphQLRequest
+import com.apollographql.apollo.execution.toGraphQLRequest
 import com.example.ServiceExecutableSchemaBuilder
 import kotlinx.coroutines.runBlocking
 import kotlin.test.Test

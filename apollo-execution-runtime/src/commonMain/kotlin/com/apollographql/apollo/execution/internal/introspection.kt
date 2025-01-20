@@ -1,8 +1,8 @@
-package com.apollographql.execution.internal
+package com.apollographql.apollo.execution.internal
 
 import com.apollographql.apollo.ast.*
-import com.apollographql.execution.Resolver
-import com.apollographql.execution.StringCoercing
+import com.apollographql.apollo.execution.Resolver
+import com.apollographql.apollo.execution.StringCoercing
 
 private inline fun <reified T> Any?.cast() = this as T
 

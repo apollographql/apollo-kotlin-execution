@@ -5,7 +5,11 @@ import com.squareup.kotlinpoet.MemberName
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 
 internal object KotlinSymbols {
-  val apolloExecutionPackageName = "com.apollographql.execution"
+  val executionPackageName = "com.apollographql.execution"
+  val subgraphPackageName = "com.apollographql.execution.subgraph"
+  val annotationPackageName = "com.apollographql.execution.annotation"
+
+  val apolloExecutionPackageName = "com.apollographql.apollo.execution"
   val apolloAstPackageName = "com.apollographql.apollo.ast"
   val apolloApiPackageName = "com.apollographql.apollo.api"
 
@@ -13,6 +17,11 @@ internal object KotlinSymbols {
   val Resolver = ClassName(apolloExecutionPackageName, "Resolver")
   val ResolveInfo = ClassName(apolloExecutionPackageName, "ResolveInfo")
   val Coercing = ClassName(apolloExecutionPackageName, "Coercing")
+
+  val GraphQLQuery = ClassName(annotationPackageName, "GraphQLQuery")
+  val GraphQLMutation = ClassName(annotationPackageName, "GraphQLMutation")
+  val GraphQLSubscription = ClassName(annotationPackageName, "GraphQLSubscription")
+
   val AstDocument = ClassName(apolloAstPackageName, "GQLDocument")
   val AstScalarTypeDefinition = ClassName(apolloAstPackageName, "GQLScalarTypeDefinition")
   val AstEnumTypeDefinition = ClassName(apolloAstPackageName, "GQLEnumTypeDefinition")
