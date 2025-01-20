@@ -8,13 +8,13 @@
 // Library unique name: <com.apollographql.execution:apollo-execution-reporting>
 final class com.apollographql.execution.reporting/ApolloOperationTracing { // com.apollographql.execution.reporting/ApolloOperationTracing|null[0]
     constructor <init>() // com.apollographql.execution.reporting/ApolloOperationTracing.<init>|<init>(){}[0]
-    final fun beforeField(com.apollographql.execution/ResolveInfo): com.apollographql.execution/FieldCallback? // com.apollographql.execution.reporting/ApolloOperationTracing.beforeField|beforeField(com.apollographql.execution.ResolveInfo){}[0]
+    final fun beforeField(com.apollographql.apollo.execution/ResolveInfo): com.apollographql.apollo.execution/FieldCallback? // com.apollographql.execution.reporting/ApolloOperationTracing.beforeField|beforeField(com.apollographql.apollo.execution.ResolveInfo){}[0]
     final fun toProtoTrace(kotlin/String?, kotlin/String?): com.apollographql.execution.reporting/Trace // com.apollographql.execution.reporting/ApolloOperationTracing.toProtoTrace|toProtoTrace(kotlin.String?;kotlin.String?){}[0]
 }
-final class com.apollographql.execution.reporting/ApolloReportingInstrumentation : com.apollographql.execution/Instrumentation { // com.apollographql.execution.reporting/ApolloReportingInstrumentation|null[0]
+final class com.apollographql.execution.reporting/ApolloReportingInstrumentation : com.apollographql.apollo.execution/Instrumentation { // com.apollographql.execution.reporting/ApolloReportingInstrumentation|null[0]
     constructor <init>(kotlin/String? = ...) // com.apollographql.execution.reporting/ApolloReportingInstrumentation.<init>|<init>(kotlin.String?){}[0]
-    final fun onField(com.apollographql.execution/ResolveInfo): com.apollographql.execution/FieldCallback? // com.apollographql.execution.reporting/ApolloReportingInstrumentation.onField|onField(com.apollographql.execution.ResolveInfo){}[0]
-    final fun onOperation(com.apollographql.execution/OperationInfo): com.apollographql.execution/OperationCallback? // com.apollographql.execution.reporting/ApolloReportingInstrumentation.onOperation|onOperation(com.apollographql.execution.OperationInfo){}[0]
+    final fun onField(com.apollographql.apollo.execution/ResolveInfo): com.apollographql.apollo.execution/FieldCallback? // com.apollographql.execution.reporting/ApolloReportingInstrumentation.onField|onField(com.apollographql.apollo.execution.ResolveInfo){}[0]
+    final fun onOperation(com.apollographql.apollo.execution/OperationInfo): com.apollographql.apollo.execution/OperationCallback? // com.apollographql.execution.reporting/ApolloReportingInstrumentation.onOperation|onOperation(com.apollographql.apollo.execution.OperationInfo){}[0]
     final val apolloKey // com.apollographql.execution.reporting/ApolloReportingInstrumentation.apolloKey|{}apolloKey[0]
         final fun <get-apolloKey>(): kotlin/String? // com.apollographql.execution.reporting/ApolloReportingInstrumentation.apolloKey.<get-apolloKey>|<get-apolloKey>(){}[0]
     final val client // com.apollographql.execution.reporting/ApolloReportingInstrumentation.client|{}client[0]
@@ -22,7 +22,7 @@ final class com.apollographql.execution.reporting/ApolloReportingInstrumentation
 }
 final class com.apollographql.execution.reporting/ApolloReportingOperationContext : com.apollographql.apollo.api/ExecutionContext.Element { // com.apollographql.execution.reporting/ApolloReportingOperationContext|null[0]
     constructor <init>(kotlin/String? = ..., kotlin/String? = ...) // com.apollographql.execution.reporting/ApolloReportingOperationContext.<init>|<init>(kotlin.String?;kotlin.String?){}[0]
-    final fun beforeField(com.apollographql.execution/ResolveInfo): com.apollographql.execution/FieldCallback? // com.apollographql.execution.reporting/ApolloReportingOperationContext.beforeField|beforeField(com.apollographql.execution.ResolveInfo){}[0]
+    final fun beforeField(com.apollographql.apollo.execution/ResolveInfo): com.apollographql.apollo.execution/FieldCallback? // com.apollographql.execution.reporting/ApolloReportingOperationContext.beforeField|beforeField(com.apollographql.apollo.execution.ResolveInfo){}[0]
     final fun toProtoTrace(): com.apollographql.execution.reporting/Trace // com.apollographql.execution.reporting/ApolloReportingOperationContext.toProtoTrace|toProtoTrace(){}[0]
     final object Key : com.apollographql.apollo.api/ExecutionContext.Key<com.apollographql.execution.reporting/ApolloReportingOperationContext> // com.apollographql.execution.reporting/ApolloReportingOperationContext.Key|null[0]
     final val key // com.apollographql.execution.reporting/ApolloReportingOperationContext.key|{}key[0]

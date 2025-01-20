@@ -1,5 +1,8 @@
 package com.apollographql.execution
 
+import com.apollographql.apollo.execution.ExecutableSchema
+import com.apollographql.apollo.execution.Resolver
+
 @DslMarker
 annotation class CompositeResolverMarker
 

@@ -3,11 +3,11 @@
 package com.apollographql.execution.subgraph
 
 import com.apollographql.apollo.api.ExecutionContext
-import com.apollographql.execution.Instrumentation
-import com.apollographql.execution.FieldCallback
-import com.apollographql.execution.OperationCallback
-import com.apollographql.execution.OperationInfo
-import com.apollographql.execution.ResolveInfo
+import com.apollographql.apollo.execution.Instrumentation
+import com.apollographql.apollo.execution.FieldCallback
+import com.apollographql.apollo.execution.OperationCallback
+import com.apollographql.apollo.execution.OperationInfo
+import com.apollographql.apollo.execution.ResolveInfo
 import com.apollographql.execution.reporting.ApolloOperationTracing
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi

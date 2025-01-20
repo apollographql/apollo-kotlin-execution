@@ -3,8 +3,8 @@
 package com.apollographql.execution.reporting
 
 import com.apollographql.apollo.api.ExecutionContext
-import com.apollographql.execution.FieldCallback
-import com.apollographql.execution.ResolveInfo
+import com.apollographql.apollo.execution.FieldCallback
+import com.apollographql.apollo.execution.ResolveInfo
 import kotlin.io.encoding.ExperimentalEncodingApi
 
 class ApolloReportingOperationContext(

@@ -1,8 +1,8 @@
 package com.apollographql.execution.reporting
 
 import com.apollographql.apollo.ast.toUtf8
-import com.apollographql.execution.FieldCallback
-import com.apollographql.execution.ResolveInfo
+import com.apollographql.apollo.execution.FieldCallback
+import com.apollographql.apollo.execution.ResolveInfo
 import com.squareup.wire.ofEpochSecond
 import kotlinx.datetime.Clock
 import kotlin.time.TimeSource.Monotonic.markNow

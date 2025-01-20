@@ -1,4 +1,4 @@
-package com.apollographql.execution
+package com.apollographql.apollo.execution
 
 import com.apollographql.apollo.api.Error
 

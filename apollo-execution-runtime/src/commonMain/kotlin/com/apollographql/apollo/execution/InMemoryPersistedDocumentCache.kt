@@ -1,6 +1,6 @@
-package com.apollographql.execution
+package com.apollographql.apollo.execution
 
-import com.apollographql.execution.internal.LruCache
+import com.apollographql.apollo.execution.internal.LruCache
 import kotlinx.atomicfu.locks.reentrantLock
 import kotlinx.atomicfu.locks.withLock
 

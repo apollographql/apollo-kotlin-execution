@@ -1,4 +1,4 @@
-import com.apollographql.execution.toGraphQLRequest
+import com.apollographql.apollo.execution.toGraphQLRequest
 import com.example.ServiceExecutableSchemaBuilder
 import kotlinx.coroutines.runBlocking
 import kotlin.test.Test

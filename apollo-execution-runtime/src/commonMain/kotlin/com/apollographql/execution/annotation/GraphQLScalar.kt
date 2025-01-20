@@ -1,6 +1,5 @@
 package com.apollographql.execution.annotation
 
-import com.apollographql.execution.Coercing
 import kotlin.reflect.KClass
 
 /**

@@ -1,7 +1,6 @@
-package com.apollographql.execution
+package com.apollographql.apollo.execution
 
 import com.apollographql.apollo.api.ExecutionContext
-import com.apollographql.apollo.ast.GQLDocument
 import com.apollographql.apollo.ast.GQLFragmentDefinition
 import com.apollographql.apollo.ast.GQLOperationDefinition
 import com.apollographql.apollo.ast.Schema

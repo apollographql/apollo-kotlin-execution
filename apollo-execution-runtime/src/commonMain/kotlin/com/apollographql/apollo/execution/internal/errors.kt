@@ -1,8 +1,8 @@
-package com.apollographql.execution.internal
+package com.apollographql.apollo.execution.internal
 
 import com.apollographql.apollo.api.Error
 import com.apollographql.apollo.ast.Issue
-import com.apollographql.execution.GraphQLResponse
+import com.apollographql.apollo.execution.GraphQLResponse
 
 internal fun graphQLError(message: String) = Error.Builder(message).build()
 internal fun singleGraphQLError(message: String) = listOf(Error.Builder(message).build())

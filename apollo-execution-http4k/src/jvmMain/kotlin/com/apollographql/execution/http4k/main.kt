@@ -3,8 +3,8 @@
 package com.apollographql.execution.http4k
 
 import com.apollographql.apollo.api.ExecutionContext
-import com.apollographql.execution.ExecutableSchema
-import com.apollographql.execution.parseAsGraphQLRequest
+import com.apollographql.apollo.execution.ExecutableSchema
+import com.apollographql.apollo.execution.parseAsGraphQLRequest
 import com.apollographql.execution.sandboxHtml
 import com.apollographql.execution.websocket.ConnectionInitAck
 import com.apollographql.execution.websocket.ConnectionInitError

@@ -1,8 +1,8 @@
 package test
 
 import com.apollographql.apollo.api.ExecutionContext
-import com.apollographql.execution.ExecutableSchema
-import com.apollographql.execution.toGraphQLRequest
+import com.apollographql.apollo.execution.ExecutableSchema
+import com.apollographql.apollo.execution.toGraphQLRequest
 import kotlinx.coroutines.runBlocking
 import okio.FileSystem
 import okio.Path.Companion.toPath

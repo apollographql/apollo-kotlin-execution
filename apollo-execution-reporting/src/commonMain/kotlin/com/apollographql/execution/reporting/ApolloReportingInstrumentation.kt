@@ -18,7 +18,11 @@ import com.apollographql.apollo.ast.definitionFromScope
 import com.apollographql.apollo.ast.rawType
 import com.apollographql.apollo.ast.toUtf8
 import com.apollographql.apollo.ast.transform
-import com.apollographql.execution.*
+import com.apollographql.apollo.execution.FieldCallback
+import com.apollographql.apollo.execution.Instrumentation
+import com.apollographql.apollo.execution.OperationCallback
+import com.apollographql.apollo.execution.OperationInfo
+import com.apollographql.apollo.execution.ResolveInfo
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*

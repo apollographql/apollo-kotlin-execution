@@ -1,6 +1,6 @@
 @file:Suppress("UNCHECKED_CAST")
 
-package com.apollographql.execution
+package com.apollographql.apollo.execution
 
 import arrow.core.flatMap
 import com.apollographql.apollo.annotations.ApolloInternal

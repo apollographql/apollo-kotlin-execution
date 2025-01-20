@@ -1,6 +1,6 @@
-package com.apollographql.execution.internal
+package com.apollographql.apollo.execution.internal
 
-import com.apollographql.execution.Weigher
+import com.apollographql.apollo.execution.Weigher
 
 /**
  * Multiplatform LRU cache implementation.

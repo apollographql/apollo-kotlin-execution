@@ -1,7 +1,7 @@
 package com.apollographql.execution.reporting
 
 import com.apollographql.apollo.api.Error
-import com.apollographql.execution.ExternalValue
+import com.apollographql.apollo.execution.ExternalValue
 
 /**
  * An internal node. It is mostly a copy of [Trace.Node] but is 100% mutable so we can build the tree as

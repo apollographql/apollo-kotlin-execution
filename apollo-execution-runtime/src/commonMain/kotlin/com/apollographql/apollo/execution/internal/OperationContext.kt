@@ -1,9 +1,29 @@
-package com.apollographql.execution.internal
+package com.apollographql.apollo.execution.internal
 
 import com.apollographql.apollo.api.Error
 import com.apollographql.apollo.api.ExecutionContext
 import com.apollographql.apollo.ast.*
-import com.apollographql.execution.*
+import com.apollographql.apollo.execution.Coercing
+import com.apollographql.apollo.execution.ExternalValue
+import com.apollographql.apollo.execution.ExternalValueOrDeferred
+import com.apollographql.apollo.execution.FieldCallback
+import com.apollographql.apollo.execution.GraphQLResponse
+import com.apollographql.apollo.execution.Instrumentation
+import com.apollographql.apollo.execution.InternalValue
+import com.apollographql.apollo.execution.OperationCallback
+import com.apollographql.apollo.execution.OperationInfo
+import com.apollographql.apollo.execution.ResolveInfo
+import com.apollographql.apollo.execution.ResolveTypeInfo
+import com.apollographql.apollo.execution.Resolver
+import com.apollographql.apollo.execution.ResolverValue
+import com.apollographql.apollo.execution.ResolverValueOrError
+import com.apollographql.apollo.execution.RootResolver
+import com.apollographql.apollo.execution.SubscriptionError
+import com.apollographql.apollo.execution.SubscriptionEvent
+import com.apollographql.apollo.execution.SubscriptionResponse
+import com.apollographql.apollo.execution.TypeResolver
+import com.apollographql.apollo.execution.finalize
+import com.apollographql.apollo.execution.leafCoercingSerialize
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 

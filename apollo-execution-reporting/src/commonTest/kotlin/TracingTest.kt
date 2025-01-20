@@ -1,8 +1,8 @@
 @file:OptIn(ExperimentalEncodingApi::class)
 
 import com.apollographql.apollo.ast.toGQLDocument
-import com.apollographql.execution.ExecutableSchema
-import com.apollographql.execution.toGraphQLRequest
+import com.apollographql.apollo.execution.ExecutableSchema
+import com.apollographql.apollo.execution.toGraphQLRequest
 import com.apollographql.execution.reporting.ApolloReportingInstrumentation
 import com.apollographql.execution.reporting.ApolloReportingOperationContext
 import com.apollographql.execution.reporting.Trace

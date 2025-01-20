@@ -1,8 +1,8 @@
 package test
 
-import com.apollographql.execution.ExecutableSchema
-import com.apollographql.execution.ResolveInfo
-import com.apollographql.execution.Resolver
+import com.apollographql.apollo.execution.ExecutableSchema
+import com.apollographql.apollo.execution.ResolveInfo
+import com.apollographql.apollo.execution.Resolver
 import com.apollographql.execution.ktor.apolloModule
 import io.ktor.server.application.install
 import io.ktor.server.engine.embeddedServer

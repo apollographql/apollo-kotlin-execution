@@ -3,8 +3,8 @@
 package test
 
 import com.apollographql.apollo.ast.toGQLDocument
-import com.apollographql.execution.ExecutableSchema
-import com.apollographql.execution.toGraphQLRequest
+import com.apollographql.apollo.execution.ExecutableSchema
+import com.apollographql.apollo.execution.toGraphQLRequest
 import kotlinx.coroutines.*
 import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.test.Test

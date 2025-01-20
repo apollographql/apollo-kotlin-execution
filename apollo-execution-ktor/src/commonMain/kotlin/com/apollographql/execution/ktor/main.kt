@@ -1,11 +1,14 @@
 package com.apollographql.execution.ktor
 
 import com.apollographql.apollo.api.ExecutionContext
+import com.apollographql.apollo.execution.ExecutableSchema
+import com.apollographql.apollo.execution.GraphQLRequest
+import com.apollographql.apollo.execution.GraphQLResponse
+import com.apollographql.apollo.execution.parseAsGraphQLRequest
 import com.apollographql.execution.*
 import com.apollographql.execution.websocket.ConnectionInitAck
 import com.apollographql.execution.websocket.SubscriptionWebSocketHandler
 import com.apollographql.execution.websocket.WebSocketBinaryMessage
-import com.apollographql.execution.websocket.WebSocketHandler
 import com.apollographql.execution.websocket.WebSocketTextMessage
 import io.ktor.http.*
 import io.ktor.http.content.*

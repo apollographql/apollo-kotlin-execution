@@ -3,10 +3,10 @@
 package test
 
 import com.apollographql.apollo.api.ExecutionContext
-import com.apollographql.execution.ExecutableSchema
-import com.apollographql.execution.SubscriptionError
-import com.apollographql.execution.SubscriptionResponse
-import com.apollographql.execution.toGraphQLRequest
+import com.apollographql.apollo.execution.ExecutableSchema
+import com.apollographql.apollo.execution.SubscriptionError
+import com.apollographql.apollo.execution.SubscriptionResponse
+import com.apollographql.apollo.execution.toGraphQLRequest
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -142,7 +142,7 @@ class ExecutionTest {
       executableSchema.subscribe(document.toGraphQLRequest()).toList()
     }
 
-    response.filterIsInstance<SubscriptionError>().single().errors.single().apply {
+    response.filterIsInstance<SubscriptionResponse>().single().response.errors!!.single().apply {
       assertEquals("Can't query `bar` on type `Subscription`", message)
       assertEquals(3, locations.orEmpty().single().line)
       assertEquals(5, locations.orEmpty().single().column)
