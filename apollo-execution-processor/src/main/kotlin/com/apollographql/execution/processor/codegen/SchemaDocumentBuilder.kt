@@ -288,7 +288,6 @@ private fun SirDirective.codeBlock(): CodeBlock {
     }
     add(")\n")
   }
-  return CodeBlock.of("%T(null, %S, %L)", AstDirective, name, arguments.map { it.codeBlock() }.joinToCode(prefix = "listOf(", suffix = ")"))
 }
 
 private fun SirArgument.codeBlock(): CodeBlock {
