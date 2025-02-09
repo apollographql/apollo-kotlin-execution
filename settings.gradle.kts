@@ -1,12 +1,7 @@
 pluginManagement {
   listOf(repositories, dependencyResolutionManagement.repositories).forEach {
     it.mavenCentral()
-    it.exclusiveContent {
-      forRepository { it.maven("https://storage.googleapis.com/gradleup/m2") }
-      filter {
-        includeGroup("com.gradleup.librarian")
-      }
-    }
+    it.maven("https://storage.googleapis.com/gradleup/m2")
     it.maven("https://storage.googleapis.com/apollo-previews/m2/")
   }
 }
