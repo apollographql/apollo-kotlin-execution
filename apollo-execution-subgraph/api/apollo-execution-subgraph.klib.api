@@ -6,24 +6,30 @@
 // - Show declarations: true
 
 // Library unique name: <com.apollographql.execution:apollo-execution-subgraph>
+open annotation class com.apollographql.execution.subgraph/GraphQLKey : kotlin/Annotation { // com.apollographql.execution.subgraph/GraphQLKey|null[0]
+    constructor <init>() // com.apollographql.execution.subgraph/GraphQLKey.<init>|<init>(){}[0]
+}
+
 final class com.apollographql.execution.subgraph/Ftv1Context : com.apollographql.apollo.api/ExecutionContext.Element { // com.apollographql.execution.subgraph/Ftv1Context|null[0]
     constructor <init>() // com.apollographql.execution.subgraph/Ftv1Context.<init>|<init>(){}[0]
-    final object Key : com.apollographql.apollo.api/ExecutionContext.Key<com.apollographql.execution.subgraph/Ftv1Context> // com.apollographql.execution.subgraph/Ftv1Context.Key|null[0]
+
     final val apolloOperationTracing // com.apollographql.execution.subgraph/Ftv1Context.apolloOperationTracing|{}apolloOperationTracing[0]
         final fun <get-apolloOperationTracing>(): com.apollographql.execution.reporting/ApolloOperationTracing // com.apollographql.execution.subgraph/Ftv1Context.apolloOperationTracing.<get-apolloOperationTracing>|<get-apolloOperationTracing>(){}[0]
     final val key // com.apollographql.execution.subgraph/Ftv1Context.key|{}key[0]
         final fun <get-key>(): com.apollographql.execution.subgraph/Ftv1Context.Key // com.apollographql.execution.subgraph/Ftv1Context.key.<get-key>|<get-key>(){}[0]
+
+    final object Key : com.apollographql.apollo.api/ExecutionContext.Key<com.apollographql.execution.subgraph/Ftv1Context> // com.apollographql.execution.subgraph/Ftv1Context.Key|null[0]
 }
+
 final class com.apollographql.execution.subgraph/Ftv1Instrumentation : com.apollographql.apollo.execution/Instrumentation { // com.apollographql.execution.subgraph/Ftv1Instrumentation|null[0]
     constructor <init>() // com.apollographql.execution.subgraph/Ftv1Instrumentation.<init>|<init>(){}[0]
+
     final fun onField(com.apollographql.apollo.execution/ResolveInfo): com.apollographql.apollo.execution/FieldCallback? // com.apollographql.execution.subgraph/Ftv1Instrumentation.onField|onField(com.apollographql.apollo.execution.ResolveInfo){}[0]
     final fun onOperation(com.apollographql.apollo.execution/OperationInfo): com.apollographql.apollo.execution/OperationCallback? // com.apollographql.execution.subgraph/Ftv1Instrumentation.onOperation|onOperation(com.apollographql.apollo.execution.OperationInfo){}[0]
 }
+
 final object com.apollographql.execution.subgraph/_AnyCoercing : com.apollographql.apollo.execution/Coercing<kotlin/Any?> { // com.apollographql.execution.subgraph/_AnyCoercing|null[0]
     final fun deserialize(kotlin/Any?): kotlin/Any? // com.apollographql.execution.subgraph/_AnyCoercing.deserialize|deserialize(kotlin.Any?){}[0]
     final fun parseLiteral(com.apollographql.apollo.ast/GQLValue): kotlin/Any? // com.apollographql.execution.subgraph/_AnyCoercing.parseLiteral|parseLiteral(com.apollographql.apollo.ast.GQLValue){}[0]
     final fun serialize(kotlin/Any?): kotlin/Any? // com.apollographql.execution.subgraph/_AnyCoercing.serialize|serialize(kotlin.Any?){}[0]
-}
-open annotation class com.apollographql.execution.subgraph/GraphQLKey : kotlin/Annotation { // com.apollographql.execution.subgraph/GraphQLKey|null[0]
-    constructor <init>() // com.apollographql.execution.subgraph/GraphQLKey.<init>|<init>(){}[0]
 }

@@ -20,6 +20,7 @@ kotlin {
         implementation(libs.coroutines)
         implementation(project.dependencies.platform(libs.http4k.bom.get()))
         implementation(libs.http4k.core)
+        api(libs.apollo.execution)
         implementation(libs.http4k.realtime.core)
       }
     }
