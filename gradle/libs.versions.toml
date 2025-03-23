@@ -1,5 +1,5 @@
 [versions]
-kotlin-plugin = "2.1.10"
+kotlin-plugin = "2.1.20"
 ksp = "2.1.10-1.0.29"
 apollo = "4.1.1"
 ktor = "3.0.0"
@@ -7,7 +7,7 @@ spring = "3.3.3"
 
 [libraries]
 kgp = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin-plugin" }
-kgp-min = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version = "1.9.0" }
+kgp-min = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version = "1.9.25" }
 java-diff-utils = { module = "io.github.java-diff-utils:java-diff-utils", version = "4.12" }
 gradle-api-min = { group = "dev.gradleplugins", name = "gradle-api", version = "8.0" }
 apollo-ast = { group = "com.apollographql.apollo", name = "apollo-ast", version.ref = "apollo" }
