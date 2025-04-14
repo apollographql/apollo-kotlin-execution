@@ -14,7 +14,7 @@
 
 ## 🚀 Apollo Execution
 
-GraphQL execution algorithms.
+GraphQL server.
 
 ## 📚 Documentation
 
