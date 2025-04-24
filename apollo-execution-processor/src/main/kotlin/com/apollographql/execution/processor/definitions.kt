@@ -381,6 +381,12 @@ private class TypeDefinitionContext(
 
     val usedNames = mutableSetOf<String>()
     val allFields = declarations.filter { it.isPublic() }.mapNotNull {
+      if (it.origin == Origin.SYNTHETIC) {
+        /**
+         * This happens for data classes functions, which we do not want to track
+         */
+        return@mapNotNull null
+      }
       val name = it.graphqlName()
       if (usedNames.contains(name)) {
         logger.error("Duplicate field '$name'. Either rename the declaration or use @GraphQLName.", it)
