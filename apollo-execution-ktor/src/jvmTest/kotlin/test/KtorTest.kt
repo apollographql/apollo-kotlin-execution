@@ -13,6 +13,7 @@ import kotlin.test.Test
 
 class MyDefaultResolver: Resolver {
   override suspend fun resolve(resolveInfo: ResolveInfo): Any? {
+    @Suppress("UNCHECKED_CAST")
     return when (val parent = resolveInfo.parentObject) {
       null -> mapOf("foo" to "bar")
       else -> (parent as Map<String, *>).get(resolveInfo.fieldName)
