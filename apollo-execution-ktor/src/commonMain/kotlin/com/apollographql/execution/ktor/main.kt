@@ -107,7 +107,7 @@ fun Application.apolloSubscriptionModule(
   install(WebSockets)
 
   routing {
-    webSocket(path) {
+    webSocket(path, "graphql-ws") {
       coroutineScope {
         val handler = SubscriptionWebSocketHandler(
           executableSchema = executableSchema,
