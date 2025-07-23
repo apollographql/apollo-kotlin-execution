@@ -9,7 +9,7 @@
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.apollographql.execution/apollo-execution-runtime?style=flat-square)](https://central.sonatype.com/namespace/com.apollographql.execution)
 [![OSS Snapshots](https://img.shields.io/nexus/s/com.apollographql.execution/apollo-execution-runtime?server=https%3A%2F%2Fs01.oss.sonatype.org&label=oss-snapshots&style=flat-square)](https://s01.oss.sonatype.org/content/repositories/snapshots/com/apollographql/execution/)
-
+[![Maven Snapshots](https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Fcentral.sonatype.com%2Frepository%2Fmaven-snapshots%2Fcom%2Fapollographql%2Fexecution%2Fapollo-execution-runtime%2Fmaven-metadata.xml&style=flat-square&label=snapshots&color=%2315252D&strategy=latestProperty)](https://central.sonatype.com/repository/maven-snapshots/com/apollographql/execution/)
 </div>
 
 ## 🚀 Apollo Execution

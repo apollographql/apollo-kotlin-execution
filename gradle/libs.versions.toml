@@ -36,7 +36,7 @@ http4k-core = { module = "org.http4k:http4k-core" }
 http4k-realtime-core = { module = "org.http4k:http4k-realtime-core" }
 http4k-server-undertow = { module = "org.http4k:http4k-server-undertow" }
 http4k-server-netty = { module = "org.http4k:http4k-server-netty" }
-librarian-gradle-plugin = "com.gradleup.librarian:librarian-gradle-plugin:0.0.8-SNAPSHOT-cd822254de75426f8f047a50bae467da872cc912"
+librarian-gradle-plugin = "com.gradleup.librarian:librarian-gradle-plugin:0.0.11-SNAPSHOT-ba8b5ecfcbda070ecc3b5b95056ee359199552b4"
 apollo-execution-runtime = { module = "com.apollographql.execution:apollo-execution-runtime" }
 apollo-execution-subgraph = { module = "com.apollographql.execution:apollo-execution-subgraph" }
 spring-webflux = "org.springframework:spring-webflux:6.1.10"
