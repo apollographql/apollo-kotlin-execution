@@ -137,23 +137,12 @@ fun Application.apolloSubscriptionModule(
 
 fun Application.apolloSandboxModule(
   title: String = "API sandbox",
-  graphqlPath: String = "/graphql",
   sandboxPath: String = "/",
+  endpoint: (RoutingCall) -> String = { it.url { path("/graphql") } },
 ) {
   routing {
     get(sandboxPath) {
-      val initialEndpoint = call.url {
-        /**
-         * Trying to guess if the client connected through HTTPS
-         */
-        val proto = call.request.header("x-forwarded-proto")
-        when (proto) {
-          "http" -> protocol = URLProtocol.HTTP
-          "https" -> protocol = URLProtocol.HTTPS
-        }
-        path(graphqlPath)
-      }
-      call.respondText(sandboxHtml(title, initialEndpoint), ContentType.parse("text/html"))
+      call.respondText(sandboxHtml(title, endpoint(call)), ContentType.parse("text/html"))
     }
   }
 }
