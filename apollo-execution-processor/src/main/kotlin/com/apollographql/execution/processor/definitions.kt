@@ -77,7 +77,7 @@ private class TypeDefinitionContext(
 
   /**
    * Walk the Kotlin type graph. It goes:
-   * - recursively (depth first) for supertypes so we can filter out union markers
+   * - depth first for supertypes so we can filter out union markers
    * - breadth first for subtypes/fields so we don't loop on circular field/interfaces references
    */
   fun walk(
@@ -85,12 +85,27 @@ private class TypeDefinitionContext(
     mutation: KSClassDeclaration?,
     subscription: KSClassDeclaration?,
   ): TraversalResults {
-    declarationsToVisit.add(DeclarationToVisit(query, VisitContext.OUTPUT, "query"))
+    declarationsToVisit.add(
+      DeclarationToVisit(
+        query,
+        DeclarationContext(operationType = "query", direction = Direction.Ouput)
+      )
+    )
     if (mutation != null) {
-      declarationsToVisit.add(DeclarationToVisit(mutation, VisitContext.OUTPUT, "mutation"))
+      declarationsToVisit.add(
+        DeclarationToVisit(
+          mutation,
+          DeclarationContext(operationType = "mutation", direction = Direction.Ouput)
+        )
+      )
     }
     if (subscription != null) {
-      declarationsToVisit.add(DeclarationToVisit(subscription, VisitContext.OUTPUT, "subscription"))
+      declarationsToVisit.add(
+        DeclarationToVisit(
+          subscription,
+          DeclarationContext(operationType = "subscription", direction = Direction.Ouput)
+        )
+      )
     }
 
     while (declarationsToVisit.isNotEmpty()) {
@@ -116,13 +131,14 @@ private class TypeDefinitionContext(
        * Not 100% sure what order to use for the types.
        * Fields in source order make sense but for classes that may be defined in different files, it's a lot less clear
        */
-      definitions = typeDefinitions.patchUnions(unions).sortedBy { it.type() + it.name } + finalizedDirectiveDefinitions.sortedBy { it.name },
+      definitions = typeDefinitions.patchUnions(unions)
+        .sortedBy { it.type() + it.name } + finalizedDirectiveDefinitions.sortedBy { it.name },
       analyzedFiles = ksFiles.filterNotNull()
     )
   }
 
   private fun getOrResolve(declarationToVisit: DeclarationToVisit): SirTypeDefinition? {
-    val qualifiedName = declarationToVisit. declaration.asClassName().asString()
+    val qualifiedName = declarationToVisit.declaration.asClassName().asString()
     if (typeDefinitions.containsKey(qualifiedName)) {
       // Already visited (maybe error)
       return typeDefinitions.get(qualifiedName)
@@ -154,8 +170,8 @@ private class TypeDefinitionContext(
     }
     if (declaration.containingFile == null) {
       logger.error(
-        "'$qualifiedName' doesn't have a containing file and probably comes from a dependency.",
-        declaration
+        "Symbol '$qualifiedName' isn't part of your project. Did you forget to map a custom scalar?",
+        context.origin
       )
       return null
     }
@@ -191,9 +207,9 @@ private class TypeDefinitionContext(
       return declaration.toSirScalarDefinition(qualifiedName)
     }
 
-    return when(context) {
-      VisitContext.OUTPUT -> declaration.toSirComposite(declarationToVisit.operationType)
-      VisitContext.INPUT -> declaration.toSirInputObject()
+    return when (context.direction) {
+      Direction.Ouput -> declaration.toSirComposite(context.operationType)
+      Direction.Input -> declaration.toSirInputObject()
     }
   }
 
@@ -310,11 +326,11 @@ private class TypeDefinitionContext(
   private fun KSAnnotation.toSirDirective(directiveDefinition: SirDirectiveDefinition): SirDirective {
     return SirDirective(
       name = directiveDefinition.name,
-      arguments = arguments.mapNotNull { it.SirInputValueDefinition(directiveDefinition) }
+      arguments = arguments.mapNotNull { it.sirInputValueDefinition(directiveDefinition) }
     )
   }
 
-  private fun KSValueArgument.SirInputValueDefinition(directiveDefinition: SirDirectiveDefinition): SirArgument? {
+  private fun KSValueArgument.sirInputValueDefinition(directiveDefinition: SirDirectiveDefinition): SirArgument? {
     val kotlinName = name?.asString()
     if (kotlinName == null) {
       logger.error("Arguments must be named", this)
@@ -352,7 +368,7 @@ private class TypeDefinitionContext(
 
       is KSType -> {
         /**
-         * Not sure this is still used. This might be a leftover of KSP1
+         * Not sure if this is still used. This might be a leftover of KSP1
          */
         GQLEnumValue(null, declaration.simpleName.asString())
       }
@@ -396,14 +412,14 @@ private class TypeDefinitionContext(
 
       when (it) {
         is KSPropertyDeclaration -> {
-          it.toSirFieldDefinition(operationType)
+          it.toSirFieldDefinition(operationType == "subscription")
         }
 
         is KSFunctionDeclaration -> {
           if (it.isConstructor()) {
             null
           } else {
-            it.toSirFieldDefinition(operationType)
+            it.toSirFieldDefinition(operationType == "subscription")
           }
         }
 
@@ -460,8 +476,20 @@ private class TypeDefinitionContext(
            *
            * union Animal = Cat | Dog | Lion ...
            * ```
+           *
+           * Note that technically the subscription root might implement an interface, but it was
+           * visited already when we reach this point so it's fine to hardcode `isSubscriptionRoot = false` here.
            */
-          declarationsToVisit.add(DeclarationToVisit(it, VisitContext.OUTPUT, null))
+          declarationsToVisit.add(
+            DeclarationToVisit(
+              it,
+              DeclarationContext(
+                direction = Direction.Ouput,
+                // The subclasses are always part of the project so we should not need some origin information here.
+                origin = null
+              )
+            )
+          )
         }
 
         if (allFields.isEmpty()) {
@@ -517,21 +545,36 @@ private class TypeDefinitionContext(
           // kotlin.Any is a super type of everything, just ignore it
           null
         } else {
-          val supertype = getOrResolve(DeclarationToVisit(declaration, VisitContext.OUTPUT, null))
-          if (supertype is SirInterfaceDefinition) {
-            supertype.name
-          } else if (supertype is SirUnionDefinition) {
-            if (objectName == null) {
-              logger.error("Interfaces are not allowed to extend union markers. Only classes can")
-            } else {
-              unions.compute(supertype.name) { _, oldValue ->
-                oldValue.orEmpty() + objectName
-              }
+          val supertype = getOrResolve(
+            DeclarationToVisit(
+              declaration,
+              DeclarationContext(
+                direction = Direction.Ouput,
+                // TODO: use the exact KSTypeReference in superTypes() as origin for nicer error messages instead of just the class.
+                origin = this
+              )
+            )
+          )
+          when (supertype) {
+            is SirInterfaceDefinition -> {
+              supertype.name
             }
-            null
-          } else {
-            // error
-            null
+
+            is SirUnionDefinition -> {
+              if (objectName == null) {
+                logger.error("Interfaces are not allowed to extend union markers. Only classes can")
+              } else {
+                unions.compute(supertype.name) { _, oldValue ->
+                  oldValue.orEmpty() + objectName
+                }
+              }
+              null
+            }
+
+            else -> {
+              // error
+              null
+            }
           }
         }
       } else {
@@ -541,7 +584,7 @@ private class TypeDefinitionContext(
     }.toList()
   }
 
-  private fun KSFunctionDeclaration.toSirFieldDefinition(operationType: String?): SirFieldDefinition? {
+  private fun KSFunctionDeclaration.toSirFieldDefinition(isSubscriptionRoot: Boolean): SirFieldDefinition? {
     if (returnType == null) {
       logger.error("No return type?", this)
       return null
@@ -553,7 +596,14 @@ private class TypeDefinitionContext(
       directives = directives(GQLDirectiveLocation.FIELD_DEFINITION),
       targetName = simpleName.asString(),
       isFunction = true,
-      type = returnType!!.resolve().toSirType(SirDebugContext(this), VisitContext.OUTPUT, operationType, false),
+      type = returnType!!.resolve().toSirType(
+        SirContext(
+          direction = Direction.Ouput,
+          origin = this,
+          isSubscriptionRoot = isSubscriptionRoot,
+          hasDefaultValue = false
+        )
+      ),
       arguments = parameters.mapNotNull {
         it.toSirArgument()
       },
@@ -581,13 +631,22 @@ private class TypeDefinitionContext(
     val name = this.graphqlNameOrNull() ?: targetName
 
     if (this.hasDefault) {
-      logger.error("Default parameter values are not supported, annotate your parameter with '@GraphQLDefault' instead.", this)
+      logger.error(
+        "Default parameter values are not supported, annotate your parameter with '@GraphQLDefault' instead.",
+        this
+      )
       return null
     }
     val defaultValue = defaultValue()
     val type = type.resolve()
-    val sirType =
-      type.toSirType(SirDebugContext(this), VisitContext.INPUT, operationType = null, defaultValue != null)
+    val sirType = type.toSirType(
+      SirContext(
+        direction = Direction.Input,
+        origin = this,
+        isSubscriptionRoot = false,
+        hasDefaultValue = defaultValue != null
+      )
+    )
 
     return SirInputValueDefinition(
       name = name,
@@ -599,14 +658,21 @@ private class TypeDefinitionContext(
     )
   }
 
-  private fun KSPropertyDeclaration.toSirFieldDefinition(operationType: String?): SirFieldDefinition {
+  private fun KSPropertyDeclaration.toSirFieldDefinition(isSubscriptionRoot: Boolean): SirFieldDefinition {
     return SirFieldDefinition(
       name = graphqlName(),
       description = docString,
       directives = directives(GQLDirectiveLocation.FIELD_DEFINITION),
       targetName = simpleName.asString(),
       isFunction = false,
-      type = type.resolve().toSirType(SirDebugContext(this), VisitContext.OUTPUT, operationType, false),
+      type = type.resolve().toSirType(
+        SirContext(
+          direction = Direction.Ouput,
+          origin = this,
+          isSubscriptionRoot = isSubscriptionRoot,
+          hasDefaultValue = false
+        )
+      ),
       arguments = emptyList(),
       isKey = findAnnotation("GraphQLKey") != null
     )
@@ -650,7 +716,7 @@ private class TypeDefinitionContext(
         kotlinName = kotlinName,
         description = docString,
         directives = directives(GQLDirectiveLocation.ARGUMENT_DEFINITION),
-        type = declaration.toSirType(SirDebugContext(it), VisitContext.INPUT, null, defaultValue != null),
+        type = declaration.toSirType(SirContext(direction = Direction.Input, origin = it, isSubscriptionRoot = false, hasDefaultValue = defaultValue != null)),
         defaultValue = defaultValue
       )
     }
@@ -677,24 +743,21 @@ private class TypeDefinitionContext(
   }
 
   private fun KSType.toSirType(
-    debugContext: SirDebugContext,
-    context: VisitContext,
-    operationType: String?,
-    hasDefaultValue: Boolean
+    context: SirContext,
   ): SirType {
     var type: KSType = this
-    if (operationType == "subscription") {
+    if (context.direction == Direction.Ouput && context.isSubscriptionRoot) {
       if (!declaration.isFlow()) {
         logger.error("Subscription root fields must be of Flow<T> type", this.declaration)
         return SirErrorType
       }
       type = arguments.single().type!!.resolve()
-    } else if (context == VisitContext.INPUT) {
+    } else if (context.direction == Direction.Input) {
       if (declaration.isApolloOptional()) {
         val argumentType = type.arguments.first().type!!.resolve()
 
-        if (hasDefaultValue) {
-          logger.error("Input value has a default value and cannot be optional", debugContext.node)
+        if (context.hasDefaultValue) {
+          logger.error("Input value has a default value and cannot be optional", context.origin)
           return SirErrorType
         }
 
@@ -704,47 +767,57 @@ private class TypeDefinitionContext(
            * Those cases trigger request error before reaching the resolver and the argument cannot
            * be of Optional type.
            */
-          logger.error("Input value is not nullable and cannot be optional", debugContext.node)
+          logger.error("Input value is not nullable and cannot be optional", context.origin)
           return SirErrorType
         }
 
         type = argumentType
       } else {
-        if (!hasDefaultValue && isMarkedNullable) {
+        if (!context.hasDefaultValue && isMarkedNullable) {
           logger.error(
             "Input value is nullable and doesn't have a default value: it must also be optional.",
-            debugContext.node
+            context.origin
           )
           return SirErrorType
         }
       }
     }
 
-    return type.toSirType2(debugContext, context, type.isMarkedNullable)
+    return type.toSirType2(context, type.isMarkedNullable)
   }
 
-  private fun KSType.toSirType2(debugContext: SirDebugContext, context: VisitContext, isNullable: Boolean): SirType {
+  private fun KSType.toSirType2(context: SirContext, isNullable: Boolean): SirType {
     if (!isNullable) {
-      return SirNonNullType(toSirType2(debugContext, context, true))
+      return SirNonNullType(toSirType2(context, true))
     }
 
     val qualifiedName = declaration.asClassName().asString()
     if (qualifiedName == "kotlin.collections.List") {
       return SirListType(
-        arguments.single().type!!.resolve().toSirType(debugContext, context, null, false)
+        arguments.single().type!!.resolve().toSirType(context.copy(hasDefaultValue = false, isSubscriptionRoot = false))
       )
     }
 
     return when {
       builtinTypes.contains(qualifiedName) -> {
         val name = builtinScalarName(qualifiedName)
-        declarationsToVisit.add(DeclarationToVisit(declaration, context))
+        declarationsToVisit.add(
+          DeclarationToVisit(
+            declaration,
+            DeclarationContext(direction = context.direction, origin = context.origin)
+          )
+        )
         SirNamedType(name)
       }
 
       else -> {
         val name = declaration.graphqlName()
-        declarationsToVisit.add(DeclarationToVisit(declaration, context))
+        declarationsToVisit.add(
+          DeclarationToVisit(
+            declaration,
+            DeclarationContext(direction = context.direction, origin = context.origin)
+          )
+        )
         SirNamedType(name)
       }
     }
@@ -859,11 +932,6 @@ private fun KSDeclaration.isFlow(): Boolean {
   return asClassName().asString() == "kotlinx.coroutines.flow.Flow"
 }
 
-
-private fun KSDeclaration.isExternal(): Boolean {
-  return (containingFile == null && !isApolloOptional())
-}
-
 private fun String.isReserved(): Boolean = this.startsWith("__")
 
 private val unsupportedTypes = listOf("Float", "Byte", "Short", "Long", "UByte", "UShort", "ULong", "Char").map {
@@ -876,23 +944,46 @@ private val builtinTypes = listOf("Double", "String", "Boolean", "Int").map {
 
 private class DeclarationToVisit(
   val declaration: KSDeclaration,
-  val context: VisitContext,
-  val operationType: String? = null
+  val context: DeclarationContext,
 )
 
-private enum class VisitContext {
-  OUTPUT,
-  INPUT,
-}
+private class DeclarationContext(
+  val direction: Direction,
+  /**
+   * If this declaration is a root type, the type of the operation, null else.
+   */
+  val operationType: String? = null,
+  /**
+   * Where this declaration is coming from.
+   *
+   * Only used for error messages when the declaration is not part of the current project for an example.
+   */
+  val origin: KSNode? = null,
+)
 
+private data class SirContext(
+  val direction: Direction,
+  /**
+   * The node that contains the type. One of
+   * - KSValueParameter
+   * - KSPropertyDeclaration
+   * - KSFunctionDeclaration
+   *
+   */
+  val origin: KSNode,
+  /**
+   * Only for outputs.
+   */
+  val isSubscriptionRoot: Boolean,
+  /**
+   * Only for inputs.
+   */
+  val hasDefaultValue: Boolean,
+)
 
-private class SirDebugContext(
-  val node: KSNode?,
-  val name: String?,
-) {
-  constructor(parameter: KSValueParameter) : this(parameter.parent, parameter.name?.asString())
-  constructor(property: KSPropertyDeclaration) : this(property.parentDeclaration, property.simpleName.asString())
-  constructor(function: KSFunctionDeclaration) : this(function.parentDeclaration, function.simpleName.asString())
+private enum class Direction {
+  Input,
+  Ouput
 }
 
 internal fun KSClassDeclaration.instantiation(): Instantiation {
