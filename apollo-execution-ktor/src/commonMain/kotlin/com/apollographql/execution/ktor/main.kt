@@ -137,14 +137,11 @@ fun Application.apolloSubscriptionModule(
 
 fun Application.apolloSandboxModule(
   title: String = "API sandbox",
-  sandboxPath: String = "/sandbox",
   graphqlPath: String = "/graphql",
+  sandboxPath: String = "/",
 ) {
   routing {
-    get(Regex("/sandbox/?")) {
-      call.respondRedirect(call.url { path("/sandbox/index.html") }, permanent = true)
-    }
-    get("$sandboxPath/index.html") {
+    get(sandboxPath) {
       val initialEndpoint = call.url {
         /**
          * Trying to guess if the client connected through HTTPS
