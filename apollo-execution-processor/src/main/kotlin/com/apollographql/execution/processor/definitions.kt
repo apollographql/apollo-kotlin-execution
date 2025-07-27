@@ -169,10 +169,18 @@ private class TypeDefinitionContext(
       return null
     }
     if (declaration.containingFile == null) {
-      logger.error(
-        "Symbol '$qualifiedName' isn't part of your project. Did you forget to map a custom scalar?",
-        context.origin
-      )
+      if (qualifiedName == "kotlin.Unit") {
+        logger.error(
+          "'kotlin.Unit' is not support as an output type as there is no void scalar in GraphQL. Either add a custom scalar or return another built in type such as 'Boolean' or 'Int'.",
+          context.origin
+        )
+
+      } else {
+        logger.error(
+          "Symbol '$qualifiedName' isn't part of your project. Did you forget to map a custom scalar?",
+          context.origin
+        )
+      }
       return null
     }
 
@@ -716,7 +724,14 @@ private class TypeDefinitionContext(
         kotlinName = kotlinName,
         description = docString,
         directives = directives(GQLDirectiveLocation.ARGUMENT_DEFINITION),
-        type = declaration.toSirType(SirContext(direction = Direction.Input, origin = it, isSubscriptionRoot = false, hasDefaultValue = defaultValue != null)),
+        type = declaration.toSirType(
+          SirContext(
+            direction = Direction.Input,
+            origin = it,
+            isSubscriptionRoot = false,
+            hasDefaultValue = defaultValue != null
+          )
+        ),
         defaultValue = defaultValue
       )
     }
