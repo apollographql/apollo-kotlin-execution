@@ -7,9 +7,11 @@ import com.apollographql.apollo.execution.GraphQLResponse
 import com.apollographql.apollo.execution.parseAsGraphQLRequest
 import com.apollographql.execution.*
 import com.apollographql.execution.websocket.ConnectionInitAck
+import com.apollographql.execution.websocket.GraphQLWsWebSocketHandler
 import com.apollographql.execution.websocket.SubscriptionWebSocketHandler
 import com.apollographql.execution.websocket.WebSocketBinaryMessage
 import com.apollographql.execution.websocket.WebSocketTextMessage
+import com.apollographql.execution.websocket.WsConnectionInitAck
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.server.application.*
@@ -99,30 +101,59 @@ fun Application.apolloModule(
   }
 }
 
+enum class WsProtocol {
+  GraphqlWS,
+  Legacy
+}
 fun Application.apolloSubscriptionModule(
   executableSchema: ExecutableSchema,
   path: String = "/subscription",
+  protocol: WsProtocol = WsProtocol.GraphqlWS,
   executionContext: (ApplicationRequest) -> ExecutionContext = { ExecutionContext.Empty }
 ) {
   install(WebSockets)
 
   routing {
-    webSocket(path, "graphql-ws") {
+    val transport = when (protocol) {
+      WsProtocol.GraphqlWS -> "graphql-transport-ws"
+      WsProtocol.Legacy -> "graphql-ws"
+    }
+    webSocket(path, transport) {
       coroutineScope {
-        val handler = SubscriptionWebSocketHandler(
-          executableSchema = executableSchema,
-          scope = this,
-          executionContext = executionContext(call.request),
-          sendMessage = {
-            when (it) {
-              is WebSocketBinaryMessage -> send(Frame.Binary(true, it.data))
-              is WebSocketTextMessage -> send(Frame.Text(it.data))
-            }
-          },
-          connectionInitHandler = {
-            ConnectionInitAck
+        val handler = when(protocol) {
+          WsProtocol.GraphqlWS -> {
+            GraphQLWsWebSocketHandler(
+              executableSchema = executableSchema,
+              scope = this,
+              executionContext = executionContext(call.request),
+              sendMessage = {
+                when (it) {
+                  is WebSocketBinaryMessage -> send(Frame.Binary(true, it.data))
+                  is WebSocketTextMessage -> send(Frame.Text(it.data))
+                }
+              },
+              connectionInitHandler = {
+                WsConnectionInitAck
+              }
+            )
           }
-        )
+          WsProtocol.Legacy -> {
+            SubscriptionWebSocketHandler(
+              executableSchema = executableSchema,
+              scope = this,
+              executionContext = executionContext(call.request),
+              sendMessage = {
+                when (it) {
+                  is WebSocketBinaryMessage -> send(Frame.Binary(true, it.data))
+                  is WebSocketTextMessage -> send(Frame.Text(it.data))
+                }
+              },
+              connectionInitHandler = {
+                ConnectionInitAck
+              }
+            )
+          }
+        }
 
         for (frame in incoming) {
           if (frame !is Frame.Text) {

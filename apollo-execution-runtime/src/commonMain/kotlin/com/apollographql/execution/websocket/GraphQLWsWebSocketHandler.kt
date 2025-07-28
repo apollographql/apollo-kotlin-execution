@@ -3,6 +3,7 @@ package com.apollographql.execution.websocket
 import CurrentSubscription
 import com.apollographql.apollo.annotations.ApolloInternal
 import com.apollographql.apollo.api.Error
+import com.apollographql.apollo.api.Error.*
 import com.apollographql.apollo.api.ExecutionContext
 import com.apollographql.apollo.api.Optional
 import com.apollographql.apollo.api.json.*
@@ -18,14 +19,14 @@ import okio.Buffer
 import okio.Sink
 
 /**
- * A [WebSocketHandler] that implements https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md
+ * A [WebSocketHandler] that implements https://github.com/enisdenjo/graphql-ws/blob/0c0eb499c3a0278c6d9cc799064f22c5d24d2f60/PROTOCOL.md
  */
-class SubscriptionWebSocketHandler(
+class GraphQLWsWebSocketHandler(
     private val executableSchema: ExecutableSchema,
     private val scope: CoroutineScope,
     private val executionContext: ExecutionContext,
     private val sendMessage: suspend (WebSocketMessage) -> Unit,
-    private val connectionInitHandler: ConnectionInitHandler = { ConnectionInitAck },
+    private val connectionInitHandler: WsConnectionInitHandler = { WsConnectionInitAck },
 ) : WebSocketHandler {
   private val lock = reentrantLock()
   private val activeSubscriptions = mutableMapOf<String, Job>()
@@ -39,28 +40,28 @@ class SubscriptionWebSocketHandler(
     }.parseApolloWebsocketClientMessage()
 
     when (clientMessage) {
-      is SubscriptionWebsocketInit -> {
+      is Init -> {
         initJob = lock.withLock {
           scope.launch {
             when(val result = connectionInitHandler.invoke(clientMessage.connectionParams)) {
-              is ConnectionInitAck -> {
-                sendMessage(SubscriptionWebsocketConnectionAck.toWsMessage())
+              is WsConnectionInitAck -> {
+                sendMessage(ConnectionAck.toWsMessage())
               }
-              is ConnectionInitError -> {
-                sendMessage(SubscriptionWebsocketConnectionError(result.payload).toWsMessage())
+              is WsConnectionInitError -> {
+                sendMessage(ConnectionError(result.payload).toWsMessage())
               }
             }
           }
         }
       }
 
-      is SubscriptionWebsocketStart -> {
+      is Subscribe -> {
         val isActive = lock.withLock {
           activeSubscriptions.containsKey(clientMessage.id)
         }
         if (isActive) {
           scope.launch {
-            sendMessage(SubscriptionWebsocketError(id = clientMessage.id, error = Error.Builder("Subscription ${clientMessage.id} is already active").build()).toWsMessage())
+            sendMessage(Error(id = clientMessage.id, error = Builder("Subscription ${clientMessage.id} is already active").build()).toWsMessage())
           }
           return
         }
@@ -71,15 +72,16 @@ class SubscriptionWebSocketHandler(
           flow.collect {
             when (it) {
               is SubscriptionResponse -> {
-                sendMessage(SubscriptionWebsocketData(id = clientMessage.id, response = it.response).toWsMessage())
+                sendMessage(Data(id = clientMessage.id, response = it.response).toWsMessage())
               }
 
               is SubscriptionError -> {
-                sendMessage(SubscriptionWebsocketError(id = clientMessage.id, error = it.errors.first()).toWsMessage())
+                sendMessage(Error(id = clientMessage.id, error = it.errors.first()).toWsMessage())
               }
             }
+            sendMessage(Complete(id = clientMessage.id).toWsMessage())
           }
-          sendMessage(SubscriptionWebsocketComplete(id = clientMessage.id).toWsMessage())
+          sendMessage(Complete(id = clientMessage.id).toWsMessage())
           lock.withLock {
             activeSubscriptions.remove(clientMessage.id)?.cancel()
           }
@@ -90,20 +92,25 @@ class SubscriptionWebSocketHandler(
         }
       }
 
-      is SubscriptionWebsocketStop -> {
+      is Complete -> {
         lock.withLock {
           activeSubscriptions.remove(clientMessage.id)?.cancel()
         }
       }
 
-      SubscriptionWebsocketTerminate -> {
-        // nothing to do
+      is ParseError -> {
+        scope.launch {
+          sendMessage(Error(null, Builder("Cannot handle message (${clientMessage.message})").build()).toWsMessage())
+        }
       }
 
-      is SubscriptionWebsocketClientMessageParseError -> {
+      Ping -> {
         scope.launch {
-          sendMessage(SubscriptionWebsocketError(null, Error.Builder("Cannot handle message (${clientMessage.message})").build()).toWsMessage())
+          sendMessage(Pong.toWsMessage())
         }
+      }
+      Pong -> {
+
       }
     }
   }
@@ -125,31 +132,47 @@ class SubscriptionWebSocketHandler(
   }
 }
 
-private sealed interface SubscriptionWebsocketClientMessageResult
+private sealed interface MessageResult
 
-private class SubscriptionWebsocketClientMessageParseError internal constructor(
+private class ParseError(
     val message: String,
-) : SubscriptionWebsocketClientMessageResult
+) : MessageResult
 
-private sealed interface SubscriptionWebsocketClientMessage : SubscriptionWebsocketClientMessageResult
+private sealed interface ClientMessage : MessageResult
 
-private class SubscriptionWebsocketInit(
+private class Init(
     val connectionParams: Any?,
-) : SubscriptionWebsocketClientMessage
+) : ClientMessage
 
-private class SubscriptionWebsocketStart(
+private class Subscribe(
     val id: String,
     val request: GraphQLRequest,
-) : SubscriptionWebsocketClientMessage
+) : ClientMessage
 
-private class SubscriptionWebsocketStop(
+private class Complete(
     val id: String,
-) : SubscriptionWebsocketClientMessage
+) : ClientMessage, ServerMessage {
+  override fun serialize(sink: Sink) {
+    sink.writeMessage("complete") {
+      name("id")
+      value(id)
+    }
+  }
+}
 
+private data object Ping : ClientMessage, ServerMessage {
+  override fun serialize(sink: Sink) {
+    sink.writeMessage("ping")
+  }
+}
 
-private object SubscriptionWebsocketTerminate : SubscriptionWebsocketClientMessage
+private data object Pong : ClientMessage, ServerMessage {
+  override fun serialize(sink: Sink) {
+    sink.writeMessage("pong")
+  }
+}
 
-private sealed interface SubscriptionWebsocketServerMessage {
+private sealed interface ServerMessage {
   fun serialize(sink: Sink)
 }
 
@@ -164,13 +187,13 @@ private fun Sink.writeMessage(type: String, block: (JsonWriter.() -> Unit)? = nu
   }
 }
 
-private data object SubscriptionWebsocketConnectionAck : SubscriptionWebsocketServerMessage {
+private data object ConnectionAck : ServerMessage {
   override fun serialize(sink: Sink) {
     sink.writeMessage("connection_ack")
   }
 }
 
-private class SubscriptionWebsocketConnectionError(private val payload: Optional<Any?>) : SubscriptionWebsocketServerMessage {
+private class ConnectionError(private val payload: Optional<Any?>) : ServerMessage {
   override fun serialize(sink: Sink) {
     sink.writeMessage("connection_error") {
       if (payload is Optional.Present<*>) {
@@ -181,10 +204,10 @@ private class SubscriptionWebsocketConnectionError(private val payload: Optional
   }
 }
 
-private class SubscriptionWebsocketData(
+private class Data(
     val id: String,
     val response: GraphQLResponse,
-) : SubscriptionWebsocketServerMessage {
+) : ServerMessage {
   override fun serialize(sink: Sink) {
     sink.writeMessage("data") {
       name("id")
@@ -195,10 +218,10 @@ private class SubscriptionWebsocketData(
   }
 }
 
-private class SubscriptionWebsocketError(
+private class Error(
     val id: String?,
     val error: Error,
-) : SubscriptionWebsocketServerMessage {
+) : ServerMessage {
 
   override fun serialize(sink: Sink) {
     sink.writeMessage("error") {
@@ -212,85 +235,73 @@ private class SubscriptionWebsocketError(
   }
 }
 
-private class SubscriptionWebsocketComplete(
-    val id: String,
-) : SubscriptionWebsocketServerMessage {
-  override fun serialize(sink: Sink) {
-    sink.writeMessage("complete") {
-      name("id")
-      value(id)
-    }
-  }
-}
-
 @OptIn(ApolloInternal::class)
-private fun String.parseApolloWebsocketClientMessage(): SubscriptionWebsocketClientMessageResult {
+private fun String.parseApolloWebsocketClientMessage(): MessageResult {
   @Suppress("UNCHECKED_CAST")
   val map = try {
     Buffer().writeUtf8(this).jsonReader().readAny() as Map<String, Any?>
   } catch (e: Exception) {
-    return SubscriptionWebsocketClientMessageParseError("Malformed Json: ${e.message}")
+    return ParseError("Malformed Json: ${e.message}")
   }
 
   val type = map["type"]
   if (type == null) {
-    return SubscriptionWebsocketClientMessageParseError("No 'type' found in $this")
+    return ParseError("No 'type' found in $this")
   }
   if (type !is String) {
-    return SubscriptionWebsocketClientMessageParseError("'type' must be a String in $this")
+    return ParseError("'type' must be a String in $this")
   }
 
   when (type) {
-    "start", "stop" -> {
+    "subscribe", "complete" -> {
       val id = map["id"]
       if (id == null) {
-        return SubscriptionWebsocketClientMessageParseError("No 'id' found in $this")
+        return ParseError("No 'id' found in $this")
       }
 
       if (id !is String) {
-        return SubscriptionWebsocketClientMessageParseError("'id' must be a String in $this")
+        return ParseError("'id' must be a String in $this")
       }
 
-      if (type == "start") {
+      if (type == "subscribe") {
         val payload = map["payload"]
         if (payload == null) {
-          return SubscriptionWebsocketClientMessageParseError("No 'payload' found in $this")
+          return ParseError("No 'payload' found in $this")
         }
         if (payload !is Map<*, *>) {
-          return SubscriptionWebsocketClientMessageParseError("'payload' must be an Object in $this")
+          return ParseError("'payload' must be an Object in $this")
         }
 
         @Suppress("UNCHECKED_CAST")
         val request = (payload as Map<String, Any?>).parseAsGraphQLRequest()
         return request.fold(
-            onFailure = { SubscriptionWebsocketClientMessageParseError("Cannot parse start payload: '${it.message}'") },
-            onSuccess = { SubscriptionWebsocketStart(id, request = it) }
+            onFailure = { ParseError("Cannot parse subscribe payload: '${it.message}'") },
+            onSuccess = { Subscribe(id, request = it) }
         )
       } else {
-        return SubscriptionWebsocketStop(id)
+        return Complete(id)
       }
     }
-
+    "ping" -> {
+      return Ping
+    }
+    "pong" -> {
+      return Pong
+    }
     "connection_init" -> {
-      return SubscriptionWebsocketInit(map["payload"])
+      return Init(map["payload"])
     }
 
-    "connection_terminate" -> {
-      return SubscriptionWebsocketTerminate
-    }
-
-    else -> return SubscriptionWebsocketClientMessageParseError("Unknown message type '$type'")
+    else -> return ParseError("Unknown message type '$type'")
   }
 }
 
-private fun SubscriptionWebsocketServerMessage.toWsMessage(): WebSocketMessage {
+private fun ServerMessage.toWsMessage(): WebSocketMessage {
   return WebSocketTextMessage(Buffer().apply { serialize(this) }.readUtf8())
 }
 
-sealed interface ConnectionInitResult
-data object ConnectionInitAck : ConnectionInitResult
-class ConnectionInitError(val payload: Optional<Any?> = Optional.absent()): ConnectionInitResult
+sealed interface WsConnectionInitResult
+data object WsConnectionInitAck : WsConnectionInitResult
+class WsConnectionInitError(val payload: Optional<Any?> = Optional.absent()): WsConnectionInitResult
 
-typealias ConnectionInitHandler = suspend (Any?) -> ConnectionInitResult
-
-
+typealias WsConnectionInitHandler = suspend (Any?) -> WsConnectionInitResult

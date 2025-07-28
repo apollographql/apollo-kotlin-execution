@@ -62,15 +62,18 @@ public final class com/apollographql/execution/websocket/ConnectionInitError : c
 public abstract interface class com/apollographql/execution/websocket/ConnectionInitResult {
 }
 
-public final class com/apollographql/execution/websocket/SubscriptionWebSocketHandler : com/apollographql/execution/websocket/WebSocketHandler {
+public final class com/apollographql/execution/websocket/GraphQLWsWebSocketHandler : com/apollographql/execution/websocket/WebSocketHandler {
 	public fun <init> (Lcom/apollographql/apollo/execution/ExecutableSchema;Lkotlinx/coroutines/CoroutineScope;Lcom/apollographql/apollo/api/ExecutionContext;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;)V
 	public synthetic fun <init> (Lcom/apollographql/apollo/execution/ExecutableSchema;Lkotlinx/coroutines/CoroutineScope;Lcom/apollographql/apollo/api/ExecutionContext;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun close ()V
 	public fun handleMessage (Lcom/apollographql/execution/websocket/WebSocketMessage;)V
 }
 
-public final class com/apollographql/execution/websocket/SubscriptionWebSocketHandlerKt {
-	public static final fun subscriptionId (Lcom/apollographql/apollo/api/ExecutionContext;)Ljava/lang/String;
+public final class com/apollographql/execution/websocket/SubscriptionWebSocketHandler : com/apollographql/execution/websocket/WebSocketHandler {
+	public fun <init> (Lcom/apollographql/apollo/execution/ExecutableSchema;Lkotlinx/coroutines/CoroutineScope;Lcom/apollographql/apollo/api/ExecutionContext;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;)V
+	public synthetic fun <init> (Lcom/apollographql/apollo/execution/ExecutableSchema;Lkotlinx/coroutines/CoroutineScope;Lcom/apollographql/apollo/api/ExecutionContext;Lkotlin/jvm/functions/Function2;Lkotlin/jvm/functions/Function2;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun close ()V
+	public fun handleMessage (Lcom/apollographql/execution/websocket/WebSocketMessage;)V
 }
 
 public final class com/apollographql/execution/websocket/WebSocketBinaryMessage : com/apollographql/execution/websocket/WebSocketMessage {
@@ -88,5 +91,22 @@ public abstract interface class com/apollographql/execution/websocket/WebSocketM
 public final class com/apollographql/execution/websocket/WebSocketTextMessage : com/apollographql/execution/websocket/WebSocketMessage {
 	public fun <init> (Ljava/lang/String;)V
 	public final fun getData ()Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/websocket/WsConnectionInitAck : com/apollographql/execution/websocket/WsConnectionInitResult {
+	public static final field INSTANCE Lcom/apollographql/execution/websocket/WsConnectionInitAck;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/websocket/WsConnectionInitError : com/apollographql/execution/websocket/WsConnectionInitResult {
+	public fun <init> ()V
+	public fun <init> (Lcom/apollographql/apollo/api/Optional;)V
+	public synthetic fun <init> (Lcom/apollographql/apollo/api/Optional;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getPayload ()Lcom/apollographql/apollo/api/Optional;
+}
+
+public abstract interface class com/apollographql/execution/websocket/WsConnectionInitResult {
 }
 
