@@ -55,11 +55,20 @@ sealed interface com.apollographql.execution.websocket/ConnectionInitResult // c
 
 sealed interface com.apollographql.execution.websocket/WebSocketMessage // com.apollographql.execution.websocket/WebSocketMessage|null[0]
 
+sealed interface com.apollographql.execution.websocket/WsConnectionInitResult // com.apollographql.execution.websocket/WsConnectionInitResult|null[0]
+
 final class com.apollographql.execution.websocket/ConnectionInitError : com.apollographql.execution.websocket/ConnectionInitResult { // com.apollographql.execution.websocket/ConnectionInitError|null[0]
     constructor <init>(com.apollographql.apollo.api/Optional<kotlin/Any?> = ...) // com.apollographql.execution.websocket/ConnectionInitError.<init>|<init>(com.apollographql.apollo.api.Optional<kotlin.Any?>){}[0]
 
     final val payload // com.apollographql.execution.websocket/ConnectionInitError.payload|{}payload[0]
         final fun <get-payload>(): com.apollographql.apollo.api/Optional<kotlin/Any?> // com.apollographql.execution.websocket/ConnectionInitError.payload.<get-payload>|<get-payload>(){}[0]
+}
+
+final class com.apollographql.execution.websocket/GraphQLWsWebSocketHandler : com.apollographql.execution.websocket/WebSocketHandler { // com.apollographql.execution.websocket/GraphQLWsWebSocketHandler|null[0]
+    constructor <init>(com.apollographql.apollo.execution/ExecutableSchema, kotlinx.coroutines/CoroutineScope, com.apollographql.apollo.api/ExecutionContext, kotlin.coroutines/SuspendFunction1<com.apollographql.execution.websocket/WebSocketMessage, kotlin/Unit>, kotlin.coroutines/SuspendFunction1<kotlin/Any?, com.apollographql.execution.websocket/WsConnectionInitResult> = ...) // com.apollographql.execution.websocket/GraphQLWsWebSocketHandler.<init>|<init>(com.apollographql.apollo.execution.ExecutableSchema;kotlinx.coroutines.CoroutineScope;com.apollographql.apollo.api.ExecutionContext;kotlin.coroutines.SuspendFunction1<com.apollographql.execution.websocket.WebSocketMessage,kotlin.Unit>;kotlin.coroutines.SuspendFunction1<kotlin.Any?,com.apollographql.execution.websocket.WsConnectionInitResult>){}[0]
+
+    final fun close() // com.apollographql.execution.websocket/GraphQLWsWebSocketHandler.close|close(){}[0]
+    final fun handleMessage(com.apollographql.execution.websocket/WebSocketMessage) // com.apollographql.execution.websocket/GraphQLWsWebSocketHandler.handleMessage|handleMessage(com.apollographql.execution.websocket.WebSocketMessage){}[0]
 }
 
 final class com.apollographql.execution.websocket/SubscriptionWebSocketHandler : com.apollographql.execution.websocket/WebSocketHandler { // com.apollographql.execution.websocket/SubscriptionWebSocketHandler|null[0]
@@ -83,6 +92,13 @@ final class com.apollographql.execution.websocket/WebSocketTextMessage : com.apo
         final fun <get-data>(): kotlin/String // com.apollographql.execution.websocket/WebSocketTextMessage.data.<get-data>|<get-data>(){}[0]
 }
 
+final class com.apollographql.execution.websocket/WsConnectionInitError : com.apollographql.execution.websocket/WsConnectionInitResult { // com.apollographql.execution.websocket/WsConnectionInitError|null[0]
+    constructor <init>(com.apollographql.apollo.api/Optional<kotlin/Any?> = ...) // com.apollographql.execution.websocket/WsConnectionInitError.<init>|<init>(com.apollographql.apollo.api.Optional<kotlin.Any?>){}[0]
+
+    final val payload // com.apollographql.execution.websocket/WsConnectionInitError.payload|{}payload[0]
+        final fun <get-payload>(): com.apollographql.apollo.api/Optional<kotlin/Any?> // com.apollographql.execution.websocket/WsConnectionInitError.payload.<get-payload>|<get-payload>(){}[0]
+}
+
 final class com.apollographql.execution/CompositeResolverBuilder { // com.apollographql.execution/CompositeResolverBuilder|null[0]
     constructor <init>() // com.apollographql.execution/CompositeResolverBuilder.<init>|<init>(){}[0]
 
@@ -103,6 +119,11 @@ final object com.apollographql.execution.websocket/ConnectionInitAck : com.apoll
     final fun toString(): kotlin/String // com.apollographql.execution.websocket/ConnectionInitAck.toString|toString(){}[0]
 }
 
-final fun (com.apollographql.apollo.api/ExecutionContext).com.apollographql.execution.websocket/subscriptionId(): kotlin/String // com.apollographql.execution.websocket/subscriptionId|subscriptionId@com.apollographql.apollo.api.ExecutionContext(){}[0]
+final object com.apollographql.execution.websocket/WsConnectionInitAck : com.apollographql.execution.websocket/WsConnectionInitResult { // com.apollographql.execution.websocket/WsConnectionInitAck|null[0]
+    final fun equals(kotlin/Any?): kotlin/Boolean // com.apollographql.execution.websocket/WsConnectionInitAck.equals|equals(kotlin.Any?){}[0]
+    final fun hashCode(): kotlin/Int // com.apollographql.execution.websocket/WsConnectionInitAck.hashCode|hashCode(){}[0]
+    final fun toString(): kotlin/String // com.apollographql.execution.websocket/WsConnectionInitAck.toString|toString(){}[0]
+}
+
 final fun (com.apollographql.apollo.execution/ExecutableSchema.Builder).com.apollographql.execution/compositeResolver(kotlin/Function1<com.apollographql.execution/CompositeResolverBuilder, kotlin/Unit>): com.apollographql.apollo.execution/ExecutableSchema.Builder // com.apollographql.execution/compositeResolver|compositeResolver@com.apollographql.apollo.execution.ExecutableSchema.Builder(kotlin.Function1<com.apollographql.execution.CompositeResolverBuilder,kotlin.Unit>){}[0]
 final fun com.apollographql.execution/sandboxHtml(kotlin/String, kotlin/String): kotlin/String // com.apollographql.execution/sandboxHtml|sandboxHtml(kotlin.String;kotlin.String){}[0]
