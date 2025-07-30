@@ -1,6 +1,7 @@
 package com.apollographql.execution.processor
 
 import com.apollographql.apollo.ast.*
+import com.apollographql.execution.processor.codegen.KotlinSymbols.GraphQLIgnore
 import com.apollographql.execution.processor.sir.*
 import com.apollographql.execution.processor.sir.Instantiation
 import com.apollographql.execution.processor.sir.SirArgumentDefinition
@@ -19,10 +20,7 @@ import com.apollographql.execution.processor.sir.SirObjectDefinition
 import com.apollographql.execution.processor.sir.SirType
 import com.apollographql.execution.processor.sir.SirTypeDefinition
 import com.apollographql.execution.processor.sir.SirUnionDefinition
-import com.google.devtools.ksp.getAllSuperTypes
-import com.google.devtools.ksp.getDeclaredProperties
-import com.google.devtools.ksp.isConstructor
-import com.google.devtools.ksp.isPublic
+import com.google.devtools.ksp.*
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.symbol.*
 
@@ -195,11 +193,6 @@ private class TypeDefinitionContext(
       return null
     }
     usedTypeNames.add(name)
-
-    if (declaration.typeParameters.isNotEmpty()) {
-      logger.error("Generic classes are not supported")
-      return null
-    }
 
     if (declaration is KSTypeAlias) {
       return declaration.toSirScalarDefinition(qualifiedName)
@@ -402,7 +395,6 @@ private class TypeDefinitionContext(
       logger.error("Cannot map to a GraphQL output type", this)
       return null
     }
-
     val usedNames = mutableSetOf<String>()
     val allFields = declarations.filter { it.isPublic() }.mapNotNull {
       if (it.origin == Origin.SYNTHETIC) {
@@ -412,6 +404,10 @@ private class TypeDefinitionContext(
         return@mapNotNull null
       }
       val name = it.graphqlName()
+      val hasIsIgnoreAnnotation = this.annotations.any {
+        it.annotationType.resolve().declaration.qualifiedName?.asString() == "com.apollographql.execution.annotation.GraphQLIgnore"
+      }
+      if (hasIsIgnoreAnnotation) return@mapNotNull null
       if (usedNames.contains(name)) {
         logger.error("Duplicate field '$name'. Either rename the declaration or use @GraphQLName.", it)
         return@mapNotNull null
@@ -464,11 +460,6 @@ private class TypeDefinitionContext(
       }
 
       ClassKind.INTERFACE -> {
-        if (!modifiers.contains(Modifier.SEALED)) {
-          logger.error("Interfaces and unions must be sealed interfaces", this)
-          return null
-        }
-
         getSealedSubclasses().forEach {
           /**
            * We go depth first on the superclasses but need to escape the callstack and
@@ -545,10 +536,11 @@ private class TypeDefinitionContext(
   private fun KSClassDeclaration.interfaces(objectName: String?): List<String> {
     return getAllSuperTypes().mapNotNull {
       val declaration = it.declaration
-      if (it.arguments.isNotEmpty()) {
-        logger.error("Generic interfaces are not supported", this)
-        null
-      } else if (declaration is KSClassDeclaration) {
+      val hasIsIgnoreAnnotation = this.annotations.any {
+        it.annotationType.resolve().declaration.qualifiedName?.asString() == "com.apollographql.execution.annotation.GraphQLIgnore"
+      }
+      if (hasIsIgnoreAnnotation) return@mapNotNull null
+      if (declaration is KSClassDeclaration) {
         if (declaration.asClassName().asString() == "kotlin.Any") {
           // kotlin.Any is a super type of everything, just ignore it
           null

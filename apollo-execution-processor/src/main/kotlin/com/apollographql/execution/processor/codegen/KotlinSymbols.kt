@@ -21,6 +21,7 @@ internal object KotlinSymbols {
   val GraphQLQuery = ClassName(annotationPackageName, "GraphQLQuery")
   val GraphQLMutation = ClassName(annotationPackageName, "GraphQLMutation")
   val GraphQLSubscription = ClassName(annotationPackageName, "GraphQLSubscription")
+  val GraphQLIgnore = ClassName(annotationPackageName, "GraphQLIgnore")
 
   val AstDocument = ClassName(apolloAstPackageName, "GQLDocument")
   val AstScalarTypeDefinition = ClassName(apolloAstPackageName, "GQLScalarTypeDefinition")
