@@ -173,13 +173,13 @@ Typically, `ID` is mapped either to `Int` or `String`.
 Mapping `ID` to `String`:
 
 ```kotlin
-@GraphQLScalar(StringCoercing)
+@GraphQLScalar(StringCoercing::class)
 typealias ID = String
 ```
 
 Mapping `ID` to `Int`:
 
 ```kotlin
-@GraphQLScalar(IntCoercing)
+@GraphQLScalar(IntCoercing::class)
 typealias ID = Int
 ```
