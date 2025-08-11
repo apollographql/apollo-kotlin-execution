@@ -1,11 +1,18 @@
 import com.apollographql.execution.annotation.GraphQLQuery
+import com.apollographql.execution.annotation.GraphQLIgnore
 import com.apollographql.execution.subgraph.GraphQLKey
 
+@GraphQLIgnore
+interface SomeGenericInterface<T>
+
 @GraphQLQuery
-class Query {
+class Query : SomeGenericInterface<String>{
   fun products(): List<Product> {
     return products
   }
+
+  @GraphQLIgnore
+  fun internalFields(): Int = 1
 }
 
 class Product(
