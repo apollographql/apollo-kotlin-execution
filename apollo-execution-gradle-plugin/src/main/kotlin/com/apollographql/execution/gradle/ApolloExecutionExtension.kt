@@ -40,7 +40,7 @@ abstract class ApolloExecutionExtension @Inject constructor(private val project:
     if (kotlin is KotlinMultiplatformExtension) {
       /**
        * KSP configuration
-       * KMP support isn't great, so we wire most of the things manually
+       * To avoid calling the processor multiple times, we wire things manually
        * See https://github.com/google/ksp/pull/1021
        */
       kotlin.sourceSets.getByName("commonMain").kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
