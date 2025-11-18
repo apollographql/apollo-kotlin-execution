@@ -1,24 +1,25 @@
 [versions]
-kotlin-plugin = "2.1.10"
-ksp = "2.1.10-1.0.29"
-apollo = "4.2.0"
-ktor = "3.0.0"
+kotlin-plugin = "2.3.0-RC"
+ksp = "2.3.2"
+apollo = "5.0.0-alpha.3"
+ktor = "3.3.2"
 spring = "3.3.3"
 
 [libraries]
 kgp = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin-plugin" }
+#noinspection GradleDependency,NewerVersionAvailable compatibility with native consumers
 kgp-min = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version = "1.9.0" }
-java-diff-utils = { module = "io.github.java-diff-utils:java-diff-utils", version = "4.12" }
-gradle-api-min = { group = "dev.gradleplugins", name = "gradle-api", version = "8.0" }
+java-diff-utils = { module = "io.github.java-diff-utils:java-diff-utils", version = "4.16" }
+gradle-api-min = { group = "dev.gradleplugins", name = "gradle-api", version = "8.11.1" }
 apollo-ast = { group = "com.apollographql.apollo", name = "apollo-ast", version.ref = "apollo" }
 apollo-compiler = { group = "com.apollographql.apollo", name = "apollo-compiler", version.ref = "apollo" }
 apollo-api = { group = "com.apollographql.apollo", name = "apollo-api", version.ref = "apollo" }
 apollo-execution = { group = "com.apollographql.apollo", name = "apollo-execution", version.ref = "apollo" }
-atomicfu = "org.jetbrains.kotlinx:atomicfu:0.24.0"
-kotlinpoet = "com.squareup:kotlinpoet:1.18.0"
-kotlinx-datetime = "org.jetbrains.kotlinx:kotlinx-datetime:0.6.1"
-arrowCore = "io.arrow-kt:arrow-core:1.2.4"
-coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1"
+atomicfu = "org.jetbrains.kotlinx:atomicfu:0.30.0-beta"
+kotlinpoet = "com.squareup:kotlinpoet:2.2.0"
+kotlinx-datetime = "org.jetbrains.kotlinx:kotlinx-datetime:0.7.1"
+arrowCore = "io.arrow-kt:arrow-core:2.2.0"
+coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2"
 ktor-server-netty = { group = "io.ktor", name = "ktor-server-netty", version.ref ="ktor" }
 ktor-server-core = { group = "io.ktor", name = "ktor-server-core", version.ref ="ktor" }
 ktor-server-cors = { group = "io.ktor", name = "ktor-server-cors", version.ref ="ktor" }
@@ -31,17 +32,17 @@ ksp-implementation = { module = "com.google.devtools.ksp:symbol-processing", ver
 ksp-gradle = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version.ref = "ksp" }
 kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test" } # the Kotlin plugin resolves the version
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-plugin" }
-http4k-bom = "org.http4k:http4k-bom:5.8.0.0"
+http4k-bom = "org.http4k:http4k-bom:6.21.0.0"
 http4k-core = { module = "org.http4k:http4k-core" }
 http4k-realtime-core = { module = "org.http4k:http4k-realtime-core" }
 http4k-server-undertow = { module = "org.http4k:http4k-server-undertow" }
 http4k-server-netty = { module = "org.http4k:http4k-server-netty" }
-librarian-gradle-plugin = "com.gradleup.librarian:librarian-gradle-plugin:0.0.11-SNAPSHOT-ba8b5ecfcbda070ecc3b5b95056ee359199552b4"
+librarian-gradle-plugin = "com.gradleup.librarian:librarian-gradle-plugin:0.2.2-SNAPSHOT-44b68f3cb157b53cd19d63b93c6eeae967d1da4a"
 apollo-execution-runtime = { module = "com.apollographql.execution:apollo-execution-runtime" }
 apollo-execution-subgraph = { module = "com.apollographql.execution:apollo-execution-subgraph" }
-spring-webflux = "org.springframework:spring-webflux:6.1.10"
+spring-webflux = "org.springframework:spring-webflux:7.0.0"
 wire-gradle-plugin = "com.squareup.wire:wire-gradle-plugin:5.3.1"
-kotlinx-serialization-core = "org.jetbrains.kotlinx:kotlinx-serialization-core:1.7.3"
+kotlinx-serialization-core = "org.jetbrains.kotlinx:kotlinx-serialization-core:1.9.0"
 [plugins]
 kgp-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-plugin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

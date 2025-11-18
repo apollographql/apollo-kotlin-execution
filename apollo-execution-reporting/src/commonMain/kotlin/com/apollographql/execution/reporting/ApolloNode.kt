@@ -15,7 +15,7 @@ internal class ApolloNode(private val id: Any?) {
   var type: String = ""
   var startNanos: Long = 0L
   var endNanos: Long = 0L
-  var value: ExternalValue? = null
+  var value: ExternalValue = null
 
   fun toProtoNode(): Trace.Node {
     val errors = mutableListOf<Trace.Error>()

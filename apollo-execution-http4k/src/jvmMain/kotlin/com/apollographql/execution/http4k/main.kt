@@ -78,7 +78,7 @@ fun apolloWebSocketHandler(executableSchema: ExecutableSchema, executionContext:
             ConnectionInitError()
           }
 
-          shouldReturn != null && shouldReturn.toString().startsWith("close") -> {
+          shouldReturn != null && shouldReturn.startsWith("close") -> {
             val code = Regex("close\\(([0-9]*)\\)").matchEntire(shouldReturn)
                 ?.let { it.groupValues[1].toIntOrNull() }
                 ?: 1001
@@ -122,7 +122,7 @@ fun apolloWebSocketHandler(executableSchema: ExecutableSchema, executionContext:
 private fun WebSocketMessage.toWsMessage(): WsMessage {
   return when (this) {
     is WebSocketBinaryMessage -> {
-      WsMessage(MemoryBody(data))
+      WsMessage(data)
     }
 
     is WebSocketTextMessage -> {

@@ -20,8 +20,12 @@ public final class com/apollographql/execution/reporting/ApolloReportingOperatio
 	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun beforeField (Lcom/apollographql/apollo/execution/ResolveInfo;)Lcom/apollographql/apollo/execution/FieldCallback;
+	public fun fold (Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)Ljava/lang/Object;
+	public fun get (Lcom/apollographql/apollo/api/ExecutionContext$Key;)Lcom/apollographql/apollo/api/ExecutionContext$Element;
 	public synthetic fun getKey ()Lcom/apollographql/apollo/api/ExecutionContext$Key;
 	public fun getKey ()Lcom/apollographql/execution/reporting/ApolloReportingOperationContext$Key;
+	public fun minusKey (Lcom/apollographql/apollo/api/ExecutionContext$Key;)Lcom/apollographql/apollo/api/ExecutionContext;
+	public fun plus (Lcom/apollographql/apollo/api/ExecutionContext;)Lcom/apollographql/apollo/api/ExecutionContext;
 	public final fun toProtoTrace ()Lcom/apollographql/execution/reporting/Trace;
 }
 
