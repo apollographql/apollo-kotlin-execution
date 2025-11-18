@@ -1,10 +1,12 @@
+@file:OptIn(ExperimentalTime::class)
 package com.apollographql.execution.reporting
 
 import com.apollographql.apollo.ast.toUtf8
 import com.apollographql.apollo.execution.FieldCallback
 import com.apollographql.apollo.execution.ResolveInfo
 import com.squareup.wire.ofEpochSecond
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 import kotlin.time.TimeSource.Monotonic.markNow
 
 class ApolloOperationTracing {
@@ -13,6 +15,7 @@ class ApolloOperationTracing {
   private val rootNode = ApolloNode(null)
 
   internal val operationStartMark = markNow()
+
   private val startInstant = Clock.System.now()
 
   init {

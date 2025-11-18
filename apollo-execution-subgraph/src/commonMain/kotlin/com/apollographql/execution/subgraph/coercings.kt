@@ -1,5 +1,6 @@
 package com.apollographql.execution.subgraph
 
+import com.apollographql.apollo.api.json.ApolloJsonElement
 import com.apollographql.apollo.ast.GQLBooleanValue
 import com.apollographql.apollo.ast.GQLEnumValue
 import com.apollographql.apollo.ast.GQLFloatValue
@@ -11,14 +12,13 @@ import com.apollographql.apollo.ast.GQLStringValue
 import com.apollographql.apollo.ast.GQLValue
 import com.apollographql.apollo.ast.GQLVariableValue
 import com.apollographql.apollo.execution.Coercing
-import com.apollographql.apollo.execution.JsonValue
 
 object _AnyCoercing: Coercing<Any?> {
-  override fun serialize(internalValue: Any?): JsonValue {
+  override fun serialize(internalValue: Any?): ApolloJsonElement {
     return internalValue
   }
 
-  override fun deserialize(value: JsonValue): Any? {
+  override fun deserialize(value: ApolloJsonElement): Any? {
     return value
   }
 

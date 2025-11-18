@@ -16,7 +16,7 @@ internal class ExecutableSchemaBuilderBuilder(
   override fun prepare() {}
 
   override fun build(): FileSpec {
-    @file:OptIn(ApolloExperimental::class)
+    @OptIn(ApolloExperimental::class)
     return FileSpec.builder(context.packageName, simpleName)
       .addAnnotation(AnnotationSpec
         .builder(ClassName("kotlin", "OptIn"))

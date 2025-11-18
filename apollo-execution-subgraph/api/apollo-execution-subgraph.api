@@ -1,9 +1,13 @@
 public final class com/apollographql/execution/subgraph/Ftv1Context : com/apollographql/apollo/api/ExecutionContext$Element {
 	public static final field Key Lcom/apollographql/execution/subgraph/Ftv1Context$Key;
 	public fun <init> ()V
+	public fun fold (Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)Ljava/lang/Object;
+	public fun get (Lcom/apollographql/apollo/api/ExecutionContext$Key;)Lcom/apollographql/apollo/api/ExecutionContext$Element;
 	public final fun getApolloOperationTracing ()Lcom/apollographql/execution/reporting/ApolloOperationTracing;
 	public synthetic fun getKey ()Lcom/apollographql/apollo/api/ExecutionContext$Key;
 	public fun getKey ()Lcom/apollographql/execution/subgraph/Ftv1Context$Key;
+	public fun minusKey (Lcom/apollographql/apollo/api/ExecutionContext$Key;)Lcom/apollographql/apollo/api/ExecutionContext;
+	public fun plus (Lcom/apollographql/apollo/api/ExecutionContext;)Lcom/apollographql/apollo/api/ExecutionContext;
 }
 
 public final class com/apollographql/execution/subgraph/Ftv1Context$Key : com/apollographql/apollo/api/ExecutionContext$Key {
