@@ -1,7 +1,7 @@
 package com.apollographql.execution.gradle
 
-import com.apollographql.execution.gradle.internal.ApolloCheckSchema
-import com.apollographql.execution.gradle.internal.ApolloDumpSchema
+import com.apollographql.execution.gradle.task.registerApolloCheckSchemaTask
+import com.apollographql.execution.gradle.task.registerApolloDumpSchemaTask
 import org.gradle.api.Project
 import org.gradle.api.file.RegularFile
 import org.gradle.api.file.RegularFileProperty
@@ -11,18 +11,17 @@ private fun Project.defaultSchemaDump(): RegularFile {
 }
 
 fun Project.enableSchemaDump(kspSchemaPath: String, kspTaskName: String, schemaDump: RegularFileProperty) {
-  val dumpSchema = tasks.register(apolloDumpSchema, ApolloDumpSchema::class.java) {
+  val dumpSchema = registerApolloDumpSchemaTask(from = objects.fileProperty().apply { fileValue(file(kspSchemaPath)) }, to = schemaDump.orElse(defaultSchemaDump()))
+  dumpSchema.configure {
     it.dependsOn(kspTaskName)
-    it.from.set(file(kspSchemaPath))
-    it.to.set(schemaDump.orElse(defaultSchemaDump()))
   }
-  val checkSchema = tasks.register(apolloCheckSchema, ApolloCheckSchema::class.java) {
+  val checkSchema = registerApolloCheckSchemaTask(
+    existing = schemaDump.orElse(defaultSchemaDump()), new = objects.fileProperty().apply { fileValue(file(kspSchemaPath)) })
+  checkSchema.configure {
     it.dependsOn(kspTaskName)
-    it.new.set(file(kspSchemaPath))
-    it.existing.set(schemaDump.orElse(defaultSchemaDump()))
   }
   tasks.named("check") {
-    it.dependsOn(apolloCheckSchema)
+    it.dependsOn(checkSchema)
   }
 
   tasks.configureEach { maybeKsp ->

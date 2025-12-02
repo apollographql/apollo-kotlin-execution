@@ -9,6 +9,7 @@ pluginManagement {
 include(
   "apollo-execution-processor",
   "apollo-execution-gradle-plugin",
+  "apollo-execution-gradle-tasks",
   "apollo-execution-runtime",
   "apollo-execution-ktor",
   "apollo-execution-http4k",
