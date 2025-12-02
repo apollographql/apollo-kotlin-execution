@@ -1,0 +1,32 @@
+public final class com/apollographql/execution/gradle/VersionKt {
+	public static final field VERSION Ljava/lang/String;
+}
+
+public final class com/apollographql/execution/gradle/task/ApolloCheckSchemaKt {
+	public static final fun taskAction (Ljava/io/File;Ljava/io/File;)V
+}
+
+public final class com/apollographql/execution/gradle/task/ApolloDumpSchemaEntryPoint {
+	public static final field Companion Lcom/apollographql/execution/gradle/task/ApolloDumpSchemaEntryPoint$Companion;
+	public fun <init> ()V
+	public static final fun run (Ljava/io/File;Ljava/io/File;)V
+}
+
+public final class com/apollographql/execution/gradle/task/ApolloDumpSchemaEntryPoint$Companion {
+	public final fun run (Ljava/io/File;Ljava/io/File;)V
+}
+
+public final class com/apollographql/execution/gradle/task/ApolloDumpSchemaKt {
+	public static final fun apolloDumpSchema (Ljava/io/File;Ljava/io/File;)V
+}
+
+public final class com/apollographql/execution/gradle/task/TaskActionEntryPoint {
+	public static final field Companion Lcom/apollographql/execution/gradle/task/TaskActionEntryPoint$Companion;
+	public fun <init> ()V
+	public static final fun run (Ljava/io/File;Ljava/io/File;)V
+}
+
+public final class com/apollographql/execution/gradle/task/TaskActionEntryPoint$Companion {
+	public final fun run (Ljava/io/File;Ljava/io/File;)V
+}
+

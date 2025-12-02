@@ -1,14 +1,28 @@
 package com.apollographql.execution.gradle
 
 import com.google.devtools.ksp.gradle.KspExtension
+import gratatouille.wiring.GExtension
 import org.gradle.api.Action
 import org.gradle.api.Project
+import org.gradle.api.artifacts.ExternalDependency
 import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import javax.inject.Inject
 
+@GExtension(pluginId = "com.apollographql.execution")
 abstract class ApolloExecutionExtension @Inject constructor(private val project: Project) {
   var hasService = false
+
+  init {
+    project.configurations.configureEach { configuration ->
+      configuration.withDependencies { dependencySet ->
+        val pluginVersion = VERSION
+        dependencySet.filterIsInstance<ExternalDependency>()
+          .filter { it.group == "com.apollographql.execution" && it.version.isNullOrEmpty() }
+          .forEach { it.version { constraint -> constraint.require(pluginVersion) } }
+      }
+    }
+  }
 
   fun service(serviceName: String, action: Action<ApolloExecutionService>) {
     if (hasService) {
@@ -69,5 +83,3 @@ abstract class ApolloExecutionExtension @Inject constructor(private val project:
   }
 }
 
-internal const val apolloDumpSchema = "apolloDumpSchema"
-internal const val apolloCheckSchema = "apolloCheckSchema"

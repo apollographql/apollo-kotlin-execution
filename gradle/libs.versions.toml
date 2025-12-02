@@ -4,6 +4,8 @@ ksp = "2.3.2"
 apollo = "5.0.0-alpha.3"
 ktor = "3.3.2"
 spring = "3.3.3"
+gratatouille = "0.1.4-SNAPSHOT-111ca2caffb04690ee1e8c994714a40547444117"
+gratatouille-runtime = "0.1.3"
 
 [libraries]
 kgp = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin-plugin" }
@@ -18,13 +20,16 @@ apollo-execution = { group = "com.apollographql.apollo", name = "apollo-executio
 atomicfu = "org.jetbrains.kotlinx:atomicfu:0.30.0-beta"
 kotlinpoet = "com.squareup:kotlinpoet:2.2.0"
 kotlinx-datetime = "org.jetbrains.kotlinx:kotlinx-datetime:0.7.1"
+gratatouille = { module = "com.gradleup.gratatouille:gratatouille-gradle-plugin", version.ref = "gratatouille" }
+gratatouille-tasks-runtime = { module = "com.gradleup.gratatouille:gratatouille-tasks-runtime", version.ref = "gratatouille-runtime" }
+gratatouille-wiring-runtime = { module = "com.gradleup.gratatouille:gratatouille-wiring-runtime", version.ref = "gratatouille-runtime" }
 arrowCore = "io.arrow-kt:arrow-core:2.2.0"
 coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2"
-ktor-server-netty = { group = "io.ktor", name = "ktor-server-netty", version.ref ="ktor" }
-ktor-server-core = { group = "io.ktor", name = "ktor-server-core", version.ref ="ktor" }
-ktor-server-cors = { group = "io.ktor", name = "ktor-server-cors", version.ref ="ktor" }
+ktor-server-netty = { group = "io.ktor", name = "ktor-server-netty", version.ref = "ktor" }
+ktor-server-core = { group = "io.ktor", name = "ktor-server-core", version.ref = "ktor" }
+ktor-server-cors = { group = "io.ktor", name = "ktor-server-cors", version.ref = "ktor" }
 ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
-ktor-server-websockets = { group = "io.ktor", name = "ktor-server-websockets", version.ref ="ktor" }
+ktor-server-websockets = { group = "io.ktor", name = "ktor-server-websockets", version.ref = "ktor" }
 slf4j-simple = "org.slf4j:slf4j-simple:2.0.13"
 slf4j-nop = "org.slf4j:slf4j-nop:2.0.13"
 ksp-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
@@ -37,7 +42,7 @@ http4k-core = { module = "org.http4k:http4k-core" }
 http4k-realtime-core = { module = "org.http4k:http4k-realtime-core" }
 http4k-server-undertow = { module = "org.http4k:http4k-server-undertow" }
 http4k-server-netty = { module = "org.http4k:http4k-server-netty" }
-librarian-gradle-plugin = "com.gradleup.librarian:librarian-gradle-plugin:0.2.2-SNAPSHOT-44b68f3cb157b53cd19d63b93c6eeae967d1da4a"
+librarian-gradle-plugin = "com.gradleup.librarian:librarian-gradle-plugin:0.2.2-SNAPSHOT-2cde396ec5d739d8857aa98f99885ba62ca1769a"
 apollo-execution-runtime = { module = "com.apollographql.execution:apollo-execution-runtime" }
 apollo-execution-subgraph = { module = "com.apollographql.execution:apollo-execution-subgraph" }
 spring-webflux = "org.springframework:spring-webflux:7.0.0"
