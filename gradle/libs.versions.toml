@@ -19,7 +19,7 @@ apollo-api = { group = "com.apollographql.apollo", name = "apollo-api", version.
 apollo-execution = { group = "com.apollographql.apollo", name = "apollo-execution", version.ref = "apollo" }
 atomicfu = "org.jetbrains.kotlinx:atomicfu:0.30.0-beta"
 kotlinpoet = "com.squareup:kotlinpoet:2.2.0"
-kotlinx-datetime = "org.jetbrains.kotlinx:kotlinx-datetime:0.7.1"
+kotlinx-datetime = "org.jetbrains.kotlinx:kotlinx-datetime:0.7.1-0.6.x-compat"
 gratatouille = { module = "com.gradleup.gratatouille:gratatouille-gradle-plugin", version.ref = "gratatouille" }
 gratatouille-tasks-runtime = { module = "com.gradleup.gratatouille:gratatouille-tasks-runtime", version.ref = "gratatouille-runtime" }
 gratatouille-wiring-runtime = { module = "com.gradleup.gratatouille:gratatouille-wiring-runtime", version.ref = "gratatouille-runtime" }
