@@ -1,4 +1,12 @@
-# Next version (unreleased)
+# Version 0.1.2
+
+* Add graphql-ws support by @martinbonnin in https://github.com/apollographql/apollo-kotlin-execution/pull/60
+* Fix SPDX license name by @martinbonnin in https://github.com/apollographql/apollo-kotlin-execution/pull/64
+* Update dependencies by @martinbonnin in https://github.com/apollographql/apollo-kotlin-execution/pull/67
+* Add KDoc for `@GraphQLDefault` by @martinbonnin in https://github.com/apollographql/apollo-kotlin-execution/pull/68
+* Switch to gratatouille by @martinbonnin in https://github.com/apollographql/apollo-kotlin-execution/pull/69
+
+# Version 0.1.1
 
 * Add `Ftv1Instrumentation` and `ApolloReportingInstrumentation` for respectively federated and monograph operation and fields insights.
 * Publish to GCS
