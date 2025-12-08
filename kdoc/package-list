@@ -3,7 +3,9 @@ $dokka.linkExtension:html
 
 module:apollo-execution-gradle-plugin
 com.apollographql.execution.gradle
-com.apollographql.execution.gradle.internal
+module:apollo-execution-gradle-tasks
+com.apollographql.execution.gradle
+com.apollographql.execution.gradle.task
 module:apollo-execution-http4k
 com.apollographql.execution.http4k
 module:apollo-execution-ktor
