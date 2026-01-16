@@ -46,7 +46,7 @@ librarian-gradle-plugin = "com.gradleup.librarian:librarian-gradle-plugin:0.2.2-
 apollo-execution-runtime = { module = "com.apollographql.execution:apollo-execution-runtime" }
 apollo-execution-subgraph = { module = "com.apollographql.execution:apollo-execution-subgraph" }
 spring-webflux = "org.springframework:spring-webflux:7.0.0"
-wire-gradle-plugin = "com.squareup.wire:wire-gradle-plugin:5.3.1"
+wire-gradle-plugin = "com.squareup.wire:wire-gradle-plugin:5.5.0"
 kotlinx-serialization-core = "org.jetbrains.kotlinx:kotlinx-serialization-core:1.9.0"
 [plugins]
 kgp-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-plugin" }
