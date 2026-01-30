@@ -2,7 +2,7 @@
 kotlin-plugin = "2.3.0-RC"
 ksp = "2.3.2"
 apollo = "5.0.0-alpha.3"
-ktor = "3.3.2"
+ktor = "3.4.0"
 spring = "3.3.3"
 gratatouille = "0.1.4-SNAPSHOT-111ca2caffb04690ee1e8c994714a40547444117"
 gratatouille-runtime = "0.1.3"
