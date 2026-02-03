@@ -1,6 +1,6 @@
 [versions]
 kotlin-plugin = "2.3.0-RC"
-ksp = "2.3.2"
+ksp = "2.3.5"
 apollo = "5.0.0-alpha.3"
 ktor = "3.3.2"
 spring = "3.3.3"
