@@ -150,17 +150,19 @@ private class TypeDefinitionContext(
   }
 
   /**
-   * If returning null, this function also logs an error to fail the processor.
-   *
-   * @return the definition or null if there was an error
+   * @return
+   * - null if this declaration doesn't need a GraphQL type generated because it's a builtin scalar.
+   * - null if there is an error (an error is also logged).
+   * - the definition else.
    */
   private fun resolveType(qualifiedName: String, declarationToVisit: DeclarationToVisit): SirTypeDefinition? {
     val declaration = declarationToVisit.declaration
     val context = declarationToVisit.context
 
-    if (builtinTypes.contains(qualifiedName)) {
-      return builtinScalarDefinition(qualifiedName)
+    if (graphqlScalars.get(qualifiedName) != null) {
+      return null
     }
+
     if (unsupportedTypes.contains(qualifiedName)) {
       logger.error(
         "'$qualifiedName' is not a supported built-in type. Either use one of the built-in types (Boolean, String, Int, Double) or use a custom scalar.",
@@ -229,7 +231,12 @@ private class TypeDefinitionContext(
       logger.error("Custom scalar type aliases must be annotated with @GraphQLScalar", this)
       return null
     }
+
     val name = graphqlName()
+    if (name in graphqlScalars.values) {
+      logger.error("'$name' is always mapped to Kotlin '${graphqlScalars.entries.first { it.value == name }.key}', it is not possibile to remap it. You can use type aliases instead.", this)
+      return null
+    }
 
     val coercing = getCoercing(logger)
     if (coercing == null) {
@@ -570,7 +577,7 @@ private class TypeDefinitionContext(
 
             is SirUnionDefinition -> {
               if (objectName == null) {
-                logger.error("Interfaces are not allowed to extend union markers. Only classes can")
+                logger.error("Interfaces are not allowed to extend union markers. Only classes can.")
               } else {
                 unions.compute(supertype.name) { _, oldValue ->
                   oldValue.orEmpty() + objectName
@@ -814,15 +821,9 @@ private class TypeDefinitionContext(
     }
 
     return when {
-      builtinTypes.contains(qualifiedName) -> {
-        val name = builtinScalarName(qualifiedName)
-        declarationsToVisit.add(
-          DeclarationToVisit(
-            declaration,
-            DeclarationContext(direction = context.direction, origin = context.origin)
-          )
-        )
-        SirNamedType(name)
+      graphqlScalars.containsKey(qualifiedName) -> {
+        // no need to visit this declaration, it's builtin
+        SirNamedType(graphqlScalars.get(qualifiedName)!!)
       }
 
       else -> {
@@ -953,9 +954,6 @@ private val unsupportedTypes = listOf("Float", "Byte", "Short", "Long", "UByte",
   "kotlin.$it"
 }.toSet()
 
-private val builtinTypes = listOf("Double", "String", "Boolean", "Int").map {
-  "kotlin.$it"
-}.toSet()
 
 private class DeclarationToVisit(
   val declaration: KSDeclaration,

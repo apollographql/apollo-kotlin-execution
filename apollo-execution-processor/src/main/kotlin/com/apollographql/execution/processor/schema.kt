@@ -29,11 +29,11 @@ internal fun schemaString(definitions: List<SirDefinition>): String {
   )
 
   val document = GQLDocument(
-    definitions = listOf(schemaDefinition) + definitions.map { it.toGQL() } + builtinDefinitions(),
+    definitions = listOf(schemaDefinition) + definitions.map { it.toGQL() },
     sourceLocation = null
   )
 
-  return document.toSDL("  ")
+  return document.toUtf8("  ")
 }
 
 private fun SirDefinition.toGQL(): GQLDefinition {
