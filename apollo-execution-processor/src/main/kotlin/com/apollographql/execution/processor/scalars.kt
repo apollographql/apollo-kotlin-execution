@@ -2,9 +2,7 @@ package com.apollographql.execution.processor
 
 import com.apollographql.execution.processor.codegen.KotlinSymbols
 import com.apollographql.execution.processor.sir.Instantiation
-import com.apollographql.execution.processor.sir.SirClassName
 import com.apollographql.execution.processor.sir.SirCoercing
-import com.apollographql.execution.processor.sir.SirScalarDefinition
 import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSClassDeclaration
@@ -45,29 +43,18 @@ internal fun KSAnnotated.getCoercing(logger: KSPLogger): SirCoercing? {
   return SirCoercing(declaration.asClassName(), instantiation)
 }
 
-internal fun builtinScalarName(qualifiedName: String): String {
-  return when (qualifiedName) {
-    "kotlin.String" -> "String"
-    "kotlin.Boolean" -> "Boolean"
-    "kotlin.Double" -> "Float"
-    "kotlin.Int" -> "Int"
-    // This is only called on built-in scalars so should not happen
-    else -> error("")
-  }
-}
-internal fun builtinScalarDefinition(qualifiedName: String): SirScalarDefinition {
-  val name = builtinScalarName(qualifiedName)
-  return SirScalarDefinition(
-    name,
-    qualifiedName = qualifiedName,
-    description = null,
-    coercing = SirCoercing(
-      className = SirClassName(
-        KotlinSymbols.apolloExecutionPackageName,
-        listOf("${name}Coercing")
-      ),
-      instantiation = Instantiation.OBJECT,
-    ),
-    directives = emptyList()
-  )
-}
+/**
+ * Those types are always hardwired and can't be remapped.
+ *
+ * This is because introspection uses `String` and `Double` and changing the coercing and kotlin types would confuse the execution engine.
+ * We could technically allow users to remap the GraphQL "Int" and "Float" types if we really wanted to, but we enforce a hard wired
+ * mapping for those scalars for consistency.
+ * ID can (and should) be declared by the user because there is no native `ID` type in Kotlin.
+ */
+internal val graphqlScalars = mapOf(
+  "kotlin.String" to "String",
+  "kotlin.Boolean" to "Boolean",
+  "kotlin.Double" to "Float",
+  "kotlin.Int" to "Int",
+)
+
