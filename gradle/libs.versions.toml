@@ -37,7 +37,7 @@ ksp-implementation = { module = "com.google.devtools.ksp:symbol-processing", ver
 ksp-gradle = { module = "com.google.devtools.ksp:symbol-processing-gradle-plugin", version.ref = "ksp" }
 kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test" } # the Kotlin plugin resolves the version
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-plugin" }
-http4k-bom = "org.http4k:http4k-bom:6.21.0.0"
+http4k-bom = "org.http4k:http4k-bom:6.28.1.0"
 http4k-core = { module = "org.http4k:http4k-core" }
 http4k-realtime-core = { module = "org.http4k:http4k-realtime-core" }
 http4k-server-undertow = { module = "org.http4k:http4k-server-undertow" }
