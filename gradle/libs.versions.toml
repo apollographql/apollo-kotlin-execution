@@ -45,7 +45,7 @@ http4k-server-netty = { module = "org.http4k:http4k-server-netty" }
 librarian-gradle-plugin = "com.gradleup.librarian:librarian-gradle-plugin:0.2.2-SNAPSHOT-2cde396ec5d739d8857aa98f99885ba62ca1769a"
 apollo-execution-runtime = { module = "com.apollographql.execution:apollo-execution-runtime" }
 apollo-execution-subgraph = { module = "com.apollographql.execution:apollo-execution-subgraph" }
-spring-webflux = "org.springframework:spring-webflux:7.0.0"
+spring-webflux = "org.springframework:spring-webflux:7.0.4"
 wire-gradle-plugin = "com.squareup.wire:wire-gradle-plugin:5.3.1"
 kotlinx-serialization-core = "org.jetbrains.kotlinx:kotlinx-serialization-core:1.9.0"
 [plugins]
