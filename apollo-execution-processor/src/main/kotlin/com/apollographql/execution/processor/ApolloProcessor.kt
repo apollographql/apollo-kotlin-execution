@@ -53,6 +53,7 @@ class ApolloProcessor(
     done = true
 
     val query = getRootSymbol(resolver, KotlinSymbols.GraphQLQuery.canonicalName)
+
     if (query == null) {
       logger.error("No '@GraphQLQuery' class found")
       return emptyList()
