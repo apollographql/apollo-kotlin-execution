@@ -3,6 +3,7 @@ pluginManagement {
     it.mavenCentral()
     it.maven("https://storage.googleapis.com/gradleup/m2")
     it.maven("https://storage.googleapis.com/apollo-previews/m2/")
+    it.maven("https://repo.spring.io/snapshot") 
   }
 }
 
