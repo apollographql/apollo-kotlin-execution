@@ -18,7 +18,7 @@ suspend fun ServerRequest.parseAsGraphQLRequest(): Result<GraphQLRequest> {
       onSuccess = { it.parseAsGraphQLRequest() },
       onFailure = { Result.failure(it) }
     )
-    HttpMethod.POST -> {
+    HttpMethod.QUERY, HttpMethod.POST -> {
       awaitBody<String>().let {
         Buffer().writeUtf8(it).parseAsGraphQLRequest()
       }
@@ -32,7 +32,7 @@ fun CoRouterFunctionDsl.apolloGraphQLRoutes(
   path: String = "/graphql",
   executionContext: ExecutionContext = ExecutionContext.Empty
 ) {
-  (POST(path) or GET(path)).invoke { serverRequest ->
+  (POST(path) or GET(path) or RequestPredicates.method(HttpMethod.QUERY)).invoke { serverRequest ->
     val graphqlRequestResult = serverRequest.parseAsGraphQLRequest()
     if (!graphqlRequestResult.isSuccess) {
       return@invoke badRequest().buildAndAwait()

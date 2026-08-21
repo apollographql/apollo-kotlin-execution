@@ -80,7 +80,7 @@ private fun GraphQLResponse.toByteArray(): ByteArray {
 
 suspend fun ApplicationRequest.parseAsGraphQLRequest(): Result<GraphQLRequest> {
   return when (httpMethod) {
-    HttpMethod.Post -> receiveChannel().buffer().parseAsGraphQLRequest()
+    HttpMethod.Post, HttpMethod.Query -> receiveChannel().buffer().parseAsGraphQLRequest()
     HttpMethod.Get -> queryString().parseAsGraphQLRequest()
     else -> Result.failure(Exception("Unhandled method: $httpMethod"))
   }
@@ -96,6 +96,9 @@ fun Application.apolloModule(
       call.respondGraphQL(executableSchema, executionContext(call.request))
     }
     get(path) {
+      call.respondGraphQL(executableSchema, executionContext(call.request))
+    }
+    query(path) {
       call.respondGraphQL(executableSchema, executionContext(call.request))
     }
   }
