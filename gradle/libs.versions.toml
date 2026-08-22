@@ -16,7 +16,7 @@ apollo-ast = { group = "com.apollographql.apollo", name = "apollo-ast", version.
 apollo-compiler = { group = "com.apollographql.apollo", name = "apollo-compiler", version.ref = "apollo" }
 apollo-api = { group = "com.apollographql.apollo", name = "apollo-api", version.ref = "apollo" }
 apollo-execution = { group = "com.apollographql.apollo", name = "apollo-execution", version.ref = "apollo" }
-atomicfu = "org.jetbrains.kotlinx:atomicfu:0.30.0-beta"
+atomicfu = "org.jetbrains.kotlinx:atomicfu:0.33.0"
 kotlinpoet = "com.squareup:kotlinpoet:2.2.0"
 kotlinx-datetime = "org.jetbrains.kotlinx:kotlinx-datetime:0.7.1"
 gratatouille = { module = "com.gradleup.gratatouille:gratatouille-gradle-plugin", version.ref = "gratatouille" }
