@@ -22,7 +22,7 @@ final class com.apollographql.execution.reporting/ApolloReportingInstrumentation
         final fun <get-client>(): io.ktor.client/HttpClient // com.apollographql.execution.reporting/ApolloReportingInstrumentation.client.<get-client>|<get-client>(){}[0]
 
     final fun onField(com.apollographql.apollo.execution/ResolveInfo): com.apollographql.apollo.execution/FieldCallback? // com.apollographql.execution.reporting/ApolloReportingInstrumentation.onField|onField(com.apollographql.apollo.execution.ResolveInfo){}[0]
-    final fun onOperation(com.apollographql.apollo.execution/OperationInfo): com.apollographql.apollo.execution/OperationCallback? // com.apollographql.execution.reporting/ApolloReportingInstrumentation.onOperation|onOperation(com.apollographql.apollo.execution.OperationInfo){}[0]
+    final fun onOperation(com.apollographql.apollo.execution/OperationInfo): com.apollographql.apollo.execution/OperationCallback // com.apollographql.execution.reporting/ApolloReportingInstrumentation.onOperation|onOperation(com.apollographql.apollo.execution.OperationInfo){}[0]
 }
 
 final class com.apollographql.execution.reporting/ApolloReportingOperationContext : com.apollographql.apollo.api/ExecutionContext.Element { // com.apollographql.execution.reporting/ApolloReportingOperationContext|null[0]
