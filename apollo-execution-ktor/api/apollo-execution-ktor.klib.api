@@ -1,0 +1,24 @@
+// Klib ABI Dump
+// Targets: [linuxX64, macosArm64]
+// Rendering settings:
+// - Signature version: 2
+// - Show manifest properties: true
+// - Show declarations: true
+
+// Library unique name: <com.apollographql.execution:apollo-execution-ktor>
+final enum class com.apollographql.execution.ktor/WsProtocol : kotlin/Enum<com.apollographql.execution.ktor/WsProtocol> { // com.apollographql.execution.ktor/WsProtocol|null[0]
+    enum entry GraphqlWS // com.apollographql.execution.ktor/WsProtocol.GraphqlWS|null[0]
+    enum entry Legacy // com.apollographql.execution.ktor/WsProtocol.Legacy|null[0]
+
+    final val entries // com.apollographql.execution.ktor/WsProtocol.entries|#static{}entries[0]
+        final fun <get-entries>(): kotlin.enums/EnumEntries<com.apollographql.execution.ktor/WsProtocol> // com.apollographql.execution.ktor/WsProtocol.entries.<get-entries>|<get-entries>#static(){}[0]
+
+    final fun valueOf(kotlin/String): com.apollographql.execution.ktor/WsProtocol // com.apollographql.execution.ktor/WsProtocol.valueOf|valueOf#static(kotlin.String){}[0]
+    final fun values(): kotlin/Array<com.apollographql.execution.ktor/WsProtocol> // com.apollographql.execution.ktor/WsProtocol.values|values#static(){}[0]
+}
+
+final fun (io.ktor.server.application/Application).com.apollographql.execution.ktor/apolloModule(com.apollographql.apollo.execution/ExecutableSchema, kotlin/String = ..., kotlin/Function1<io.ktor.server.routing/RoutingRequest, com.apollographql.apollo.api/ExecutionContext> = ...) // com.apollographql.execution.ktor/apolloModule|apolloModule@io.ktor.server.application.Application(com.apollographql.apollo.execution.ExecutableSchema;kotlin.String;kotlin.Function1<io.ktor.server.routing.RoutingRequest,com.apollographql.apollo.api.ExecutionContext>){}[0]
+final fun (io.ktor.server.application/Application).com.apollographql.execution.ktor/apolloSandboxModule(kotlin/String = ..., kotlin/String = ..., kotlin/Function1<io.ktor.server.routing/RoutingCall, kotlin/String> = ...) // com.apollographql.execution.ktor/apolloSandboxModule|apolloSandboxModule@io.ktor.server.application.Application(kotlin.String;kotlin.String;kotlin.Function1<io.ktor.server.routing.RoutingCall,kotlin.String>){}[0]
+final fun (io.ktor.server.application/Application).com.apollographql.execution.ktor/apolloSubscriptionModule(com.apollographql.apollo.execution/ExecutableSchema, kotlin/String = ..., com.apollographql.execution.ktor/WsProtocol = ..., kotlin/Function1<io.ktor.server.request/ApplicationRequest, com.apollographql.apollo.api/ExecutionContext> = ...) // com.apollographql.execution.ktor/apolloSubscriptionModule|apolloSubscriptionModule@io.ktor.server.application.Application(com.apollographql.apollo.execution.ExecutableSchema;kotlin.String;com.apollographql.execution.ktor.WsProtocol;kotlin.Function1<io.ktor.server.request.ApplicationRequest,com.apollographql.apollo.api.ExecutionContext>){}[0]
+final suspend fun (io.ktor.server.application/ApplicationCall).com.apollographql.execution.ktor/respondGraphQL(com.apollographql.apollo.execution/ExecutableSchema, com.apollographql.apollo.api/ExecutionContext = ..., kotlin/Function2<io.ktor.http.content/OutgoingContent, com.apollographql.apollo.execution/GraphQLResponse?, kotlin/Unit> = ...) // com.apollographql.execution.ktor/respondGraphQL|respondGraphQL@io.ktor.server.application.ApplicationCall(com.apollographql.apollo.execution.ExecutableSchema;com.apollographql.apollo.api.ExecutionContext;kotlin.Function2<io.ktor.http.content.OutgoingContent,com.apollographql.apollo.execution.GraphQLResponse?,kotlin.Unit>){}[0]
+final suspend fun (io.ktor.server.request/ApplicationRequest).com.apollographql.execution.ktor/parseAsGraphQLRequest(): kotlin/Result<com.apollographql.apollo.execution/GraphQLRequest> // com.apollographql.execution.ktor/parseAsGraphQLRequest|parseAsGraphQLRequest@io.ktor.server.request.ApplicationRequest(){}[0]
