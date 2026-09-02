@@ -9,6 +9,7 @@ Librarian.module(project)
 kotlin {
   jvm()
   macosArm64()
+  linuxX64()
 
   sourceSets {
     getByName("commonMain") {
