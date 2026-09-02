@@ -24,4 +24,4 @@ input OptInFeature {
   level: OptInLevel!
 }
 
-directive @requiresOptIn (feature: OptInFeature!) on FIELD_DEFINITION
+directive @requiresOptIn(feature: OptInFeature!) on FIELD_DEFINITION

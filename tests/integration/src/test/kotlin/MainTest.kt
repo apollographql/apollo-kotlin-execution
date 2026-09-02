@@ -1,9 +1,14 @@
-import com.apollographql.apollo.execution.toGraphQLRequest
+import com.apollographql.apollo.execution.GraphQLRequest
+import com.apollographql.apollo.execution.parseAsGraphQLRequest
 import com.example.ServiceExecutableSchemaBuilder
 import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
+
+private fun String.toGraphQLRequest(): GraphQLRequest{
+  return mapOf("query" to this).parseAsGraphQLRequest().getOrThrow()
+}
 
 class MainTest {
   @Test
