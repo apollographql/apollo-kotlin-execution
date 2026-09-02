@@ -2,7 +2,7 @@
 
 import com.apollographql.apollo.ast.toGQLDocument
 import com.apollographql.apollo.execution.ExecutableSchema
-import com.apollographql.apollo.execution.toGraphQLRequest
+import com.apollographql.apollo.execution.parseAsGraphQLRequest
 import com.apollographql.execution.reporting.ApolloReportingInstrumentation
 import com.apollographql.execution.reporting.ApolloReportingOperationContext
 import com.apollographql.execution.reporting.Trace
@@ -49,7 +49,7 @@ class TracingTest {
   fun testTracing() {
     val context = ApolloReportingOperationContext()
     runBlocking {
-      schema().execute("{ widgets { foo, baz: bar }, listOfLists { foo }, listOfScalars }".toGraphQLRequest(), context)
+      schema().execute("{ widgets { foo, baz: bar }, listOfLists { foo }, listOfScalars }".parseAsGraphQLRequest().getOrThrow(), context)
     }
 
     val trace = context.toProtoTrace()
