@@ -1,17 +1,22 @@
 @file:OptIn(ApolloExperimental::class)
 
+import com.apollographql.apollo.execution.GraphQLRequest
+import com.apollographql.apollo.execution.parseAsGraphQLRequest
 import com.apollographql.apollo.annotations.ApolloExperimental
 import com.apollographql.apollo.ast.GQLDirectiveDefinition
 import com.apollographql.apollo.ast.GQLObjectTypeDefinition
 import com.apollographql.apollo.ast.parseAsGQLDocument
 import com.apollographql.apollo.ast.validateAsSchema
-import com.apollographql.apollo.execution.toGraphQLRequest
 import com.example.ServiceExecutableSchemaBuilder
 import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
+
+private fun String.toGraphQLRequest(): GraphQLRequest{
+  return mapOf("query" to this).parseAsGraphQLRequest().getOrThrow()
+}
 
 class MainTest {
   @Test

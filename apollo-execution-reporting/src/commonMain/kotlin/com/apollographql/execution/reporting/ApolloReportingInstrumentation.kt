@@ -58,7 +58,7 @@ class ApolloReportingInstrumentation(val apolloKey: String? = null) : Instrument
     }
   }
 
-  override fun onOperation(operationInfo: OperationInfo): OperationCallback? {
+  override fun onOperation(operationInfo: OperationInfo): OperationCallback {
     return OperationCallback { response ->
       if (apolloKey == null) {
         return@OperationCallback response
@@ -129,7 +129,7 @@ private fun getOperationData(operationInfo: OperationInfo): OperationData? {
     val referencedFields = mutableMapOf<String, ApolloFields>()
     walk(
       operation.selections,
-      operationInfo.schema.rootTypeNameFor(operation.operationType),
+      operationInfo.schema.rootTypeNameOrNullFor(operation.operationType) ?: error("Cannot find root type name for ${operation.operationType}"),
       referencedFields,
       operationInfo
     )

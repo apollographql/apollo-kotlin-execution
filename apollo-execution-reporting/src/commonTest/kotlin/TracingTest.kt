@@ -2,11 +2,13 @@
 
 import com.apollographql.apollo.ast.toGQLDocument
 import com.apollographql.apollo.execution.ExecutableSchema
-import com.apollographql.apollo.execution.toGraphQLRequest
+import com.apollographql.apollo.execution.GraphQLRequest
+import com.apollographql.apollo.execution.parseAsGraphQLRequest
 import com.apollographql.execution.reporting.ApolloReportingInstrumentation
 import com.apollographql.execution.reporting.ApolloReportingOperationContext
 import com.apollographql.execution.reporting.Trace
 import kotlinx.coroutines.runBlocking
+import okio.Buffer
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 import kotlin.test.Test
@@ -43,6 +45,10 @@ class TracingTest {
       }
       .addInstrumentation(ApolloReportingInstrumentation())
       .build()
+  }
+
+  private fun String.toGraphQLRequest(): GraphQLRequest{
+    return mapOf("query" to this).parseAsGraphQLRequest().getOrThrow()
   }
 
   @Test
