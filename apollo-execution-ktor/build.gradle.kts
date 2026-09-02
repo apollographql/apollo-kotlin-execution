@@ -10,6 +10,7 @@ kotlin {
   jvm()
   macosArm64()
   linuxX64()
+  linuxArm64()
 
   sourceSets {
     getByName("commonMain") {
