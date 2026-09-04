@@ -1,5 +1,5 @@
 [versions]
-kotlin-plugin = "2.4.20-RC"
+kotlin-plugin = "2.4.20-RC2"
 ksp = "2.3.2"
 apollo = "5.1.0"
 ktor = "3.5.2"
