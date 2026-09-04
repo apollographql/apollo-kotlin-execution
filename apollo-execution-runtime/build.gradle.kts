@@ -1,4 +1,5 @@
 import com.gradleup.librarian.gradle.Librarian
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
   id("org.jetbrains.kotlin.multiplatform")
@@ -10,6 +11,10 @@ kotlin {
   jvm()
   macosArm64()
   linuxX64()
+  @OptIn(ExperimentalWasmDsl::class)
+  wasmJs {
+    browser()
+  }
 
   sourceSets {
     getByName("commonMain") {
